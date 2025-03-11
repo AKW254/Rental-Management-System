@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<!-- Mirrored from demo.bootstrapdash.com/corona-new/themes/modern-vertical/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 06 Mar 2025 12:24:46 GMT -->
+
 
 <?php include('../partials/head.php') ?>
 
