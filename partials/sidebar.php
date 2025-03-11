@@ -1,254 +1,390 @@
-<?php
-/*
- *   Crafted On Mon Sep 16 2024
- *   By the one and only Martin Mbithi (martin@devlan.co.ke)
- *   
- *   www.devlan.co.ke
- *   hello@devlan.co.ke
- *
- *
- *   The Devlan Solutions LTD Super Duper User License Agreement
- *   Copyright (c) 2022 Devlan Solutions LTD
- *
- *
- *   1. LICENSE TO BE AWESOME
- *   Congrats, you lucky human! Devlan Solutions LTD hereby bestows upon you the magical,
- *   revocable, personal, non-exclusive, and totally non-transferable right to install this epic system
- *   on not one, but TWO separate computers for your personal, non-commercial shenanigans.
- *   Unless, of course, you've leveled up with a commercial license from Devlan Solutions LTD.
- *   Sharing this software with others or letting them even peek at it? Nope, that's a big no-no.
- *   And don't even think about putting this on a network or letting a crowd join the fun unless you
- *   first scored a multi-user license from us. Sharing is caring, but rules are rules!
- *
- *   2. COPYRIGHT POWER-UP
- *   This Software is the prized possession of Devlan Solutions LTD and is shielded by copyright law
- *   and the forces of international copyright treaties. You better not try to hide or mess with
- *   any of our awesome proprietary notices, labels, or marks. Respect the swag!
- *
- *
- *   3. RESTRICTIONS, NO CHEAT CODES ALLOWED
- *   You may not, and you shall not let anyone else:
- *   (a) reverse engineer, decompile, decode, decrypt, disassemble, or do any sneaky stuff to
- *   figure out the source code of this software;
- *   (b) modify, remix, distribute, or create your own funky version of this masterpiece;
- *   (c) copy (except for that one precious backup), distribute, show off in public, transmit, sell, rent,
- *   lease, or otherwise exploit the Software like it's your own.
- *
- *
- *   4. THE ENDGAME
- *   This License lasts until one of us says 'Game Over'. You can call it quits anytime by
- *   destroying the Software and all the copies you made (no hiding them under your bed).
- *   If you break any of these sacred rules, this License self-destructs, and you must obliterate
- *   every copy of the Software, no questions asked.
- *
- *
- *   5. NO GUARANTEES, JUST PIXELS
- *   DEVLAN SOLUTIONS LTD doesn’t guarantee this Software is flawless—it might have a few
- *   quirks, but who doesn’t? DEVLAN SOLUTIONS LTD washes its hands of any other warranties,
- *   implied or otherwise. That means no promises of perfect performance, marketability, or
- *   non-infringement. Some places have different rules, so you might have extra rights, but don’t
- *   count on us for backup if things go sideways. Use at your own risk, brave adventurer!
- *
- *
- *   6. SEVERABILITY—KEEP THE GOOD STUFF
- *   If any part of this License gets tossed out by a judge, don’t worry—the rest of the agreement
- *   still stands like a boss. Just because one piece fails doesn’t mean the whole thing crumbles.
- *
- *
- *   7. NO DAMAGE, NO DRAMA
- *   Under no circumstances will Devlan Solutions LTD or its squad be held responsible for any wild,
- *   indirect, or accidental chaos that might come from using this software—even if we warned you!
- *   And if you ever think you’ve got a claim, the most you’re getting out of us is the license fee you
- *   paid—if any. No drama, no big payouts, just pixels and code.
- *
- */
-
-/* Load System Settings */
-$user_id = $_SESSION['user_id'];
-$ret = "SELECT * FROM  system_settings JOIN users WHERE user_id = '{$user_id}' ";
-$stmt = $mysqli->prepare($ret);
-$stmt->execute(); //ok
-$res = $stmt->get_result();
-while ($settings = $res->fetch_object()) {
-?>
-    <div class="nk-sidebar nk-sidebar-fixed is-dark " data-content="sidebarMenu">
-        <div class="nk-sidebar-element nk-sidebar-head">
-            <div class="nk-sidebar-brand">
-                <a href="home" class="logo-link nk-sidebar-logo text-light">
-                    <img class="logo-light logo-img" src="../public/images/point-of-sale.png" srcset="https://nativebeecare.co.ke/assets/img/logo/favicon.png 2x" alt="logo">
-                    <?php echo $settings->system_name; ?>
-                </a>
+ <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+                <a class="navbar-brand" href="/">RMS</a>
             </div>
-            <div class="nk-menu-trigger mr-n2">
-                <a href="#" class="nk-nav-toggle nk-quick-nav-icon d-xl-none" data-target="sidebarMenu"><em class="icon ni ni-arrow-left"></em></a>
-            </div>
-        </div><!-- .nk-sidebar-element -->
-        <div class="nk-sidebar-element">
-            <div class="nk-sidebar-content">
-                <div class="nk-sidebar-menu" data-simplebar>
-                    <ul class="nk-menu">
-                        <li class="nk-menu-item">
-                            <a href="home" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-home"></em></span>
-                                <span class="nk-menu-text">Dashboard</span>
+            <ul class="nav">
+                <li class="nav-item profile">
+                    <div class="profile-desc">
+                        <div class="profile-pic">
+                            <div class="count-indicator">
+                                <img class="img-xs rounded-circle " src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face15.jpg" alt="">
+                                <span class="count bg-success"></span>
+                            </div>
+                            <div class="profile-name">
+                                <h5 class="mb-0 font-weight-normal">Henry Klein</h5>
+                                <span>Gold Member</span>
+                            </div>
+                        </div>
+                        <a href="#" id="profile-dropdown" data-bs-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list" aria-labelledby="profile-dropdown">
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-cog text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">Account settings</p>
+                                </div>
                             </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_stores" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-grid-plus-fill"></em></span>
-                                <span class="nk-menu-text">Stores</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-onepassword  text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">Change Password</p>
+                                </div>
                             </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                <span class="nk-menu-icon"><em class="icon ni ni-package-fill"></em></span>
-                                <span class="nk-menu-text">Items & Products</span>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item preview-item">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon bg-dark rounded-circle">
+                                        <i class="mdi mdi-calendar-today text-success"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <p class="preview-subject ellipsis mb-1 text-small">To-do list</p>
+                                </div>
                             </a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_import_items" class="nk-menu-link"><span class="nk-menu-text">Bulk Import</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_manage_items" class="nk-menu-link"><span class="nk-menu-text">Manage Products</span></a>
-                                </li>
-                            </ul><!-- .nk-menu-sub -->
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                <span class="nk-menu-icon"><em class="icon ni ni-list-check"></em></span>
-                                <span class="nk-menu-text">Inventory</span>
-                            </a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_manage_stock" class="nk-menu-link"><span class="nk-menu-text">Manage Stock</span></a>
-                                </li>
-                            </ul><!-- .nk-menu-sub -->
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                <span class="nk-menu-icon"><em class="icon ni ni-user-list-fill"></em></span>
-                                <span class="nk-menu-text">Workforce</span>
-                            </a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_import_staff" class="nk-menu-link"><span class="nk-menu-text">Bulk Import</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_manage_staffs" class="nk-menu-link"><span class="nk-menu-text">Manage Staffs</span></a>
-                                </li>
-                            </ul><!-- .nk-menu-sub -->
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_manage_vouchers" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-cc-new"></em></span>
-                                <span class="nk-menu-text">Vouchers</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_manage_sales" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-cart"></em></span>
-                                <span class="nk-menu-text">Sales</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_expenses" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-calc"></em></span>
-                                <span class="nk-menu-text">Expenses</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-
-
-                        <li class="nk-menu-heading">
-                            <h6 class="overline-title text-primary-alt">Reports</h6>
-                        </li><!-- .nk-menu-heading -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_reports_sales" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-money"></em></span>
-                                <span class="nk-menu-text">Sales Reports</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_reports_expenses" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
-                                <span class="nk-menu-text">Expenses Reports</span>
-                            </a>
-                        </li>
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_reports_pl_statements" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-growth"></em></span>
-                                <span class="nk-menu-text">P&L Statements</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_reports_income_statements" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-note-add-c"></em></span>
-                                <span class="nk-menu-text">Income Statements</span>
-                            </a>
-                        </li>
-                        <li class="nk-menu-item has-sub">
-                            <a href="#" class="nk-menu-link nk-menu-toggle">
-                                <span class="nk-menu-icon"><em class="icon ni ni-list"></em></span>
-                                <span class="nk-menu-text">Stock Reports</span>
-                            </a>
-                            <ul class="nk-menu-sub">
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_reports_stocks" class="nk-menu-link"><span class="nk-menu-text">Current Stock</span></a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="main_dashboard_reports_stock_additions" class="nk-menu-link"><span class="nk-menu-text">Stock Additions</span></a>
-                                </li>
-                            </ul><!-- .nk-menu-sub -->
-                        </li><!-- .nk-menu-item -->
-                        <li class="nk-menu-item">
-                            <a href="main_dashboard_reports_logs" class="nk-menu-link">
-                                <span class="nk-menu-icon"><em class="icon ni ni-activity-alt"></em></span>
-                                <span class="nk-menu-text">System Logs</span>
-                            </a>
-                        </li><!-- .nk-menu-item -->
-                        <?php
-                        if ($settings->user_access_level == 'Admin') {
-                            /* Show Admin This */
-                        ?>
-                            <li class="nk-menu-heading">
-                                <h6 class="overline-title text-primary-alt">Core System Settings</h6>
-                            </li><!-- .nk-menu-heading -->
-                            <li class="nk-menu-item">
-                                <a href="main_dashboard_settings_restock" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-clipboad-check-fill"></em></span>
-                                    <span class="nk-menu-text">Restock Limits</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-                            <li class="nk-menu-item has-sub">
-                                <a href="#" class="nk-menu-link nk-menu-toggle">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-opt-dot-alt"></em></span>
-                                    <span class="nk-menu-text">System Configs</span>
-                                </a>
-                                <ul class="nk-menu-sub">
-                                    <!-- 
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_payment_settings" class="nk-menu-link"><span class="nk-menu-text">Payment Settings</span></a>
-                                    </li> -->
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_settings_receipt" class="nk-menu-link"><span class="nk-menu-text">Receipt & Sales Settings</span></a>
-                                    </li>
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_settings_permissions" class="nk-menu-link"><span class="nk-menu-text">Permissions</span></a>
-                                    </li>
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_settings_customizations" class="nk-menu-link"><span class="nk-menu-text">Customizations</span></a>
-                                    </li>
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_settings_mailer" class="nk-menu-link"><span class="nk-menu-text">STMP Mailer Settings</span></a>
-                                    </li>
-                                    <li class="nk-menu-item">
-                                        <a href="main_dashboard_settings_backups" class="nk-menu-link"><span class="nk-menu-text">Database Backups</span></a>
-                                    </li>
-                                </ul><!-- .nk-menu-sub -->
-                            </li><!-- .nk-menu-item -->
-                        <?php } ?>
-                    </ul>
-                </div><!-- .nk-sidebar-menu -->
-            </div><!-- .nk-sidebar-content -->
-        </div><!-- .nk-sidebar-element -->
-    </div>
-<?php } ?>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item nav-category">
+                    <span class="nav-link">Navigation</span>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="index.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-speedometer"></i>
+                        </span>
+                        <span class="menu-title">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/widgets/widgets.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-texture"></i>
+                        </span>
+                        <span class="menu-title">Widgets</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#page-layouts" aria-expanded="false" aria-controls="page-layouts">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-view-list"></i>
+                        </span>
+                        <span class="menu-title">Page Layouts</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="page-layouts">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/boxed-layout.html">Boxed</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/rtl-layout.html">RTL</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-layouts" aria-expanded="false" aria-controls="sidebar-layouts">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-crosshairs-gps"></i>
+                        </span>
+                        <span class="menu-title">Sidebar Layouts</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="sidebar-layouts">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/compact-menu.html">Compact menu</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/sidebar-collapsed.html">Icon menu</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/sidebar-hidden.html">Sidebar Hidden</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/sidebar-hidden-overlay.html">Sidebar Overlay</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/layout/sidebar-fixed.html">Sidebar Fixed</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-laptop"></i>
+                        </span>
+                        <span class="menu-title">Basic UI Elements</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-basic">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/accordions.html">Accordions</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/badges.html">Badges</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/breadcrumbs.html">Breadcrumbs</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/modals.html">Modals</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/progress.html">Progress bar</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/pagination.html">Pagination</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/tabs.html">Tabs</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-advanced" aria-expanded="false" aria-controls="ui-advanced">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-cog"></i>
+                        </span>
+                        <span class="menu-title">Advanced Elements</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ui-advanced">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dragula.html">Dragula</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/clipboard.html">Clipboard</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/context-menu.html">Context menu</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/slider.html">Slider</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/loaders.html">Loaders</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/colcade.html">Colcade</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/carousel.html">Carousel</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/ui-features/tooltips.html">Tooltips</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-playlist-play"></i>
+                        </span>
+                        <span class="menu-title">Form Elements</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="form-elements">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/basic_elements.html">Basic Form</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/advanced_elements.html">Advanced Form</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/validation.html">Validation</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/wizard.html">Wizard</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-table-large"></i>
+                        </span>
+                        <span class="menu-title">Tables</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="tables">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/tables/basic-table.html">Basic table</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/tables/data-table.html">Data table</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/tables/js-grid.html">Js-grid</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/tables/sortable-table.html">Sortable table</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#editors" aria-expanded="false" aria-controls="editors">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-format-text"></i>
+                        </span>
+                        <span class="menu-title">Editors</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="editors">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/text_editor.html">Text editors</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/forms/code_editor.html">Code Editor</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-chart-bar"></i>
+                        </span>
+                        <span class="menu-title">Charts</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="charts">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/morris.html">Morris</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/flot-chart.html">Flot</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/google-charts.html">Google charts</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/sparkline.html">Sparkline js</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/c3.html">C3 charts</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/chartist.html">Chartists</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/charts/justGage.html">JustGage</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#maps" aria-expanded="false" aria-controls="maps">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-map-marker-radius"></i>
+                        </span>
+                        <span class="menu-title">Maps</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="maps">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/maps/google-maps.html">Google Maps</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/maps/mapael.html">Mapeal</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/maps/vector-map.html">Vector map</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/ui-features/notifications.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-bell-ring"></i>
+                        </span>
+                        <span class="menu-title">Notifications</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-contacts"></i>
+                        </span>
+                        <span class="menu-title">Icons</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="icons">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/icons/flag-icons.html">Flag icons</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/icons/mdi.html">Mdi icons</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/icons/font-awesome.html">Font Awesome</a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/icons/simple-line-icon.html">Simple line icons</a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/icons/themify.html">Themify icons</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item nav-category">
+                    <span class="nav-link">More</span>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/ui-features/popups.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-forum"></i>
+                        </span>
+                        <span class="menu-title">Popups</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-security"></i>
+                        </span>
+                        <span class="menu-title">User Pages</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="auth">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/login-2.html"> Login 2 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/register-2.html"> Register 2 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#general-pages" aria-expanded="false" aria-controls="general-pages">
+                        <span class="menu-icon" <link rel="stylesheet" href="https://demo.bootstrapdash.com/corona-new/themes/assets/vendors/jvectormap/jquery-jvectormap.css">
+                            <link rel="stylesheet" href="https://demo.bootstrapdash.com/corona-new/themes/assets/vendors/flag-icon-css/css/flag-icons.min.css">
+                            <link rel="stylesheet" href="https://demo.bootstrapdash.com/corona-new/themes/assets/vendors/owl-carousel-2/owl.carousel.min.css">
+                            <link rel="stylesheet" href="https://demo.bootstrapdash.com/corona-new/themes/assets/vendors/owl-carousel-2/owl.theme.default.min.css">>
+                            <i class="mdi mdi-earth"></i>
+                        </span>
+                        <span class="menu-title">General Pages</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="general-pages">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/blank-page.html"> Blank Page </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/profile.html"> Profile </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/portfolio.html"> Portfolio </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/faq.html"> FAQ </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/faq-2.html"> FAQ 2 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/search-results.html"> Search Results </a>
+                            </li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/news-grid.html"> News grid </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/timeline.html"> Timeline </a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#error" aria-expanded="false" aria-controls="error">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-lock"></i>
+                        </span>
+                        <span class="menu-title">Error pages</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="error">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#e-commerce" aria-expanded="false" aria-controls="e-commerce">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-medical-bag"></i>
+                        </span>
+                        <span class="menu-title">E-commerce</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="e-commerce">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/invoice.html"> Invoice </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/pricing-table.html"> Pricing Table </a></li>
+                            <li class="nav-item"> <a class="nav-link" href="pages/samples/orders.html"> Orders </a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/apps/calendar.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-calendar-today"></i>
+                        </span>
+                        <span class="menu-title">Calendar</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/apps/todo.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-bulletin-board"></i>
+                        </span>
+                        <span class="menu-title">Todo list</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/apps/email.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-email"></i>
+                        </span>
+                        <span class="menu-title">E-mail</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="pages/apps/gallery.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-image-filter-center-focus-weak"></i>
+                        </span>
+                        <span class="menu-title">Gallery</span>
+                    </a>
+                </li>
+                <li class="nav-item menu-items">
+                    <a class="nav-link" href="https://demo.bootstrapdash.com/corona-new/docs/documentation.html">
+                        <span class="menu-icon">
+                            <i class="mdi mdi-file-document"></i>
+                        </span>
+                        <span class="menu-title">Documentation</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
