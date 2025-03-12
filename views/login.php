@@ -24,7 +24,7 @@
                                         <label class="form-check-label">
                                             <input type="checkbox" class="form-check-input"> Remember me </label>
                                     </div>
-                                    <a href="#" class="forgot-pass">Forgot password</a>
+                                    <a href="reset_password" class="forgot-pass">Forgot password</a>
                                 </div>
                                 <div class="text-center d-grid gap-2">
                                     <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
