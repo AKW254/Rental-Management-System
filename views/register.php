@@ -9,28 +9,30 @@
                 <div class="content-wrapper full-page-wrapper auth login-2 login-bg">
                     <div class="card col-6">
                         <div class="card-body px-5 py-5">
-                            <h3 class="card-title text-start mb-3">Login</h3>
+                            <h3 class="card-title text-start mb-3">Registration</h3>
                             <form>
                                 <div class="form-group">
-                                    <label>Username or email *</label>
+                                    <label>Username *</label>
                                     <input type="text" class="form-control p_input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email *</label>
+                                    <input type="email" class="form-control p_input">
                                 </div>
                                 <div class="form-group">
                                     <label>Password *</label>
-                                    <input type="text" class="form-control p_input">
+                                    <input type="password" class="form-control p_input">
                                 </div>
-                                <div class="form-group d-flex align-items-center justify-content-between">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input type="checkbox" class="form-check-input"> Remember me </label>
-                                    </div>
-                                    <a href="#" class="forgot-pass">Forgot password</a>
+                                <div class="form-group">
+                                    <label>Confirm Password *</label>
+                                    <input type="password" class="form-control p_input">
                                 </div>
+
                                 <div class="text-center d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary btn-block enter-btn">Login</button>
+                                    <button type="submit" class="btn btn-primary btn-block enter-btn">Registration</button>
                                 </div>
-                               
-                                <p class="sign-up">Don't have an Account?<a href="register"> Register Here</a></p>
+                                
+                                <p class="sign-up">Have an Account?<a href="login"> Login</a></p>
                             </form>
                         </div>
                     </div>
