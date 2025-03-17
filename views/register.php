@@ -1,5 +1,4 @@
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
 
 <?php
 //connection from DB
@@ -7,38 +6,62 @@ include("../config/config.php");
 require '../vendor/autoload.php'; // Include PHPMailer autoload file
 
 
-//registration
-if (isset($_POST['registration'])) {
-    //Declaration of variables
-    $user_name = mysqli_real_escape_string($mysqli, $_POST['user_name']);
-    $user_email = mysqli_real_escape_string($mysqli, $_POST['user_email']);
-    $user_phone = mysqli_real_escape_string($mysqli, $_POST['user_phone']);
-    $user_password = mysqli_real_escape_string($mysqli, $_POST['user_password']);
-    $confirm_password = mysqli_real_escape_string($mysqli, $_POST['confirm_password']);
-    $role_id =  mysqli_real_escape_string($mysqli, $_POST['role_id']);
-    $user_role=  mysqli_real_escape_string($mysqli, $_POST['role_type']);
-    //check if the password and confirm password are same   
-    if ($user_password !== $confirm_password) {
-        echo "<script>alert('Password do not match!'); window.location.href='register';</script>";
-        exit;
-    } else {
-        $password = password_hash($user_password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (user_name, user_email, user_password) VALUES('$user_name', '$user_email', '$password')";
-        $result = $mysqli->query($sql);
-        if ($result) {
-            // Send email using PHPMailer
-            Include("../mailer/user_onboarding.php");
-            $mail();
-                echo "<script>alert('Registration Successful! A confirmation email has been sent.'); window.location.href='login';</script>";
+    //registration
+    if (isset($_POST['registration'])) {
+    
+        // Declaration of variables
+        $user_name = mysqli_real_escape_string($mysqli, $_POST['user_name']);
+        $user_email = mysqli_real_escape_string($mysqli, $_POST['user_email']);
+        $user_phone = mysqli_real_escape_string($mysqli, $_POST['user_phone']);
+        $user_password = mysqli_real_escape_string($mysqli, $_POST['user_password']);
+        $confirm_password = mysqli_real_escape_string($mysqli, $_POST['confirm_password']);
+        $role_id = mysqli_real_escape_string($mysqli, $_POST['role_id']);
+        $user_role = mysqli_real_escape_string($mysqli, $_POST['role_type']);
+
+        // Check if passwords match
+        if ($user_password !== $confirm_password) {
+            $err = "Passwords do not match!";
+            echo $err;
+            return;
+        }
+
+        // Check if email already exists
+        $check_email = $mysqli->query("SELECT * FROM users WHERE user_email = '$user_email'");
+        if ($check_email->num_rows > 0) {
+            $err = "Email already registered!";
           
-                echo "<script>alert('Registration Successful, but email could not be sent. Mailer Error: {$mail->ErrorInfo}'); window.location.href='login';</script>";
-           
-            echo "<script>alert('Registration Failed!'); window.location.href='register';</script>";
-            
+          
+        }
+
+        // Hash password
+        $password = password_hash($user_password, PASSWORD_DEFAULT);
+
+        // Insert user into the database
+        $sql = "INSERT INTO users (user_name, user_email, user_password, role_id) 
+            VALUES('$user_name', '$user_email', '$password', '$role_id')";
+
+        if ($mysqli->query($sql)) {
+            // Include mailer script
+            include('../mailers/user_onboarding.php');
+
+            try {
+                if ($mail->send()) {
+                    $success = "Registration Successful! Please check your email for login details.";
+                    header("Location: login");
+                    exit;
+                } else {
+                    $info = "Registration Successful, but email could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    
+                }
+            } catch (Exception $e) {
+                $err="Registration Successful, but email could not be sent. Exception: {$e->getMessage()}";
+            }
+        } else {
+            $err="Registration Failed! Please try again.";
         }
     }
-}
-?>
+
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <?php include('../partials/head.php') ?>
@@ -102,7 +125,7 @@ if (isset($_POST['registration'])) {
                                     const roleType = selectedOption.getAttribute('data-role-type');
                                     document.getElementById('role_type').value = roleType;
                                 });
-                            </script>
+                            </scrip>
                         </div>
                     </div>
                 </div>

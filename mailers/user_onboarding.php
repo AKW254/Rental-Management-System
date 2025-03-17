@@ -2,9 +2,9 @@
 
 require_once('../config/config.php');
 /* Mailer Configurations */
-require_once('../vendor/PHPMailer/src/SMTP.php');
-require_once('../vendor/PHPMailer/src/PHPMailer.php');
-require_once('../vendor/PHPMailer/src/Exception.php');
+require_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
+require_once('../vendor/phpmailer/phpmailer/src/PHPMailer.php');
+require_once('../vendor/phpmailer/phpmailer/src/Exception.php');
 
 /* Fetch Mailer Settings And System Settings Too */
 $ret = "SELECT * FROM mailer_settings";

@@ -76,9 +76,4 @@
          window.history.replaceState(null, null, window.location.href);
      }
  </script>
- <script>
-     $('#number_entry').bootstrapNumber({
-         upClass: 'success',
-         downClass: 'danger'
-     });
- </script>
+ 
