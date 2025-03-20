@@ -16,8 +16,9 @@
  <!-- Custom js for this page -->
 
  <script src="../public/assets/vendors/js/dashboard.js"></script>
- <!-- Load Alerts -->
 
+ <!-- Load Alerts -->
+ <script src="../public/assets/vendors/toastr/toastr.min.js"></script>
  <!-- Init  Alerts -->
  <?php if (isset($success)) { ?>
      <!-- Pop Success Alert -->
@@ -76,4 +77,3 @@
          window.history.replaceState(null, null, window.location.href);
      }
  </script>
- 

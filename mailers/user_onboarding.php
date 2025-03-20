@@ -28,126 +28,123 @@ while ($mailer = $res->fetch_object()) {
     $mail->Subject = 'Welcome Aboard';
     /* Custom Mail Body */
     $mail->Body = '<!DOCTYPE html>
-<html lang="en">
+  <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="x-apple-disable-message-reformatting">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Rental Management System</title>
-  <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Welcome to Rental Management System</title>
+    <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: #e7e7e7;
-      color: #000;
-      font-family: \'Raleway\', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      font-family: Arial, sans-serif;
     }
 
-    .u-row-container {
-      padding: 0;
-      background-color: transparent;
-    }
-
-    .u-row {
-      margin: 0 auto;
+    .container {
       max-width: 600px;
-      background-color: transparent;
+      margin: 20px auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
     }
 
-    .u-col {
-      display: table-cell;
-      vertical-align: top;
-      width: 100%;
-    }
-
-
-    .u-text-center {
+    .header {
+      background-color: #007bff;
+      color: #ffffff;
       text-align: center;
+      padding: 20px;
     }
 
-    .u-padding {
-      padding: 8px;
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
     }
 
-    .u-button {
-      display: inline-block;
-      text-decoration: none;
-      color: #000;
-      background: #ffce00;
-      border-radius: 25px;
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: bold;
+    .content {
+      padding: 20px;
     }
 
-    .u-divider {
-      border-top: 3px solid #f3dede;
+    .content h2 {
+      color: #007bff;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      font-size: 16px;
+      line-height: 1.6;
       margin: 10px 0;
     }
 
-    .u-footer-divider {
-      border-top: 1px solid #BBBBBB;
+    .button-container {
+      text-align: center;
       margin: 20px 0;
     }
 
-    @media (max-width: 620px) {
-      .u-row {
-        width: 100% !important;
-      }
-
-      .u-col {
-        display: block;
-        width: 100% !important;
-      }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #ffffff;
+      background-color: #007bff;
+      text-decoration: none;
+      border-radius: 5px;
     }
-  </style>
-</head>
 
-<body>
-  <div class="u-row-container">
-    <div class="u-row">
-      <div class="u-col" style="background-color: #ffffff;">
-        <div class="u-text-center">
-          <h1 style="font-size: 40px; line-height: 56px; margin: 0;">RENTAL MANAGEMENT SYSTEM</h1>
-        </div>
-        <div class="u-text-center">
-            <p style="font-size: 20px; line-height: 30px;">The best rental management system for your property</p>
-            <img src="https://media-hosting.imagekit.io//e12fc20d2a9b4b26/image-1.png?Expires=1836639249&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=zNqkSJMFpRCvqI2aYcPCHtrHAzK~vhsaEHDFwQWYwylEhv~~k6~kqDV9H-zQo4pmcvShSmgd~8zDibLlAQprzBfhT~9i15h3Yon8ufw-SqZEXGumwx10fC9kAtnWzAk8aUN0wLX4ARXE776D59hltLOu3bmpKQzKXHfAi1RT5kGwQkKQFfXxVFNUghhusoSqhg-IvM-WaFGc3a80UEXMdbT0gZaNrVK1ZuAAMu3biHv0~k2m1Cb3RGvXDEMazYTwGqcDmh2-TQ8K6MO0k5gSowlxESPSpIPw623JeRyYiUiSV81tCsHxK-X6qirGrGG8onJ3-Pa5QDCrW8h37HITpQ__" alt="Rental Management System" style="width: 80%; max-width: 480px; height: auto; max-height: 300px; display: block; margin: 0 auto;">
-        </div>
-      </div>
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    .footer {
+      background-color: #f8f9fa;
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .footer p {
+      margin: 5px 0;
+    }
+
+    .footer a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+    <div class="header">
+      <h1>Welcome to Rental Management System</h1>
     </div>
-  </div>
-
-  <div class="u-row-container">
-    <div class="u-row">
-      <div class="u-col" style="background-color: #f6f6f6;">
-        <div class="u-padding u-text-center">
-          <h2>Welcome Onboard ' . $user_name . '!</h2>
-        </div>
-        
-        <div class="u-padding u-text-center">
-          <p>We are so glad for you to join Rental Management System as '. $user_role. '.</p>
-          <p>We can click to proceed to login .</p>
-           <div class="u-text-center">
-          <a href="localhost/Rms/views/login" class="u-button">Login</a>
-        </div>
-        </div>
-        <div class="u-divider"></div>
-        <div class="u-padding u-text-center">
-            <ul style="list-style-type: none; padding: 0; margin: 0;">
-              <li><i><b style="font-size: 16px;">Thank you for choosing Rental Management System</b></i></li>
-              <li><i><b style="font-size: 16px;">Rental Management System</b></i></li>
-              <li><i><b style="font-size: 16px;">1234 Main Street, Anytown, USA</b></i></li>
-              <li><i><b style="font-size: 16px;">Contact us: support@rentalmanagement.com</b></i></li>
-            </ul>
-        </div>
+    <div class="content">
+      <h2>Hello ' . $user_name . ',</h2>
+      <p>We are thrilled to have you join us as a <strong>' . $user_role . '</strong> at Rental Management System. Our platform is designed to make property management seamless and efficient for you.</p>
+      <p>To get started, click the button below to log in to your account:</p>
+      <div class="button-container">
+      <a href="http://localhost/Rms/views/login" class="button">Login to Your Account</a>
       </div>
+      <p>If you have any questions or need assistance, feel free to reach out to our support team. We are here to help you every step of the way.</p>
     </div>
-    
-  </div>
-</body>
+    <div class="footer">
+      <p>Thank you for choosing Rental Management System.</p>
+      <p>1234 Main Street, Anytown, USA</p>
+      <p>Contact us: <a href="mailto:support@rentalmanagement.com">support@rentalmanagement.com</a></p>
+    </div>
+    </div>
+  </body>
 
-</html>';
+  </html>';
 }
