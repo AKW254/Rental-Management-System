@@ -1,5 +1,3 @@
-
-
 <?php
 //connection from DB
 include("../config/config.php");
@@ -21,8 +19,7 @@ require '../vendor/autoload.php'; // Include PHPMailer autoload file
         // Check if passwords match
         if ($user_password !== $confirm_password) {
             $err = "Passwords do not match!";
-            echo $err;
-            return;
+           
         }
 
         // Check if email already exists

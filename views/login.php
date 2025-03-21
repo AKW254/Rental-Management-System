@@ -36,7 +36,7 @@ if (isset($_POST['login'])) {
             // Send token via email
             include('../mailers/user_auth_token.php');
             if (!$mail->send()) {
-                $error = "Mailer Error: " . $mail->ErrorInfo;
+                $err = "Mailer Error: " . $mail->ErrorInfo;
               
             } else {
                 $success="Token sent via email";
@@ -47,11 +47,11 @@ if (isset($_POST['login'])) {
             exit;
         } else {
             $err = "Invalid email or password!";
-            echo "<script>alert('" . $error . "');</script>";
+           
         }
     } else {
-        $error = "Invalid email or password!";
-        echo "<script>alert('" . $error . "');</script>";
+        $err = "Invalid email or password!";
+       
     }
 }
 
@@ -66,22 +66,22 @@ if (isset($_POST['verify_token'])) {
 
     if (isset($_SESSION['auth_token']) && hash_equals($_SESSION['auth_token'], $user_token)) {
         if (isset($_SESSION['token_expiry']) && time() > $_SESSION['token_expiry']) {
-            $error = "Token has expired.";
+            $err = "Token has expired.";
             echo "<script>alert('" . $error . "');</script>";
             session_unset();
             session_destroy();
-            header("Location: login.php?error=TokenExpired");
+            header("Location: login.php?err=TokenExpired");
             exit;
         }
         $_SESSION['token_valid'] = true;
         unset($_SESSION['auth_token'], $_SESSION['token_expiry']);
         $success = "You have successfully logged in!";
-        echo "<script>alert('" . $success . "');</script>";
+      
         header("Location: dashboard.php");
         exit;
     } else {
-        $error = "Invalid Authentication Token. Please try again.";
-        echo "<script>alert('" . $error . "');</script>";
+        $err = "Invalid Authentication Token. Please try again.";
+       
     }
 }
 
@@ -108,10 +108,7 @@ if (isset($_GET['action']) && $_GET['action'] === "logout") {
 
                             <?php if (isset($_GET['step']) && $_GET['step'] === 'verify' && isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true) : ?>
                                 <h3 class="card-title text-start mb-3">Verify Authentication Token</h3>
-                                <?php if (isset($error)) : ?>
-                                   
-                                <?php endif; ?>
-
+                                
                                 <form method="POST" action="">
                                     <div class="form-group">
                                         <label>Enter Token *</label>
@@ -156,10 +153,6 @@ if (isset($_GET['action']) && $_GET['action'] === "logout") {
 
                             <?php else : ?>
                                 <h3 class="card-title text-start mb-3">Login</h3>
-                                <?php if (isset($error)) : ?>
-                                    
-                                <?php endif; ?>
-
                                 <form method="POST" action="">
                                     <div class="form-group">
                                         <label>User email *</label>
