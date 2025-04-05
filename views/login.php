@@ -13,7 +13,7 @@ if (isset($_POST['login'])) {
     $user_password = mysqli_real_escape_string($mysqli, $_POST['user_password']);
 
     // Check if user exists
-    $result = $mysqli->query("SELECT * FROM users WHERE user_email='$user_email'");
+    $result = $mysqli->query("SELECT * FROM users AS us INNER JOIN roles AS ro ON us.role_id = ro.role_id WHERE user_email='$user_email'");
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_object();
 
@@ -23,7 +23,7 @@ if (isset($_POST['login'])) {
             $_SESSION['user_email'] = $row->user_email;
             $_SESSION['user_name'] = $row->user_name;
             $_SESSION['role_id'] = $row->role_id;
-
+            $_SESSION['role_type'] = $row->role_type;
             // Generate a random authentication token
             // Ensure $auth_gen_token is defined in codeGen.php or replace with:
             // $auth_token = bin2hex(random_bytes(16));

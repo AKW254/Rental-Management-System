@@ -1,7 +1,15 @@
+<?php 
+//Start session
+session_start();
+require_once('../config/config.php');
+Include('../config/checklogin.php');
+check_login()
+
+//Check if user is logged in
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-
-
 
 <?php include('../partials/head.php') ?>
 
@@ -9,11 +17,11 @@
     <div class="container-scroller">
 
         <!-- partial:partials/_sidebar.html -->
-       <?php include('../partials/sidebar.php') ?>
+        <?php include('../partials/sidebar.php') ?>
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_navbar.html -->
-           <?php include('../partials/navbar.php') ?>   
+            <?php include('../partials/navbar.php') ?>
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
@@ -777,7 +785,7 @@
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
-               <?php include('../partials/footer.php') ?>
+                <?php include('../partials/footer.php') ?>
                 <!-- partial -->
             </div>
             <!-- main-panel ends -->
@@ -785,7 +793,7 @@
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
-<?php include('../partials/scripts.php') ?>
+    <?php include('../partials/scripts.php') ?>
 </body>
 
 
