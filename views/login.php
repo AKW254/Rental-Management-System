@@ -21,6 +21,8 @@ if (isset($_POST['login'])) {
             $_SESSION['authenticated'] = true;
             $_SESSION['user_id'] = $row->user_id;
             $_SESSION['user_email'] = $row->user_email;
+            $_SESSION['user_phone'] = $row->user_phone;
+            $_SESSION['user_created_at'] = $row->user_created_at;
             $_SESSION['user_name'] = $row->user_name;
             $_SESSION['role_id'] = $row->role_id;
             $_SESSION['role_type'] = $row->role_type;
