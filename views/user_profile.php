@@ -3,7 +3,7 @@
 session_start();
 require_once('../config/config.php');
 include('../config/checklogin.php');
-check_login()
+check_login();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,7 +52,7 @@ check_login()
                                                 <p class="clearfix">
                                                     <span class="float-left"> Since </span>
                                                     <span class="float-right text-muted">
-                                                       <?php echo date('d M Y', strtotime($_SESSION['user_created_at'])); ?>
+                                                        <?php echo date('d M Y', strtotime($_SESSION['user_created_at'])); ?>
                                                     </span>
                                                 </p>
 
@@ -65,15 +65,13 @@ check_login()
                                         </div>
                                         <div class="col-lg-8">
                                             <div class="d-flex justify-content-between">
-                                                <div>
-                                                    <h3><?php echo $_SESSION['user_name']; ?></h3>
-                                                    <div class="d-flex align-items-center">
-                                                        <h5 class="mb-0 me-2 text-muted"><?php echo $_SESSION['role_type']; ?></h5>
-
-                                                    </div>
+                                                <div class="d-flex flex-column">
+                                                    <h3 class="font-weight-bold dynamictext" data-type="user_name"> <?php echo $_SESSION['user_name']; ?> </h3>
+                                                    <h6 class="font-weight-normal mb-0"> <?php echo $_SESSION['role_type']; ?> </h6>
                                                 </div>
-                                   
                                             </div>
+
+
                                             <div class="mt-4 py-2 border-top border-bottom">
                                                 <?php
                                                 // Check user role and display appropriate tabs
@@ -189,45 +187,54 @@ check_login()
 
                                                         <button type="submit" class="btn btn-primary mt-3">Update</button>
                                                     </form>
-
+                                                    <?php include('../functions/custom_alerts.php'); ?>
                                                     <script>
-                                                        document.getElementById('accountUpdateForm').addEventListener('submit', function(e) {
+                                                        const form = document.getElementById('accountUpdateForm');
+                                                        form.addEventListener('submit', async function(e) {
                                                             e.preventDefault();
-
                                                             const formData = new FormData(this);
 
-                                                            fetch('../functions/update_account.php', {
+                                                            try {
+                                                                const response = await fetch('../functions/update_account.php', {
                                                                     method: 'POST',
                                                                     body: formData
-                                                                })
-                                                                .then(response => response.json())
-                                                                .then(data => {
-                                                                    if (data.success) {
-                                                                        Swal.fire({
-                                                                            icon: 'success',
-                                                                            title: 'Success',
-                                                                            text: 'Account updated successfully!'
-                                                                        }).then(() => {
-                                                                            location.reload();
-                                                                        });
-                                                                    } else {
-                                                                        Swal.fire({
-                                                                            icon: 'error',
-                                                                            title: 'Error',
-                                                                            text: 'Error updating account: ' + data.message
-                                                                        });
-                                                                    }
-                                                                })
-                                                                .catch(error => {
-                                                                    console.error('Error:', error);
-                                                                    Swal.fire({
-                                                                        icon: 'error',
-                                                                        title: 'Error',
-                                                                        text: 'An error occurred while updating the account.'
-                                                                    });
                                                                 });
+
+                                                                const result = await response.json();
+
+                                                                if (result.success) {
+                                                                    showToast('success', result.message);
+
+                                                                    // ✅ Update UI elements
+                                                                    document.querySelectorAll('.float-right.text-muted').forEach((element) => {
+                                                                        if (element.previousElementSibling?.textContent?.trim() === "Phone") {
+                                                                            element.textContent = result.updated_data.user_phone;
+                                                                        } else if (element.previousElementSibling?.textContent?.trim() === "Mail") {
+                                                                            element.textContent = result.updated_data.user_email;
+                                                                        }
+                                                                    });
+
+                                                                    document.querySelectorAll('.dynamictext').forEach((element) => {
+                                                                        if (element.dataset.type === "user_name") {
+                                                                            element.textContent = result.updated_data.user_name;
+                                                                        }
+                                                                    });
+
+                                                                    // ✅ Update input fields
+                                                                    document.getElementById('userName').value = result.updated_data.user_name;
+                                                                    document.getElementById('userEmail').value = result.updated_data.user_email;
+                                                                    document.getElementById('userPhone').value = result.updated_data.user_phone;
+
+                                                                } else {
+                                                                    showToast('error', result.error || 'An error occurred.');
+                                                                }
+                                                            } catch (error) {
+                                                                console.error('Fetch error:', error);
+                                                                showToast('error', 'A network error occurred.');
+                                                            }
                                                         });
                                                     </script>
+
                                                 </div>
                                             </div>
                                         </div>
