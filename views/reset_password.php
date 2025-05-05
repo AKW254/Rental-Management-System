@@ -1,5 +1,8 @@
 <?php
 include('../config/config.php');
+require_once('../config/codeGen.php');
+require '../vendor/autoload.php'; // Include PHPMailer autoload file
+require_once('../functions/password_standard.php'); // Include password standard function
 session_start();
 
 
@@ -7,59 +10,78 @@ session_start();
 
     // Step 1: Request Reset
     if (isset($_POST['submit_request'])) {
-        $email = $mysqli->real_escape_string($_POST['email']);
+        $user_email = trim($_POST['user_email']);
 
-        // Check if user exists
-        $result = $mysqli->query("SELECT user_email FROM users WHERE user_email='$email'");
+        $stmt = $mysqli->prepare("SELECT user_email FROM users WHERE user_email = ?");
+        $stmt->bind_param("s", $user_email);
+        $stmt->execute();
+        $stmt->store_result();
 
-        if ($result->num_rows > 0) {
-            $token = rand(100000, 999999);
-            $_SESSION['reset_email'] = $email;
-            $_SESSION['reset_token'] = $token;
+        if ($stmt->num_rows > 0) {
+            $auth_token = $auth_gen_token;
+            $_SESSION['auth_token'] = $auth_token;
+            $_SESSION['reset_email'] = $user_email;
             $_SESSION['timer'] = time() + 300; // 5 minutes
 
-            // Store token in DB
-            $mysqli->query("UPDATE users SET user_password_reset_code='$token' WHERE user_email='$email'");
+            // Send token via email
+            include('../mailers/user_auth_token.php');
 
-            $msg = "A reset token has been sent to your email.";
+            $update = $mysqli->prepare("UPDATE users SET user_password_reset_code = ? WHERE user_email = ?");
+            $update->bind_param("ss", $auth_token, $user_email);
+            $update->execute();
+
+            if (!$mail->send()) {
+                $err = "Mailer Error: " . $mail->ErrorInfo;
+            } else {
+                $success = "A reset token has been sent to your email.";
+            }
         } else {
-            $msg = "User does not exist!";
+            $err = "User does not exist!";
         }
+        $stmt->close();
     }
 
     // Step 2: Verify Token
     if (isset($_POST['verify_token'])) {
-        if (isset($_SESSION['reset_token']) && $_POST['token'] == $_SESSION['reset_token']) {
+        $submitted_token = trim($_POST['token']);
+        if (isset($_SESSION['auth_token']) && hash_equals($_SESSION['auth_token'], $submitted_token)) {
             $_SESSION['verified'] = true;
         } else {
-            $msg = "Invalid token!";
+            $err = "Invalid token!";
         }
     }
 
     // Step 3: Update Password
-    if (isset($_POST['update_password']) && isset($_SESSION['verified']) && $_SESSION['verified']) {
-        $new_pass = $mysqli->real_escape_string($_POST['new_password']);
-        $confirm_pass = $mysqli->real_escape_string($_POST['confirm_password']);
+    if (isset($_POST['update_password'], $_SESSION['verified']) && $_SESSION['verified']) {
+        $new_pass = trim($_POST['new_password']);
+        $confirm_pass = trim($_POST['confirm_password']);
 
-        if ($new_pass === $confirm_pass) {
+        $standard_check = password_standard($new_pass);
+        if ($new_pass !== $confirm_pass) {
+            $err = "Passwords do not match!";
+        } elseif ($standard_check !== true) {
+            $err = $standard_check;
+        } else {
             $hashed_pass = password_hash($new_pass, PASSWORD_BCRYPT);
             $email = $_SESSION['reset_email'];
-            $mysqli->query("UPDATE users SET user_password='$hashed_pass', user_password_reset_code=NULL WHERE user_email='$email'");
-            header("refresh:1; url=login");;
-            //$msg = "Password successfully updated!";
+
+            $stmt = $mysqli->prepare("UPDATE users SET user_password = ?, user_password_reset_code = NULL WHERE user_email = ?");
+            $stmt->bind_param("ss", $hashed_pass, $email);
+            $stmt->execute();
+
             session_destroy();
-        } else {
-            $msg = "Passwords do not match!";
+            header("refresh:1; url=login");
         }
     }
 
-    // If user submits the Back form, destroy session without redirecting
+    // Step 4: Handle Session Timeout or Manual Reset
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['timeout'])) {
         session_destroy();
-        session_start(); // Restart a new session to avoid errors
-        $msg = "Session cleared. You can start over.";
+        session_start();
+        $err = "Session cleared. You can start over.";
     }
-?>
+
+    ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -79,7 +101,7 @@ session_start();
                                 <form method="POST">
                                     <div class="form-group">
                                         <label>Email *</label>
-                                        <input type="email" name="email" class="form-control p_input" required>
+                                        <input type="email" name="user_email" class="form-control p_input" required>
                                     </div>
                                     <p class="text-center text-danger"><?php echo $msg; ?></p>
                                     <div class="text-center d-grid gap-2">

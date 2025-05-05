@@ -2,61 +2,64 @@
 //connection from DB
 include("../config/config.php");
 require '../vendor/autoload.php'; // Include PHPMailer autoload file
-
+require_once('../functions/password_standard.php'); // Include password standard function
 
     //registration
     if (isset($_POST['registration'])) {
-    
-        // Declaration of variables
-        $user_name = mysqli_real_escape_string($mysqli, $_POST['user_name']);
-        $user_email = mysqli_real_escape_string($mysqli, $_POST['user_email']);
-        $user_phone = mysqli_real_escape_string($mysqli, $_POST['user_phone']);
-        $user_password = mysqli_real_escape_string($mysqli, $_POST['user_password']);
-        $confirm_password = mysqli_real_escape_string($mysqli, $_POST['confirm_password']);
-        $role_id = mysqli_real_escape_string($mysqli, $_POST['role_id']);
-        $user_role = mysqli_real_escape_string($mysqli, $_POST['role_type']);
+        // Sanitize and assign inputs
+        $user_name     = $mysqli->real_escape_string(trim($_POST['user_name']));
+        $user_email    = $mysqli->real_escape_string(trim($_POST['user_email']));
+        $user_phone    = $mysqli->real_escape_string(trim($_POST['user_phone']));
+        $user_password = $_POST['user_password'];
+        $confirm_password = $_POST['confirm_password'];
+        $role_id       = $mysqli->real_escape_string($_POST['role_id']);
+        $user_role     = $mysqli->real_escape_string($_POST['role_type']);
 
-        // Check if passwords match
+        // Validate password match
         if ($user_password !== $confirm_password) {
             $err = "Passwords do not match!";
-           
         }
-
-        // Check if email already exists
-        $check_email = $mysqli->query("SELECT * FROM users WHERE user_email = '$user_email'");
-        if ($check_email->num_rows > 0) {
-            $err = "Email already registered!";
-          
-          
-        }
-
-        // Hash password
-        $password = password_hash($user_password, PASSWORD_DEFAULT);
-
-        // Insert user into the database
-        $sql = "INSERT INTO users (user_name, user_email, user_password, role_id) 
-            VALUES('$user_name', '$user_email', '$password', '$role_id')";
-
-        if ($mysqli->query($sql)) {
-            // Include mailer script
-            include('../mailers/user_onboarding.php');
-
-            try {
-                if ($mail->send()) {
-                    $success = "Registration Successful! Please check your email for login details.";
-                    header("Location: login");
-                    exit;
-                } else {
-                    $info = "Registration Successful, but email could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                    
-                }
-            } catch (Exception $e) {
-                $err="Registration Successful, but email could not be sent. Exception: {$e->getMessage()}";
-            }
+        // Validate password strength
+        elseif (($standard_check = password_standard($user_password)) !== true) {
+            $err = $standard_check;
         } else {
-            $err="Registration Failed! Please try again.";
+            // Check if email is already registered
+            $stmt = $mysqli->prepare("SELECT 1 FROM users WHERE user_email = ?");
+            $stmt->bind_param("s", $user_email);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                $err = "Email already registered!";
+            } else {
+                // Hash password and insert into database
+                $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+                $stmt = $mysqli->prepare("INSERT INTO users (user_name, user_email, user_password, role_id) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("sssi", $user_name, $user_email, $hashed_password, $role_id);
+
+                if ($stmt->execute()) {
+                    include('../mailers/user_onboarding.php');
+
+                    try {
+                        if ($mail->send()) {
+                            $success = "Registration successful! Please check your email.";
+                            header("Location: login");
+                            exit;
+                        } else {
+                            $info = "Registered, but email not sent: {$mail->ErrorInfo}";
+                        }
+                    } catch (Exception $e) {
+                        $err = "Registered, but email failed: {$e->getMessage()}";
+                    }
+                } else {
+                    $err = "Registration failed. Please try again.";
+                }
+            }
+
+            $stmt->close();
         }
     }
+
 
     ?>
 <!DOCTYPE html>
