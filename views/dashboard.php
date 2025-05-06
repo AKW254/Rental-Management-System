@@ -1,8 +1,8 @@
-<?php 
+<?php
 //Start session
 session_start();
 require_once('../config/config.php');
-Include('../config/checklogin.php');
+include('../config/checklogin.php');
 check_login()
 //Check if user is logged in
 
@@ -24,763 +24,101 @@ check_login()
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <div class="row">
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                            <div class="card">
+                    <?php require_once('../helpers/analysis/admin.php') ?>
+                    <div class="row g-4">
+                        <!-- Total Properties -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="d-flex align-items-center align-self-start">
-                                                <h3 class="mb-0">$12.34</h3>
-                                                <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="icon icon-box-success ">
-                                                <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal">Potential growth</h6>
+                                    <h6 class="text-muted">Total Properties</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_properties ?></h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                            <div class="card">
+
+                        <!-- Total Rooms -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="d-flex align-items-center align-self-start">
-                                                <h3 class="mb-0">$17.34</h3>
-                                                <p class="text-success ms-2 mb-0 font-weight-medium">+11%</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="icon icon-box-success">
-                                                <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal">Revenue current</h6>
+                                    <h6 class="text-muted">Total Rooms</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_rooms ?></h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                            <div class="card">
+
+                        <!-- Active Agreements -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="d-flex align-items-center align-self-start">
-                                                <h3 class="mb-0">$12.34</h3>
-                                                <p class="text-danger ms-2 mb-0 font-weight-medium">-2.4%</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="icon icon-box-danger">
-                                                <span class="mdi mdi-arrow-bottom-left icon-item"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal">Daily Income</h6>
+                                    <h6 class="text-muted">Active Agreements</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_agreements ?></h3>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                            <div class="card">
+
+                        <!-- Pending Maintenance -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-9">
-                                            <div class="d-flex align-items-center align-self-start">
-                                                <h3 class="mb-0">$31.53</h3>
-                                                <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
-                                            </div>
-                                        </div>
-                                        <div class="col-3">
-                                            <div class="icon icon-box-success ">
-                                                <span class="mdi mdi-arrow-top-right icon-item"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h6 class="text-muted font-weight-normal">Expense current</h6>
+                                    <h6 class="text-muted">Pending Maintenance</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_maintenance ?></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Tenants -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Registered Tenants</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_tenants ?></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Landlords -->
+                        <div class="col-md-4 col-xl-3">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-body">
+                                    <h6 class="text-muted">Total Landlords</h6>
+                                    <h3 class="fw-bold mb-0"><?php echo $total_landlords ?></h3>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-4 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Transaction History</h4>
-                                    <div class="position-relative">
-                                        <div class="daoughnutchart-wrapper">
-                                            <canvas id="transaction-history" class="transaction-chart"></canvas>
-                                        </div>
-                                        <div class="custom-value">$1200 <span>Total</span>
-                                        </div>
-                                    </div>
-                                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                                        <div class="text-md-center text-xl-left">
-                                            <h6 class="mb-1">Transfer to Paypal</h6>
-                                            <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p>
-                                        </div>
-                                        <div class="align-self-center flex-grow text-end text-md-center text-xl-right py-md-2 py-xl-0">
-                                            <h6 class="font-weight-bold mb-0">$236</h6>
-                                        </div>
-                                    </div>
-                                    <div class="bg-gray-dark d-flex d-md-block d-xl-flex flex-row py-3 px-4 px-md-3 px-xl-4 rounded mt-3">
-                                        <div class="text-md-center text-xl-left">
-                                            <h6 class="mb-1">Tranfer to Stripe</h6>
-                                            <p class="text-muted mb-0">07 Jan 2019, 09:12AM</p>
-                                        </div>
-                                        <div class="align-self-center flex-grow text-end text-md-center text-xl-right py-md-2 py-xl-0">
-                                            <h6 class="font-weight-bold mb-0">$593</h6>
-                                        </div>
-                                    </div>
+                    <div class="container-fluid px-2 py-4">
+
+                        <!-- Pie chart of Users roles -->
+                        <div class="col-sm-12 col-md-6 col-xl-4">
+                            <div class="card-body">
+                                <h4 class="card-title">Users Roles</h4>
+                                <div class="doughnutjs-wrapper d-flex justify-content-center">
+                                    <canvas id="doughnutChart" style="height: 240px; display: block; box-sizing: border-box; width: 240px;" width="240" height="240"></canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <h4 class="card-title mb-1">Open Projects</h4>
-                                        <p class="text-muted mb-1">Your data status</p>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="preview-list">
-                                                <div class="preview-item border-bottom">
-                                                    <div class="preview-thumbnail">
-                                                        <div class="preview-icon bg-primary">
-                                                            <i class="mdi mdi-file-document"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="preview-item-content d-sm-flex flex-grow">
-                                                        <div class="flex-grow">
-                                                            <h6 class="preview-subject">Admin dashboard design</h6>
-                                                            <p class="text-muted mb-0">Broadcast web app mockup</p>
-                                                        </div>
-                                                        <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                                            <p class="text-muted">15 minutes ago</p>
-                                                            <p class="text-muted mb-0">30 tasks, 5 issues </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="preview-item border-bottom">
-                                                    <div class="preview-thumbnail">
-                                                        <div class="preview-icon bg-success">
-                                                            <i class="mdi mdi-cloud-download"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="preview-item-content d-sm-flex flex-grow">
-                                                        <div class="flex-grow">
-                                                            <h6 class="preview-subject">Wordpress Development</h6>
-                                                            <p class="text-muted mb-0">Upload new design</p>
-                                                        </div>
-                                                        <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                                            <p class="text-muted">1 hour ago</p>
-                                                            <p class="text-muted mb-0">23 tasks, 5 issues </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="preview-item border-bottom">
-                                                    <div class="preview-thumbnail">
-                                                        <div class="preview-icon bg-info">
-                                                            <i class="mdi mdi-clock"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="preview-item-content d-sm-flex flex-grow">
-                                                        <div class="flex-grow">
-                                                            <h6 class="preview-subject">Project meeting</h6>
-                                                            <p class="text-muted mb-0">New project discussion</p>
-                                                        </div>
-                                                        <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                                            <p class="text-muted">35 minutes ago</p>
-                                                            <p class="text-muted mb-0">15 tasks, 2 issues</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="preview-item border-bottom">
-                                                    <div class="preview-thumbnail">
-                                                        <div class="preview-icon bg-danger">
-                                                            <i class="mdi mdi-email-open"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="preview-item-content d-sm-flex flex-grow">
-                                                        <div class="flex-grow">
-                                                            <h6 class="preview-subject">Broadcast Mail</h6>
-                                                            <p class="text-muted mb-0">Sent release details to team</p>
-                                                        </div>
-                                                        <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                                            <p class="text-muted">55 minutes ago</p>
-                                                            <p class="text-muted mb-0">35 tasks, 7 issues </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="preview-item">
-                                                    <div class="preview-thumbnail">
-                                                        <div class="preview-icon bg-warning">
-                                                            <i class="mdi mdi-chart-pie"></i>
-                                                        </div>
-                                                    </div>
-                                                    <div class="preview-item-content d-sm-flex flex-grow">
-                                                        <div class="flex-grow">
-                                                            <h6 class="preview-subject">UI Design</h6>
-                                                            <p class="text-muted mb-0">New application planning</p>
-                                                        </div>
-                                                        <div class="mr-auto text-sm-right pt-2 pt-sm-0">
-                                                            <p class="text-muted">50 minutes ago</p>
-                                                            <p class="text-muted mb-0">27 tasks, 4 issues </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <!-- Area chart annual collected -->
+                        <div class="col-sm-12 col-md-6 col-xl-8">
+                            <div class="card-body">
+                                <h4 class="card-title">Annual Collected Rent</h4>
+                                <div class="area-chartjs-wrapper">
+                                    <canvas id="areaChart" style="height: 240px; display: block; box-sizing: border-box; width: 480px;" width="480" height="240"></canvas>
                                 </div>
                             </div>
                         </div>
+                        <!-- Line chart for tenant and landlord registration -->
+                        <div class="col-sm-12 col-md-6 col-xl-8">
+                            <div class="card-body">
+                                <h4 class="card-title">Tenant and Landlord Registration</h4>
+                                <div class="line-chartjs-wrapper">
+                                    <canvas id="lineChart" style="height: 240px; display: block; box-sizing: border-box; width: 480px;" width="480" height="240"></canvas>
+                                </div>
+                            </div>
+                        <!--Line chart for tenant and landlord registration-->
                     </div>
 
-                    <div class="row">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Jquery-toast styles</h4>
-                                    <p class="card-description mb-0"> Click on the below buttons for notifications in different styles. </p>
-                                    <p class="card-description"> The <code>icon</code> property can be used to specify the predefined types of toasts - success, info, warning and danger </p>
-                                    <div class="template-demo d-flex justify-content-between flex-wrap">
-                                        <button type="button" class="btn btn-success btn-fw" onclick="showSuccessToast()">Success</button>
-                                        <button type="button" class="btn btn-info btn-fw" onclick="showInfoToast()">Info</button>
-                                        <button type="button" class="btn btn-warning btn-fw" onclick="showWarningToast()">Warning</button>
-                                        <button type="button" class="btn btn-danger btn-fw" onclick="showDangerToast()">Danger</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Jquery-toast positions</h4>
-                                    <p class="card-description"> The <code>position</code> property can be used to specify the predefined positions of toasts </p>
-                                    <div class="template-demo d-flex justify-content-between flex-wrap">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('bottom-left')">Bottom-left</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('bottom-right')">Bottom-right</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('bottom-center')">Bottom-center</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('top-left')">Top-left</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('top-right')">Top-right</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('top-center')">Top-center</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastPosition('mid-center')">Mid-center</button>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showToastInCustomPosition()">Custom</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Bootstrap alert</h4>
-                                    <p class="car-description">Add class <code>.alert .alert-*</code></p>
-                                    <div class="alert alert-success text-dark" role="alert"> You successfully read this important alert message. </div>
-                                    <div class="alert alert-info text-dark" role="alert"> This alert needs your attention, but it's not that important. </div>
-                                    <div class="alert alert-warning text-dark" role="alert"> Better check yourself, you're not looking too good. </div>
-                                    <div class="alert alert-danger text-dark" role="alert"> Change a few things up and try submitting again. </div>
-                                    <div class="alert alert-primary text-dark" role="alert"> This is a primary alert </div>
-                                    <div class="alert alert-secondary text-dark" role="alert"> This alert is not so important. </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Custom alerts</h4>
-                                    <p class="card-description"> Custom HTML inside alert </p>
-                                    <div class="card card-inverse-secondary mb-5">
-                                        <div class="card-body">
-                                            <p class="mb-4"> Well done! You successfully read this important alert message. </p>
-                                            <button class="btn btn-secondary">Ok</button>
-                                            <button class="btn btn-light">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <div class="card card-inverse-info">
-                                        <div class="card-body">
-                                            <p class="mb-4"> Heads up! This alert needs your attention, but it's not super important. </p>
-                                            <button class="btn btn-info">Ok</button>
-                                            <button class="btn btn-light">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Bootstrap alerts in fill colors</h4>
-                                    <p class="card-description"> Add class <code>.alert-fill-*</code> with <code>.alert</code>
-                                    </p>
-                                    <div class="alert alert-fill-primary" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> There! This is a primary alert.
-                                    </div>
-                                    <div class="alert alert-fill-success" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> Well done! You successfully read this important alert message.
-                                    </div>
-                                    <div class="alert alert-fill-info" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> Heads up! This alert needs your attention, but it's not super important.
-                                    </div>
-                                    <div class="alert alert-fill-warning" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> Warning! Better check yourself, you're not looking too good.
-                                    </div>
-                                    <div class="alert alert-fill-danger" role="alert">
-                                        <i class="mdi mdi-alert-circle"></i> Oh snap! Change a few things up and try submitting again.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Desktop notification</h4>
-                                    <p class="card-description">Create simple desktop notifications</p>
-                                    <form>
-                                        <div class="form-group">
-                                            <label for="title">Title</label>
-                                            <input type="text" class="form-control" id="title" placeholder="Write some title here" value="Sample title" required="">
-                                            <label class="mt-4" for="message">Message</label>
-                                            <textarea placeholder="Write some message here" id="message" class="form-control" required="">Sample content</textarea>
-                                        </div>
-                                        <button type="submit" class="btn btn-success"> <span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Notify</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Revenue</h5>
-                                    <div class="row">
-                                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                                <h2 class="mb-0">$32123</h2>
-                                                <p class="text-success ms-2 mb-0 font-weight-medium">+3.5%</p>
-                                            </div>
-                                            <h6 class="text-muted font-weight-normal">11.38% Since last month</h6>
-                                        </div>
-                                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                            <i class="icon-lg mdi mdi-codepen text-primary ml-auto"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Sales</h5>
-                                    <div class="row">
-                                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                                <h2 class="mb-0">$45850</h2>
-                                                <p class="text-success ms-2 mb-0 font-weight-medium">+8.3%</p>
-                                            </div>
-                                            <h6 class="text-muted font-weight-normal"> 9.61% Since last month</h6>
-                                        </div>
-                                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                            <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Purchase</h5>
-                                    <div class="row">
-                                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                                            <div class="d-flex d-sm-block d-md-flex align-items-center">
-                                                <h2 class="mb-0">$2039</h2>
-                                                <p class="text-danger ms-2 mb-0 font-weight-medium">-2.1% </p>
-                                            </div>
-                                            <h6 class="text-muted font-weight-normal">2.27% Since last month</h6>
-                                        </div>
-                                        <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
-                                            <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row ">
-                        <div class="col-12 grid-margin">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Order Status</h4>
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input" id="check-all">
-                                                            </label>
-                                                        </div>
-                                                    </th>
-                                                    <th> Client Name </th>
-                                                    <th> Order No </th>
-                                                    <th> Product Cost </th>
-                                                    <th> Project </th>
-                                                    <th> Payment Mode </th>
-                                                    <th> Start Date </th>
-                                                    <th> Payment Status </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face1.jpg" alt="image" />
-                                                        <span class="ps-2">Henry Klein</span>
-                                                    </td>
-                                                    <td> 02312 </td>
-                                                    <td> $14,500 </td>
-                                                    <td> Dashboard </td>
-                                                    <td> Credit card </td>
-                                                    <td> 04 Dec 2019 </td>
-                                                    <td>
-                                                        <div class="badge badge-outline-success">Approved</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face2.jpg" alt="image" />
-                                                        <span class="ps-2">Estella Bryan</span>
-                                                    </td>
-                                                    <td> 02312 </td>
-                                                    <td> $14,500 </td>
-                                                    <td> Website </td>
-                                                    <td> Cash on delivered </td>
-                                                    <td> 04 Dec 2019 </td>
-                                                    <td>
-                                                        <div class="badge badge-outline-warning">Pending</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face5.jpg" alt="image" />
-                                                        <span class="ps-2">Lucy Abbott</span>
-                                                    </td>
-                                                    <td> 02312 </td>
-                                                    <td> $14,500 </td>
-                                                    <td> App design </td>
-                                                    <td> Credit card </td>
-                                                    <td> 04 Dec 2019 </td>
-                                                    <td>
-                                                        <div class="badge badge-outline-danger">Rejected</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face3.jpg" alt="image" />
-                                                        <span class="ps-2">Peter Gill</span>
-                                                    </td>
-                                                    <td> 02312 </td>
-                                                    <td> $14,500 </td>
-                                                    <td> Development </td>
-                                                    <td> Online Payment </td>
-                                                    <td> 04 Dec 2019 </td>
-                                                    <td>
-                                                        <div class="badge badge-outline-success">Approved</div>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <div class="form-check form-check-muted m-0">
-                                                            <label class="form-check-label">
-                                                                <input type="checkbox" class="form-check-input">
-                                                            </label>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face4.jpg" alt="image" />
-                                                        <span class="ps-2">Sallie Reyes</span>
-                                                    </td>
-                                                    <td> 02312 </td>
-                                                    <td> $14,500 </td>
-                                                    <td> Website </td>
-                                                    <td> Credit card </td>
-                                                    <td> 04 Dec 2019 </td>
-                                                    <td>
-                                                        <div class="badge badge-outline-success">Approved</div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xl-4 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <h4 class="card-title">Messages</h4>
-                                        <p class="text-muted mb-1 small">View all</p>
-                                    </div>
-                                    <div class="preview-list">
-                                        <div class="preview-item border-bottom">
-                                            <div class="preview-thumbnail">
-                                                <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face6.jpg" alt="image" class="rounded-circle" />
-                                            </div>
-                                            <div class="preview-item-content d-flex flex-grow">
-                                                <div class="flex-grow">
-                                                    <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                                        <h6 class="preview-subject">Leonard</h6>
-                                                        <p class="text-muted text-small">5 minutes ago</p>
-                                                    </div>
-                                                    <p class="text-muted">Well, it seems to be working now.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="preview-item border-bottom">
-                                            <div class="preview-thumbnail">
-                                                <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face8.jpg" alt="image" class="rounded-circle" />
-                                            </div>
-                                            <div class="preview-item-content d-flex flex-grow">
-                                                <div class="flex-grow">
-                                                    <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                                        <h6 class="preview-subject">Luella Mills</h6>
-                                                        <p class="text-muted text-small">10 Minutes Ago</p>
-                                                    </div>
-                                                    <p class="text-muted">Well, it seems to be working now.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="preview-item border-bottom">
-                                            <div class="preview-thumbnail">
-                                                <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face9.jpg" alt="image" class="rounded-circle" />
-                                            </div>
-                                            <div class="preview-item-content d-flex flex-grow">
-                                                <div class="flex-grow">
-                                                    <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                                        <h6 class="preview-subject">Ethel Kelly</h6>
-                                                        <p class="text-muted text-small">2 Hours Ago</p>
-                                                    </div>
-                                                    <p class="text-muted">Please review the tickets</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="preview-item border-bottom">
-                                            <div class="preview-thumbnail">
-                                                <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face11.jpg" alt="image" class="rounded-circle" />
-                                            </div>
-                                            <div class="preview-item-content d-flex flex-grow">
-                                                <div class="flex-grow">
-                                                    <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                                        <h6 class="preview-subject">Herman May</h6>
-                                                        <p class="text-muted text-small">4 Hours Ago</p>
-                                                    </div>
-                                                    <p class="text-muted">Thanks a lot. It was easy to fix it .</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-xl-4 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Portfolio Slide</h4>
-                                    <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel" id="owl-carousel-basic">
-                                        <div class="item">
-                                            <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/dashboard/Rectangle.jpg" alt="">
-                                        </div>
-                                        <div class="item">
-                                            <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/dashboard/Img_5.jpg" alt="">
-                                        </div>
-                                        <div class="item">
-                                            <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/dashboard/img_6.jpg" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="d-flex py-4">
-                                        <div class="preview-list w-100">
-                                            <div class="preview-item p-0">
-                                                <div class="preview-thumbnail">
-                                                    <img src="https://demo.bootstrapdash.com/corona-new/themes/assets/images/faces/face12.jpg" class="rounded-circle" alt="">
-                                                </div>
-                                                <div class="preview-item-content d-flex flex-grow">
-                                                    <div class="flex-grow">
-                                                        <div class="d-flex d-md-block d-xl-flex justify-content-between">
-                                                            <h6 class="preview-subject">CeeCee Bass</h6>
-                                                            <p class="text-muted text-small">4 Hours Ago</p>
-                                                        </div>
-                                                        <p class="text-muted">Well, it seems to be working now.</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <p class="text-muted">Well, it seems to be working now. </p>
-                                    <div class="progress progress-md portfolio-progress">
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-xl-4 grid-margin stretch-card">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">To do list</h4>
-                                    <div class="add-items d-flex">
-                                        <input type="text" class="form-control todo-list-input" placeholder="enter task..">
-                                        <button class="add btn btn-primary todo-list-add-btn">Add</button>
-                                    </div>
-                                    <div class="list-wrapper">
-                                        <ul class="d-flex flex-column-reverse text-white todo-list todo-list-custom">
-                                            <li>
-                                                <div class="form-check form-check-primary">
-                                                    <label class="form-check-label">
-                                                        <input class="checkbox" type="checkbox"> Create invoice </label>
-                                                </div>
-                                                <i class="remove mdi mdi-close-box"></i>
-                                            </li>
-                                            <li>
-                                                <div class="form-check form-check-primary">
-                                                    <label class="form-check-label">
-                                                        <input class="checkbox" type="checkbox"> Meeting with Alita </label>
-                                                </div>
-                                                <i class="remove mdi mdi-close-box"></i>
-                                            </li>
-                                            <li class="completed">
-                                                <div class="form-check form-check-primary">
-                                                    <label class="form-check-label">
-                                                        <input class="checkbox" type="checkbox" checked> Prepare for presentation </label>
-                                                </div>
-                                                <i class="remove mdi mdi-close-box"></i>
-                                            </li>
-                                            <li>
-                                                <div class="form-check form-check-primary">
-                                                    <label class="form-check-label">
-                                                        <input class="checkbox" type="checkbox"> Plan weekend outing </label>
-                                                </div>
-                                                <i class="remove mdi mdi-close-box"></i>
-                                            </li>
-                                            <li>
-                                                <div class="form-check form-check-primary">
-                                                    <label class="form-check-label">
-                                                        <input class="checkbox" type="checkbox"> Pick up kids from school </label>
-                                                </div>
-                                                <i class="remove mdi mdi-close-box"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">Visitors by Countries</h4>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-us"></i>
-                                                            </td>
-                                                            <td>USA</td>
-                                                            <td class="text-end"> 1500 </td>
-                                                            <td class="text-end font-weight-medium"> 56.35% </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-de"></i>
-                                                            </td>
-                                                            <td>Germany</td>
-                                                            <td class="text-end"> 800 </td>
-                                                            <td class="text-end font-weight-medium"> 33.25% </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-au"></i>
-                                                            </td>
-                                                            <td>Australia</td>
-                                                            <td class="text-end"> 760 </td>
-                                                            <td class="text-end font-weight-medium"> 15.45% </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-gb"></i>
-                                                            </td>
-                                                            <td>United Kingdom</td>
-                                                            <td class="text-end"> 450 </td>
-                                                            <td class="text-end font-weight-medium"> 25.00% </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-ro"></i>
-                                                            </td>
-                                                            <td>Romania</td>
-                                                            <td class="text-end"> 620 </td>
-                                                            <td class="text-end font-weight-medium"> 10.25% </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <i class="flag-icon flag-icon-br"></i>
-                                                            </td>
-                                                            <td>Brasil</td>
-                                                            <td class="text-end"> 230 </td>
-                                                            <td class="text-end font-weight-medium"> 75.00% </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-7">
-                                            <div id="audience-map" class="vector-map"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
+
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
@@ -792,7 +130,13 @@ check_login()
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+    <!-- visualization chart -->
+    <!-- Doughnut Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <?php include('../helpers/visualization/admin_charts.php'); ?>
     <?php include('../partials/scripts.php') ?>
+
+
 </body>
 
 
