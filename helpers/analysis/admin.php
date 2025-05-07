@@ -44,3 +44,33 @@ $total_admin = isset($total_admin) && is_numeric($total_admin) ? (int)$total_adm
 $total_tenants = isset($total_tenants) && is_numeric($total_tenants) ? (int)$total_tenants : 0;
 $total_landlords = isset($total_landlords) && is_numeric($total_landlords) ? (int)$total_landlords : 0;
 
+// Annual rent collected for each month
+$sql = "SELECT
+    DATE_FORMAT(months.month_start, '%Y-%m') AS month,
+    COALESCE(SUM(p.payment_amount), 0) AS total_successful_payments
+FROM
+    (SELECT MAKEDATE(YEAR(CURDATE()), 1) + INTERVAL (n - 1) MONTH AS month_start
+     FROM
+         (SELECT @row := @row + 1 AS n
+          FROM information_schema.columns,
+               (SELECT @row := 0) r
+          LIMIT 12) AS numbers
+    ) AS months
+LEFT JOIN
+    payments AS p ON DATE_FORMAT(p.payment_created_at, '%Y-%m') = DATE_FORMAT(months.month_start, '%Y-%m')
+                 AND p.payment_status = 'success'
+WHERE
+    YEAR(months.month_start) = YEAR(CURDATE())
+GROUP BY
+    month
+ORDER BY
+    month ASC;";  
+$result = mysqli_query($mysqli, $sql);
+$months = [];
+$annual_rent_collected = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $month = $row['month'];
+    $months[] = date('F', strtotime($month));
+    $total_successful_payments = $row['total_successful_payments'];
+    $annual_rent_collected[] = $total_successful_payments;
+}

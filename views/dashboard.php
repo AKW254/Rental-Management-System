@@ -86,9 +86,10 @@ check_login()
                             </div>
                         </div>
                     </div>
-                    <div class="container-fluid px-2 py-4">
+                    <div class="row px-4 py-4">
 
                         <!-- Pie chart of Users roles -->
+
                         <div class="col-sm-12 col-md-6 col-xl-4">
                             <div class="card-body">
                                 <h4 class="card-title">Users Roles</h4>
@@ -102,7 +103,7 @@ check_login()
                             <div class="card-body">
                                 <h4 class="card-title">Annual Collected Rent</h4>
                                 <div class="area-chartjs-wrapper">
-                                    <canvas id="areaChart" style="height: 240px; display: block; box-sizing: border-box; width: 480px;" width="480" height="240"></canvas>
+                                    <canvas id="areaChart" style="height: 250px; display: block; box-sizing: border-box; width: 480px;" width="480" height="420"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -114,27 +115,24 @@ check_login()
                                     <canvas id="lineChart" style="height: 240px; display: block; box-sizing: border-box; width: 480px;" width="480" height="240"></canvas>
                                 </div>
                             </div>
-                        <!--Line chart for tenant and landlord registration-->
+                            <!--Line chart for tenant and landlord registration-->
+                        </div>
                     </div>
-
-
-
+                    <!-- content-wrapper ends -->
+                    <!-- partial:partials/_footer.html -->
+                    <?php include('../partials/footer.php') ?>
+                    <!-- partial -->
                 </div>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                <?php include('../partials/footer.php') ?>
-                <!-- partial -->
+                <!-- main-panel ends -->
             </div>
-            <!-- main-panel ends -->
+            <!-- page-body-wrapper ends -->
         </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
-    <!-- visualization chart -->
-    <!-- Doughnut Chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <?php include('../helpers/visualization/admin_charts.php'); ?>
-    <?php include('../partials/scripts.php') ?>
+        <!-- container-scroller -->
+        <!-- visualization chart -->
+        <!-- Doughnut Chart -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <?php include('../helpers/visualization/admin_charts.php'); ?>
+        <?php include('../partials/scripts.php') ?>
 
 
 </body>

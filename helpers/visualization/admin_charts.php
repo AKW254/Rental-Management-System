@@ -26,3 +26,35 @@
         }
     });
 </script>
+<!-- Area chart annual rent collected -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chartElement = document.getElementById('areaChart');
+        if (chartElement) {
+            const ctx = chartElement.getContext('2d');
+            const areaChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?php echo json_encode($months); ?>,
+                    datasets: [{
+                        label: <?php echo json_encode('Annual Collected Rent ' . date('Y')); ?>,
+                        data: <?php echo json_encode($total_successful_payments); ?>,
+                        backgroundColor: 'rgba(48, 110, 180, 0.2)',
+                        borderColor: 'rgb(100, 195, 224)',
+                        borderWidth: 1,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+<!-- Line chart for tenant and landlord registration -->
