@@ -8,7 +8,7 @@ storage/
 build/
 tmp/
 temp/
-
+config/
 # config file
 .env
 

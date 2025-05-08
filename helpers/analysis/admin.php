@@ -74,3 +74,54 @@ while ($row = mysqli_fetch_assoc($result)) {
     $total_successful_payments = $row['total_successful_payments'];
     $annual_rent_collected[] = $total_successful_payments;
 }
+//registration of tenants and landlords per month
+$sql = "SELECT
+    months.month,
+    -- Count the number of users with the role 'Tenant' for each month, defaulting to 0 if none are found
+    COALESCE(SUM(CASE WHEN r.role_type = 'Tenant' THEN 1 ELSE 0 END), 0) AS total_tenants_registered,
+    COALESCE(SUM(CASE WHEN r.role_type = 'Landlord' THEN 1 ELSE 0 END), 0) AS total_landlords_registered
+FROM (
+    SELECT DATE_FORMAT(DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-01-01'), INTERVAL n MONTH), '%Y-%m') AS month
+    FROM (
+        SELECT 0 AS n UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
+        UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+        UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11
+    ) AS numbers
+) AS months
+LEFT JOIN users AS u ON DATE_FORMAT(u.user_created_at, '%Y-%m') = months.month
+LEFT JOIN roles AS r ON u.role_id = r.role_id
+GROUP BY months.month
+ORDER BY months.month;
+;";
+$result = mysqli_query($mysqli, $sql);
+$months = [];
+$total_tenants_registered = [];
+$total_landlords_registered = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $month = $row['month'];
+    $months[] = date('F', strtotime($month));
+    $total_tenants_registered[] = $row['total_tenants_registered'];
+    $total_landlords_registered[] = $row['total_landlords_registered'];
+}
+
+/* Geo chart data */
+$sql = "SELECT user_id, latitude, longitude FROM user_locations";
+$result = mysqli_query($mysqli, $sql);
+$locations = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $locations[] = [
+        'user_id' => $row['user_id'],
+        'latitude' => floatval($row['latitude']),
+        'longitude' => floatval($row['longitude'])
+    ];
+}
+$locationData = [["user_id", "Latitude", "Longitude"]];
+foreach ($locations as $loc) {
+    $locationData[] = [
+        $loc['user_id'],              // label
+        floatval($loc['latitude']),
+        floatval($loc['longitude'])
+    ];
+}
+header('Content-Type: application/json');
+echo json_encode($locationData);

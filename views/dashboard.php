@@ -89,12 +89,11 @@ check_login()
                     <div class="row px-4 py-4">
 
                         <!-- Pie chart of Users roles -->
-
                         <div class="col-sm-12 col-md-6 col-xl-4">
                             <div class="card-body">
                                 <h4 class="card-title">Users Roles</h4>
-                                <div class="doughnutjs-wrapper d-flex justify-content-center">
-                                    <canvas id="doughnutChart" style="height: 240px; display: block; box-sizing: border-box; width: 240px;" width="240" height="240"></canvas>
+                                <div class="doughnutjs-wrapper">
+                                    <canvas id="doughnutChart" style="height: 250px; display: block; box-sizing: border-box; width: 250px;" width="250" height="250"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -102,8 +101,8 @@ check_login()
                         <div class="col-sm-12 col-md-6 col-xl-8">
                             <div class="card-body">
                                 <h4 class="card-title">Annual Collected Rent</h4>
-                                <div class="area-chartjs-wrapper">
-                                    <canvas id="areaChart" style="height: 250px; display: block; box-sizing: border-box; width: 480px;" width="480" height="420"></canvas>
+                                <div class="height: auto; width: 100%; display: block; box-sizing: border-box;">
+                                    <canvas id="areaChart" style="height: 250px; display: block; box-sizing: border-box; width: 250px;" width="250" height="250"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -111,12 +110,21 @@ check_login()
                         <div class="col-sm-12 col-md-6 col-xl-8">
                             <div class="card-body">
                                 <h4 class="card-title">Tenant and Landlord Registration</h4>
-                                <div class="line-chartjs-wrapper">
-                                    <canvas id="lineChart" style="height: 240px; display: block; box-sizing: border-box; width: 480px;" width="480" height="240"></canvas>
+                                <div class="height: auto; width: 100%; display: block; box-sizing: border-box;">
+                                    <canvas id="lineChart"></canvas>
                                 </div>
                             </div>
-                            <!--Line chart for tenant and landlord registration-->
                         </div>
+                        <!--Visitattion chart -->
+                        <div class="col-sm-12 col-md-6 col-xl-4">
+                            <div class="card-body">
+                                <h4 class="card-title">Visits</h4>
+                                <div class="">
+                                    <div id="geochart-markers" style="width: 100%; height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <!-- content-wrapper ends -->
                     <!-- partial:partials/_footer.html -->
@@ -131,6 +139,7 @@ check_login()
         <!-- visualization chart -->
         <!-- Doughnut Chart -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <?php include('../helpers/visualization/admin_charts.php'); ?>
         <?php include('../partials/scripts.php') ?>
 

@@ -1,5 +1,11 @@
 <!-- doughnut_chart.php -->
 <script>
+    const chartColors = {
+        background: '#81d4fa',
+        datalessRegion: '#f8bbd0',
+        default: '#f5f5f5'
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         const chartElement = document.getElementById('doughnutChart');
         if (chartElement) {
@@ -58,3 +64,91 @@
     });
 </script>
 <!-- Line chart for tenant and landlord registration -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const chartElement = document.getElementById('lineChart');
+        if (chartElement) {
+            const ctx = chartElement.getContext('2d');
+            const lineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: <?php echo json_encode($months); ?>,
+                    datasets: [{
+                            label: <?php echo json_encode('Tenants Registered on ' . date('Y')); ?>,
+                            data: <?php echo json_encode($total_tenants_registered); ?>,
+                            backgroundColor: 'rgba(221, 224, 221, 0.2)',
+                            borderColor: 'rgb(152, 6, 189)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: <?php echo json_encode('Landlords Registered on ' . date('Y')); ?>,
+                            data: <?php echo json_encode($total_landlords_registered); ?>,
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
+<!-- visualization chart -->
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        const chartElement = document.getElementById('geochart-markers');
+        if (chartElement) {
+            google.charts.load('current', {
+                packages: ['geochart'],
+                mapsApiKey: 'YOUR_API_KEY' // Optional
+            });
+
+            google.charts.setOnLoadCallback(drawMarkersMap);
+
+            let isChartDrawn = false;
+
+            function drawMarkersMap() {
+                if (isChartDrawn) {
+                    console.log('Chart already drawn, skipping redraw.');
+                    return;
+                }
+
+                
+                const locationData = <?php echo json_encode($locationData); ?>;
+
+                // Create a DataTable for Google Charts
+                const data = new google.visualization.DataTable();
+                data.addColumn('string', 'UserID');
+                data.addColumn('number', 'Latitude');
+                data.addColumn('number', 'Longitude');
+
+                locationData.forEach(location => {
+                    data.addRow([location.user_id, location.latitude, location.longitude]);
+                });
+
+                const options = {
+                    displayMode: 'markers',
+                    colorAxis: {
+                        colors: ['green', 'blue']
+                    },
+                    backgroundColor: '#81d4fa',
+                    datalessRegionColor: '#f8bbd0',
+                    defaultColor: '#f5f5f5'
+                };
+
+                const chart = new google.visualization.GeoChart(chartElement);
+                chart.draw(data, options);
+                isChartDrawn = true;
+            }
+        }
+    });
+</script>
