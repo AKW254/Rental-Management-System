@@ -14,6 +14,7 @@
 
  <!-- endinject -->
  <!-- Custom js for this page -->
+  <script src="../public/assets/vendors/datatable/datatable.js"></script>
 
  <script src="../public/assets/vendors/js/dashboard.js"></script>
 

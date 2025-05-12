@@ -106,49 +106,46 @@
 <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', () => {
         const chartElement = document.getElementById('geochart-markers');
-        if (chartElement) {
-            google.charts.load('current', {
-                packages: ['geochart'],
-                mapsApiKey: 'YOUR_API_KEY' // Optional
+        if (!chartElement) return;
+
+        google.charts.load('current', {
+            packages: ['geochart'],
+           
+        });
+
+        google.charts.setOnLoadCallback(drawMarkersMap);
+
+        let isChartDrawn = false;
+
+        function drawMarkersMap() {
+            if (isChartDrawn) return;
+
+            const locationData = <?php
+                                    echo json_encode($locationData);
+                                    ?>;
+
+            const data = new google.visualization.DataTable();
+            data.addColumn('string', 'UserID');
+            data.addColumn('number', 'Latitude');
+            data.addColumn('number', 'Longitude');
+
+            locationData.forEach(loc => {
+                data.addRow([loc.user_id, loc.latitude, loc.longitude]);
             });
 
-            google.charts.setOnLoadCallback(drawMarkersMap);
+            const options = {
+                displayMode: 'markers',
+                colorAxis: {
+                    colors: ['green', 'blue']
+                },
+                backgroundColor: '#81d4fa',
+                datalessRegionColor: '#f8bbd0',
+                defaultColor: '#f5f5f5'
+            };
 
-            let isChartDrawn = false;
-
-            function drawMarkersMap() {
-                if (isChartDrawn) {
-                    console.log('Chart already drawn, skipping redraw.');
-                    return;
-                }
-
-                
-                const locationData = <?php echo json_encode($locationData); ?>;
-
-                // Create a DataTable for Google Charts
-                const data = new google.visualization.DataTable();
-                data.addColumn('string', 'UserID');
-                data.addColumn('number', 'Latitude');
-                data.addColumn('number', 'Longitude');
-
-                locationData.forEach(location => {
-                    data.addRow([location.user_id, location.latitude, location.longitude]);
-                });
-
-                const options = {
-                    displayMode: 'markers',
-                    colorAxis: {
-                        colors: ['green', 'blue']
-                    },
-                    backgroundColor: '#81d4fa',
-                    datalessRegionColor: '#f8bbd0',
-                    defaultColor: '#f5f5f5'
-                };
-
-                const chart = new google.visualization.GeoChart(chartElement);
-                chart.draw(data, options);
-                isChartDrawn = true;
-            }
+            const chart = new google.visualization.GeoChart(chartElement);
+            chart.draw(data, options);
+            isChartDrawn = true;
         }
     });
 </script>

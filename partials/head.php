@@ -15,7 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/jvectormap@2.0.4/jquery-jvectormap.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.css" integrity="sha512-UTNP5BXLIptsaj5WdKFrkFov94lDx+eBvbKyoe1YAfjeRPC+gT5kyZ10kOHCfNZqEui1sxmqvodNUx3KbuYI/A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css" integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-   
+    <script src="https://cdn.jsdelivr.net/npm/jvectormap@2.0.4/jquery-jvectormap.min.js"></script>
 
     <!-- End plugin css for this page -->
     <!-- inject:css -->
@@ -24,13 +24,15 @@
     <link rel="stylesheet" href="../public/assets/vendors/css/style.css">
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="../public/assets/vendors/toastr/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.11.2/dataTables.bootstrap4.css" integrity="sha512-hGoWPM5M+d9Y32ZlHDWpbUh5mhgvWqw5Hmgmu0QRhj7Qye0d56/hmnQKvKKOn9/FQP0E1FygbBitiTvOJmin0Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="../public/assets/vendors/datatable/datatable.js"></script>
 
-<?php
-   
+    <?php
+
     if (isset($_SESSION['success'])) {
         $success = $_SESSION['success'];
         unset($_SESSION['success']);
     }
-?>
+    ?>
 
 </head>

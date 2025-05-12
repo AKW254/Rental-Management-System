@@ -19,3 +19,8 @@ while ($timezone_settings = $timezones_res->fetch_object()) {
 
     global $timezone, $timezone_offset;
 }
+//Google Maps API Key
+ /* Google Maps API Key */
+$config = [
+    'google_maps_api_key' => ''
+];
