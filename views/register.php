@@ -119,20 +119,7 @@ require_once('../functions/password_standard.php'); // Include password standard
                                 <p class="sign-up">Have an Account?<a href="login"> Login</a></p>
                             </form>
                             <!-- Script to get the role type from the selected role -->
-                            <script>
-                                document.addEventListener('DOMContentLoaded', function() {
-                                    const roleSelect = document.querySelector('select[name="role_id"]');
-                                    const roleTypeInput = document.getElementById('role_type');
-
-                                    if (roleSelect && roleTypeInput) {
-                                        roleSelect.addEventListener('change', function() {
-                                            const selectedOption = this.options[this.selectedIndex];
-                                            const roleType = selectedOption.getAttribute('data-role-type') || '';
-                                            roleTypeInput.value = roleType;
-                                        });
-                                    }
-                                });
-                            </script>  
+                            <script src="../public/assets/vendors/js/twoinone.js"> </script>  
                             </div>
                     </div>
                 </div>

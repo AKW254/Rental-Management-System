@@ -49,6 +49,14 @@ $sys_gen_id_alt_2 = bin2hex(random_bytes($length));
 /* user id */
 $staff_id = 'STF-' . substr(str_shuffle("1234567890"), 1, 4);
 /* user_generated password */
-$user_gen_password =  substr(str_shuffle("QWERTYUIOPwertyuioplkjLKJHGFDSAZXCVBNM1234567890qhgfdsazxcvbnm"), 1, 6);
+do {
+    $user_gen_password = substr(str_shuffle("QWERTYUIOPLKJHGFDSAZXCVBNM1234567890qwertyuioplkjhgfdsazxcvbnm!@#$%^&*()"), 1, 12);
+} while (
+    strlen($user_gen_password) < 8 ||
+    !preg_match('/[A-Z]/', $user_gen_password) ||
+    !preg_match('/[a-z]/', $user_gen_password) ||
+    !preg_match('/[0-9]/', $user_gen_password) ||
+    !preg_match('/[\W_]/', $user_gen_password)
+);
 /* Auth Token */
 $auth_gen_token = substr(str_shuffle("QWERTYUIOPLKJHGFDSAZXCVBNM1234567890"), 1, 4);

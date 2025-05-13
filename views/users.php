@@ -50,29 +50,46 @@ check_login()
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form>
-                                                            <div class="form-group">
-                                                                <label for="recipient-name" class="col-form-label">First Name:</label>
-                                                                <input type="text" class="form-control" id="recipient-name">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="message-text" class="col-form-label">Last Name:</label>
-                                                                <input type="text" class="form-control" id="message-text">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="recipient-name" class="col-form-label">Email:</label>
-                                                                <input type="text" class="form-control" id="recipient-name">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="message-text" class="col-form-label">Password:</label>
-                                                                <input type="password" class="form-control" id="message-text">
-                                                            </div>
+                                                        <form id="addUserForm" method="POST">
+                                                            <div class="row">
+                                                                <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <label for="recipient-name" class="col-form-label">Full Name:</label>
+                                                                    <input type="text" class="form-control" id="UserName" name="user_name" required>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <label for="message-text" class="col-form-label">Email:</label>
+                                                                    <input type="email" class="form-control" id="UserEmail" name="user_email" required>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <label for="recipient-name" class="col-form-label">Phone No:</label>
+                                                                    <input type="text" class="form-control" id="UserPhone" name="user_phone" required>
+                                                                </div>
+                                                                <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <label for="message-text" class="col-form-label">Select User Role:</label>
+                                                                    <select name="role_id" class="form-control p_input">
+                                                                        <option value="">Select Role</option>
+                                                                        <?php
+                                                                        $sql = "SELECT role_id, role_type FROM roles";
+                                                                        $result = $mysqli->query($sql);
+                                                                        if ($result->num_rows > 0) {
+                                                                            while ($row = $result->fetch_assoc()) {
+                                                                                echo "<option value='" . $row['role_id'] . "' data-role-type='" . $row['role_type'] . "'>" . $row['role_type'] . "</option>";
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                    <input type="hidden" name="role_type" id="role_type">
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                </div>
+
                                                         </form>
+                                                        <!-- Script to get the role type from the selected role -->
+                                                        <script src="../public/assets/vendors/js/twoinone.js"> </script>
                                                     </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -246,6 +263,34 @@ check_login()
                 </div>
                 <!-- main-panel ends -->
                 <!-- container-scroller -->
+                <?php include('../functions/custom_alerts.php'); ?>
+                <!--Add User Script -->
+                <script>
+                    //create user
+                    const form = document.getElementById('addUserForm');
+                    form.addEventListener('submit', async function(e) {
+                        e.preventDefault();
+                        const formData = new FormData(this);
+                        try {
+                            const response = await fetch('../functions/create_user.php', {
+                                method: 'POST',
+                                body: formData
+                            });
+
+                            const result = await response.json();
+
+                            if (result.success) {
+                                showToast('success', result.message);
+                            } else {
+                                showToast('error', result.error || 'An error occurred.');
+                            }
+                        } catch (error) {
+                            console.error('Fetch error:', error);
+                            showToast('error', 'A network error occurred.');
+                        }
+                    });
+                </script>
+
                 <script src="../public/assets/vendors/modal/modal-demo.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.11.2/dataTables.bootstrap4.js" integrity="sha512-SOUJxnrrYg/FO1OY7UDw1h0nUw2LtMar68dNgVwekH2Rm+BdVNO5OTHOfDCGtTGcnZbXBHvWkIoh2WTyFIXVNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>

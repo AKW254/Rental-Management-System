@@ -1,7 +1,7 @@
 <?php
 
 require_once('../config/config.php');
-/* Mailer Configurations */
+require_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
 require_once('../vendor/phpmailer/phpmailer/src/SMTP.php');
 require_once('../vendor/phpmailer/phpmailer/src/PHPMailer.php');
 require_once('../vendor/phpmailer/phpmailer/src/Exception.php');
@@ -26,6 +26,15 @@ while ($mailer = $res->fetch_object()) {
     $mail->Username = $mailer->mailer_username;
     $mail->Password = $mailer->mailer_password;
     $mail->Subject = 'Welcome Aboard';
+  // Prepare the optional password block
+  $passwordBlock = '';
+  if (!empty($user_password)) {
+    $pw = htmlspecialchars($user_password, ENT_QUOTES, 'UTF-8');
+    $passwordBlock = <<<HTML
+      <p>Your temporary password is: <strong>{$pw}</strong></p>
+      <p>Please change your password after logging in for the first time.</p>
+HTML;
+  }
     /* Custom Mail Body */
     $mail->Body = '<!DOCTYPE html>
   <html lang="en">
@@ -133,6 +142,7 @@ while ($mailer = $res->fetch_object()) {
       <h2>Hello ' . $user_name . ',</h2>
       <p>We are thrilled to have you join us as a <strong>' . $user_role . '</strong> at Rental Management System. Our platform is designed to make property management seamless and efficient for you.</p>
       <p>To get started, click the button below to log in to your account:</p>
+      '. $passwordBlock .'
       <div class="button-container">
       <a href="http://localhost/Rms/views/login" class="button">Login to Your Account</a>
       </div>
