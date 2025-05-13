@@ -102,157 +102,49 @@ check_login()
                                         <table id="order-listing" class="table">
                                             <thead>
                                                 <tr>
-                                                    <th>Order #</th>
-                                                    <th>Purchased On</th>
-                                                    <th>Customer</th>
-                                                    <th>Ship to</th>
-                                                    <th>Base Price</th>
-                                                    <th>Purchased Price</th>
-                                                    <th>Status</th>
+                                                    <th> #</th>
+                                                    <th>User Name</th>
+                                                    <th>User Email</th>
+                                                    <th>User Phone</th>
+                                                    <th>Role Type</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>2012/08/03</td>
-                                                    <td>Edinburgh</td>
-                                                    <td>New York</td>
-                                                    <td>$1500</td>
-                                                    <td>$3200</td>
-                                                    <td>
-                                                        <label class="badge badge-info">On hold</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>2015/04/01</td>
-                                                    <td>Doe</td>
-                                                    <td>Brazil</td>
-                                                    <td>$4500</td>
-                                                    <td>$7500</td>
-                                                    <td>
-                                                        <label class="badge badge-danger">Pending</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2010/11/21</td>
-                                                    <td>Sam</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-success">Closed</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>2016/01/12</td>
-                                                    <td>Sam</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-success">Closed</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>5</td>
-                                                    <td>2017/12/28</td>
-                                                    <td>Sam</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-success">Closed</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>6</td>
-                                                    <td>2000/10/30</td>
-                                                    <td>Sam</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-info">On-hold</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>7</td>
-                                                    <td>2011/03/11</td>
-                                                    <td>Cris</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-success">Closed</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>8</td>
-                                                    <td>2015/06/25</td>
-                                                    <td>Tim</td>
-                                                    <td>Italy</td>
-                                                    <td>$6300</td>
-                                                    <td>$2100</td>
-                                                    <td>
-                                                        <label class="badge badge-info">On-hold</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>9</td>
-                                                    <td>2016/11/12</td>
-                                                    <td>John</td>
-                                                    <td>Tokyo</td>
-                                                    <td>$2100</td>
-                                                    <td>$6300</td>
-                                                    <td>
-                                                        <label class="badge badge-success">Closed</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>10</td>
-                                                    <td>2003/12/26</td>
-                                                    <td>Tom</td>
-                                                    <td>Germany</td>
-                                                    <td>$1100</td>
-                                                    <td>$2300</td>
-                                                    <td>
-                                                        <label class="badge badge-danger">Pending</label>
-                                                    </td>
-                                                    <td>
-                                                        <button class="btn btn-outline-primary">View</button>
-                                                    </td>
-                                                </tr>
+                                                <?php
+                                                $count = '0';
+                                                $sql = "SELECT us.user_id,us.user_name,us.user_email,us.user_phone,rs.role_id,rs.role_type FROM users AS us 
+                                                        INNER JOIN roles AS rs ON us.role_id = rs.role_id";
+                                                $stmt = $mysqli->query($sql);
+                                                if ($stmt->num_rows > 0) {
+                                                    while ($row = $stmt->fetch_assoc()) {
+                                                        $count = $count + 1;
+
+                                                ?>
+                                                        <tr>
+                                                            <td><?php echo $count; ?></td>
+                                                            <td><?php echo $row['user_name'] ?></td>
+                                                            <td><?php echo $row['user_email'] ?></td>
+                                                            <td><?php echo $row['user_phone'] ?></td>
+                                                            <td><?php echo $row['role_type'] ?></td>
+
+                                                            <td>
+                                                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#changeRoleUserModal-<?php echo $row['user_id'] ?>">Change Role</button>
+                                                                          
+                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-<?php echo $row['user_id'] ?>">Edit</button>
+                                                               
+                                                                    <!-- Add modal content for editing user -->
+                                                                </div>
+                                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-<?php echo $row['user_id'] ?>">Delete</button>
+                                                                <div class="modal fade" id="deleteUserModal-<?php echo $row['user_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel-<?php echo $row['user_id'] ?>" aria-hidden="true">
+                                                                    <!-- Add modal content for deleting user -->
+                                                                </div>
+                                                                <?php include_once('../helpers/modals/user_modal.php'); ?>
+                                                            </td>
+                                                        </tr>
+                                                <?php }
+                                                } ?>
+
                                             </tbody>
                                         </table>
                                     </div>
