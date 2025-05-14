@@ -114,32 +114,33 @@ check_login()
                                                 <?php
                                                 $count = '0';
                                                 $sql = "SELECT us.user_id,us.user_name,us.user_email,us.user_phone,rs.role_id,rs.role_type FROM users AS us 
-                                                        INNER JOIN roles AS rs ON us.role_id = rs.role_id";
+                                                        INNER JOIN roles AS rs ON us.role_id = rs.role_id ";
                                                 $stmt = $mysqli->query($sql);
                                                 if ($stmt->num_rows > 0) {
                                                     while ($row = $stmt->fetch_assoc()) {
                                                         $count = $count + 1;
 
                                                 ?>
-                                                        <tr>
+                                                        <tr data-user-id="<?= $row['user_id'] ?>">
                                                             <td><?php echo $count; ?></td>
-                                                            <td><?php echo $row['user_name'] ?></td>
+                                                            <td>
+                                                                <?php
+                                                                if ($_SESSION['user_id'] == $row['user_id']) {
+                                                                    echo "You";
+                                                                } else {
+                                                                    echo $row['user_name'];
+                                                                }
+                                                                ?>
+                                                            </td>
                                                             <td><?php echo $row['user_email'] ?></td>
                                                             <td><?php echo $row['user_phone'] ?></td>
-                                                            <td><?php echo $row['role_type'] ?></td>
+                                                            <td class="role-cell"><?php echo $row['role_type'] ?></td>
 
                                                             <td>
                                                                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#changeRoleUserModal-<?php echo $row['user_id'] ?>">Change Role</button>
-                                                                          
                                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-<?php echo $row['user_id'] ?>">Edit</button>
-                                                               
-                                                                    <!-- Add modal content for editing user -->
-                                                                </div>
                                                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-<?php echo $row['user_id'] ?>">Delete</button>
-                                                                <div class="modal fade" id="deleteUserModal-<?php echo $row['user_id'] ?>" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel-<?php echo $row['user_id'] ?>" aria-hidden="true">
-                                                                    <!-- Add modal content for deleting user -->
-                                                                </div>
-                                                                <?php include_once('../helpers/modals/user_modal.php'); ?>
+                                                                <?php include('../helpers/modals/user_modal.php'); ?>
                                                             </td>
                                                         </tr>
                                                 <?php }
@@ -182,6 +183,50 @@ check_login()
                         }
                     });
                 </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Attach to every Change Role form
+                        document.querySelectorAll("form[id^='changeRoleUserForm-']").forEach(form => {
+                            form.addEventListener('submit', async function(e) {
+                                e.preventDefault();
+                                const formData = new FormData(this);
+                                const userId = formData.get('user_id');
+                                const select = this.querySelector('select[name="role_id"]');
+                                const newRole = select.options[select.selectedIndex].text;
+
+                                try {
+                                    const res = await fetch('../functions/change_role.php', {
+                                        method: 'POST',
+                                        body: formData
+                                    });
+                                    const json = await res.json();
+
+                                    if (json.success) {
+                                        // 1) Update the role cell in the corresponding row
+                                        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                                        if (row) {
+                                            row.querySelector('.role-cell').innerText = newRole;
+                                        }
+
+                                        // 2) Close the Bootstrap modal
+                                        const modalEl = this.closest('.modal');
+                                        bootstrap.Modal.getInstance(modalEl).hide();
+
+                                        // 3) Show a toast or alert
+                                        showToast('success', json.message);
+                                    } else {
+                                        showToast('error', json.error || 'Failed to update role');
+                                    }
+                                } catch (err) {
+                                    console.error(err);
+                                    showToast('error', 'Network error');
+                                }
+                            });
+                        });
+                    });
+                </script>
+
+
 
                 <script src="../public/assets/vendors/modal/modal-demo.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.11.2/dataTables.bootstrap4.js" integrity="sha512-SOUJxnrrYg/FO1OY7UDw1h0nUw2LtMar68dNgVwekH2Rm+BdVNO5OTHOfDCGtTGcnZbXBHvWkIoh2WTyFIXVNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
