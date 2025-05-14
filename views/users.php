@@ -139,7 +139,9 @@ check_login()
                                                             <td>
                                                                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#changeRoleUserModal-<?php echo $row['user_id'] ?>">Change Role</button>
                                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editUserModal-<?php echo $row['user_id'] ?>">Edit</button>
-                                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-<?php echo $row['user_id'] ?>">Delete</button>
+                                                                <?php if ($_SESSION['user_id'] != $row['user_id']) { ?>
+                                                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-<?php echo $row['user_id'] ?>">Delete</button>
+                                                                <?php } ?>
                                                                 <?php include('../helpers/modals/user_modal.php'); ?>
                                                             </td>
                                                         </tr>
@@ -183,6 +185,7 @@ check_login()
                         }
                     });
                 </script>
+                <!--Change User Role Script -->
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
                         // Attach to every Change Role form
@@ -225,13 +228,97 @@ check_login()
                         });
                     });
                 </script>
+                <!--Edit User Script -->
+                <script>
+                    //Edit user
+                    const editForm = document.querySelectorAll('form[id^="editUserForm-"]');
+                    editForm.forEach(form => {
+                        form.addEventListener('submit', async function(e) {
+                            e.preventDefault();
+                            const formData = new FormData(this);
+                            const userId = formData.get('user_id');
+                            const userName = formData.get('user_name');
+                            const userEmail = formData.get('user_email');
+                            const userPhone = formData.get('user_phone');
+                            try {
+                                const response = await fetch('../functions/edit_user.php', {
+                                    method: 'POST',
+                                    body: formData
+                                });
 
+                                const result = await response.json();
 
+                                if (result.success) {
+                                    // Update the user details in the table
+                                    const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                                    if (row) {
+                                        row.querySelector('td:nth-child(2)').innerText = userName;
+                                        row.querySelector('td:nth-child(3)').innerText = userEmail;
+                                        row.querySelector('td:nth-child(4)').innerText = userPhone;
+                                    }
+                                    // Close the modal
+                                    const modalEl = this.closest('.modal');
+                                    bootstrap.Modal.getInstance(modalEl).hide();
+                                    showToast('success', result.message);
+                                } else {
+                                    showToast('error', result.error || 'An error occurred.');
+                                }
+                            } catch (error) {
+                                console.error('Fetch error:', error);
+                                showToast('error', 'A network error occurred.');
+                            }
+                        });
+                    });
+                </script>
+                <!--Delete User Script -->
+                <script>
+                    const deleteForms = document.querySelectorAll('form[id^="deleteUserForm-"]');
+                    deleteForms.forEach(form => {
+                        form.addEventListener('submit', async function(e) {
+                            e.preventDefault();
+                            const formData = new FormData(this);
+                            const userId = formData.get('user_id');
+
+                            try {
+                                const response = await fetch('../functions/delete_user.php', {
+                                    method: 'POST',
+                                    body: formData
+                                });
+
+                                const result = await response.json();
+
+                                if (result.success) {
+                                    // Check if the deleted user is the current user
+                                    if (userId === '<?php echo $_SESSION['user_id']; ?>') {
+                                        // Redirect to login page
+                                        window.location.href = 'logout.php';
+                                    } else {
+                                        // Remove the user row from the table
+                                        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+                                        if (row) {
+                                            row.remove();
+                                        }
+                                        // Close the modal
+                                        const modalEl = this.closest('.modal');
+                                        bootstrap.Modal.getInstance(modalEl).hide();
+                                        showToast('success', result.message);
+                                    }
+                                } else {
+                                    showToast('error', result.error || 'An error occurred.');
+                                }
+                            } catch (error) {
+                                console.error('Fetch error:', error);
+                                showToast('error', 'A network error occurred.');
+                            }
+                        });
+                    });
+                </script>
 
                 <script src="../public/assets/vendors/modal/modal-demo.js"></script>
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables.net-bs4/1.11.2/dataTables.bootstrap4.js" integrity="sha512-SOUJxnrrYg/FO1OY7UDw1h0nUw2LtMar68dNgVwekH2Rm+BdVNO5OTHOfDCGtTGcnZbXBHvWkIoh2WTyFIXVNg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
+                
                 <?php include('../partials/scripts.php') ?>
 
 

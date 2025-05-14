@@ -7,11 +7,7 @@ header('Content-Type: application/json');
 
 $response = ['success' => false];
 
-if (!isset($_SESSION['user_id'])) {
-    $response['error'] = 'Unauthorized access.';
-    echo json_encode($response);
-    exit;
-}
+
 
 // Declare variables
 $user_name = trim($_POST['user_name'] ?? '');

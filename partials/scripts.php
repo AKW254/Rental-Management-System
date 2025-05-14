@@ -7,15 +7,13 @@
  <script src="../public/assets/vendors/js/jquery.cookie.js" type="text/javascript"></script>
  <!-- End plugin js for this page -->
  <!-- inject:js -->
+ <script src="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/scripts/verify.min.js"></script>
  <script src="../public/assets/vendors/js/off-canvas.js"></script>
  <script src="../public/assets/vendors/js/hoverable-collapse.js"></script>
  <script src="../public/assets/vendors/js/misc.js"></script>
  <script src="../public/assets/vendors/js/settings.js"></script>
 
  <!-- endinject -->
- <!-- Custom js for this page -->
-  <script src="../public/assets/vendors/datatable/datatable.js"></script>
-
  <script src="../public/assets/vendors/js/dashboard.js"></script>
 
  <!-- Load Alerts -->
@@ -79,3 +77,4 @@
      }
  </script>
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/material-design-icons@3.0.1/index.min.js"></script>

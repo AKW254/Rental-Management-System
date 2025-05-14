@@ -47,17 +47,18 @@
      <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
              <div class="modal-header">
-                 <h5 class="modal-title" id="addUserModalLabel">Add User</h5>
+                 <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
                  <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                      <span aria-hidden="true">×</span>
                  </button>
              </div>
              <div class="modal-body">
-                 <form id="addUserForm" method="POST">
+                 <form id="editUserForm-<?php echo $row['user_id'] ?>" method="POST">
                      <div class="row">
                          <div class="col-sm-12 col-md-6 col-xl-6">
                              <label for="recipient-name" class="col-form-label">Full Name:</label>
                              <input type="text" class="form-control" value="<?php echo $row['user_name'] ?>" id="UserName" name="user_name" required>
+                             <input type="hidden" name="user_id" value="<?php echo $row['user_id'] ?>" id="user_id">
                          </div>
                          <div class="col-sm-12 col-md-6 col-xl-6">
                              <label for="message-text" class="col-form-label">Email:</label>
@@ -91,7 +92,7 @@
                  </button>
              </div>
              <div class="modal-body">
-                 <form id="deleteUserForm" method="POST">
+                 <form id="deleteUserForm-<?php echo $row['user_id'] ?>" method="POST">
                      <div class="row">
                          <div class="col-sm-12 col-md-6 col-xl-6">
                              <label for="recipient-name" class="col-form-label">Are you sure you want to delete this user?</label>
