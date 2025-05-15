@@ -25,6 +25,28 @@ try{
     $stmt->bind_param("ssss", $property_manager_id, $property_name, $property_location, $property_description);
     $stmt->execute();
     $stmt->close();
+    //get propertyid and sent with response
+    $property_id = $mysqli->insert_id;
+    $stmt = $mysqli->prepare("SELECT * FROM properties WHERE property_id = ?");
+    $stmt->bind_param("s", $property_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $property = $result->fetch_assoc();
+    $stmt->close();
+    //Check if property was created successfully
+    if (!$property) {
+        $response['error'] = 'Failed to create property.';
+        echo json_encode($response);
+        exit;
+    }
+    //send property details with response
+    $response['property_id'] = $property_id;
+    $response['property_name'] = $property_name;
+    $response['property_location'] = $property_location;
+    $response['property_description'] = $property_description;
+    $response['property_manager_id'] = $property_manager_id;
+    
+    //Send propertyid with response
     $response['success'] = true;
     $response['message'] = 'Property created successfully.';
     echo json_encode($response);

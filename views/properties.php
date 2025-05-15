@@ -38,19 +38,19 @@ check_login()
                             <div class="row">
                                 <div class="d-flex align-items-right  flex-wrap">
                                     <div class="col-12 col-md-6 form-group">
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add Property</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPropertyModal">Add Property</button>
                                         <!--Add User Modal -->
-                                        <div class="modal fade" id="addPropertyModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="addPropertyModal" tabindex="-1" role="dialog" aria-labelledby="addPropertyModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="addUserModalLabel">Add New Property</h5>
+                                                        <h5 class="modal-title" id="addPropertyModalLabel">Add New Property</h5>
                                                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">×</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form id="addUserForm" method="POST">
+                                                        <form id="createPropertyForm" method="POST">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-6 col-xl-6">
                                                                     <label for="recipient-name" class="col-form-label">Property Name:</label>
@@ -100,7 +100,7 @@ check_login()
                                 </div>
                                 <div class="col-12">
                                     <div class="table-responsive">
-                                        <table id="order-listing" class="table">
+                                        <table id="propertyTable" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -148,50 +148,40 @@ check_login()
                 <!-- main-panel ends -->
                 <!-- container-scroller -->
                 <?php include('../functions/custom_alerts.php'); ?>
-                <!--Add User Script -->
+
+
+                <!--Add Property Script -->
+                <!-- 2) Create‐Property handler -->
                 <script>
-                    //create user
-                    const form = document.getElementById('addPropertyModal');
-                    form.addEventListener('submit', async function(e) {
+                    document.getElementById('createPropertyForm').addEventListener('submit', async function(e) {
                         e.preventDefault();
-                        const formData = new FormData(this);
-                        const PropertyName = formData.get('property_name');
-                        const PropertyLocation = formData.get('property_location');
-                        const PropertyDescription = formData.get('property_description');
-                        const PropertyManagerId = formData.get('property_manager_id');
+                        const form = this;
+                        const formData = new FormData(form);
 
                         try {
-                            const response = await fetch('../functions/create_property.php', {
+                            const res = await fetch('../functions/create_property.php', {
                                 method: 'POST',
                                 body: formData
                             });
+                            const result = await res.json();
 
-                            const result = await response.json();
-                            //Update the table
-                            const tableBody = document.getElementById('propertyTableBody');
-                            const newRow = document.createElement('tr');
-
-
-                            newRow.innerHTML = `
-                                <td>${PropertyName}</td>
-                                <td>${PropertyLocation}</td>
-                                <td>${PropertyDescription}</td>
-                                <td>${PropertyManagerId}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPropertyModal-${PropertyName}">Edit</button>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePropertyModal-${PropertyName}">Delete</button>
-                                </td>
-                            `;
-                            tableBody.appendChild(newRow);
-                            if (result.success) {
-
-                                showToast('success', result.message);
-                            } else {
-                                showToast('error', result.error || 'An error occurred.');
+                            if (!result.success) {
+                                return showToast('error', result.error || 'Failed to create');
                             }
-                        } catch (error) {
-                            console.error('Fetch error:', error);
-                            showToast('error', 'A network error occurred.');
+
+                            // Close modal
+                            bootstrap.Modal.getInstance(
+                                document.getElementById('addPropertyModal')
+                            ).hide();
+
+                            // 2) Reload the DataTable
+                            if (window.propertyTable && window.propertyTable.ajax) {
+                                window.propertyTable.ajax.reload(null, false);
+                            }
+                            showToast('success', result.message);
+                        } catch (err) {
+                            console.error(err);
+                            showToast('error', 'Network error');
                         }
                     });
                 </script>
@@ -239,6 +229,7 @@ check_login()
                     });
                 </script>
                 <!--Delete Property Script -->
+
                 <script>
                     const deletePropertyForms = document.querySelectorAll('form[id^="deletePropertyForm-"]');
                     deletePropertyForms.forEach(form => {
@@ -278,11 +269,11 @@ check_login()
                 <!-- Script to get the role type from the selected role -->
                 <script src="../public/assets/vendors/js/twoinone.js"> </script>
                 <script src="../public/assets/vendors/modal/modal-demo.js"></script>
+                <?php include('../partials/scripts.php') ?>
                 <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-                <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
+                <script src="../public/assets/vendors/datatables.net-bs4/property-table.js"></script>
 
-                <?php include('../partials/scripts.php') ?>
 
 
 </body>
