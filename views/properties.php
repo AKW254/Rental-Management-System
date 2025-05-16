@@ -25,7 +25,7 @@ check_login()
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="page-header">
-                        <h3 class="page-title"> Users </h3>
+                        <h3 class="page-title"> Properties </h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
@@ -112,33 +112,11 @@ check_login()
                                                 </tr>
                                             </thead>
                                             <tbody id="propertyTableBody">
-                                                <?php
-                                                $count = 0;
-                                                $sql = "SELECT p.property_id, p.property_name, p.property_location, p.property_description, u.user_name AS manager_name 
-                                                        FROM properties AS p 
-                                                        INNER JOIN users AS u ON p.property_manager_id = u.user_id";
-                                                $stmt = $mysqli->query($sql);
-                                                if ($stmt->num_rows > 0) {
-                                                    while ($row = $stmt->fetch_assoc()) {
-                                                        $count++;
-                                                ?>
-                                                        <tr data-property-id="<?= $row['property_id'] ?>">
-                                                            <td><?php echo $count; ?></td>
-                                                            <td><?php echo $row['property_name']; ?></td>
-                                                            <td><?php echo $row['property_location']; ?></td>
-                                                            <td><?php echo $row['property_description']; ?></td>
-                                                            <td><?php echo $row['manager_name']; ?></td>
-                                                            <td>
-                                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPropertyModal-<?php echo $row['property_id']; ?>">Edit</button>
-                                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePropertyModal-<?php echo $row['property_id']; ?>">Delete</button>
-                                                                <?php include('../helpers/modals/property_modal.php'); ?>
-                                                            </td>
-                                                        </tr>
-                                                <?php }
-                                                } ?>
+                                                <!-- DataTables will populate via Datatable initilazation -->
                                             </tbody>
 
                                         </table>
+                                        <?php include '../helpers/modals/property_modal.php'; ?>
                                     </div>
                                 </div>
                             </div>
@@ -151,12 +129,12 @@ check_login()
 
 
                 <!--Add Property Script -->
-                <!-- 2) Create‐Property handler -->
                 <script>
                     document.getElementById('createPropertyForm').addEventListener('submit', async function(e) {
                         e.preventDefault();
                         const form = this;
                         const formData = new FormData(form);
+
 
                         try {
                             const res = await fetch('../functions/create_property.php', {
@@ -169,15 +147,15 @@ check_login()
                                 return showToast('error', result.error || 'Failed to create');
                             }
 
-                            // Close modal
-                            bootstrap.Modal.getInstance(
-                                document.getElementById('addPropertyModal')
-                            ).hide();
+                            // 1) Close the correct modal
+                            const modalEl = document.getElementById(`addPropertyModal`);
+                            bootstrap.Modal.getOrCreateInstance(modalEl).hide();
 
-                            // 2) Reload the DataTable
+                            // 2) Refresh the DataTable
                             if (window.propertyTable && window.propertyTable.ajax) {
                                 window.propertyTable.ajax.reload(null, false);
                             }
+                            // 3) Show success message
                             showToast('success', result.message);
                         } catch (err) {
                             console.error(err);
@@ -185,84 +163,81 @@ check_login()
                         }
                     });
                 </script>
-
-                <!--Edit property Script -->
+                <!--Edit Property Script -->
                 <script>
-                    //Edit user
-                    const editForm = document.querySelectorAll('form[id^="editPropertyForm-"]');
-                    editForm.forEach(form => {
-                        form.addEventListener('submit', async function(e) {
-                            e.preventDefault();
-                            const formData = new FormData(this);
-                            const propertyId = formData.get('Property_id');
-                            const propertyName = formData.get('property_name');
-                            const propertyDescription = formData.get('property_description');
-                            const propertyManagerName = formData.get('property_manager_name');
-                            try {
-                                const response = await fetch('../functions/edit_user.php', {
-                                    method: 'POST',
-                                    body: formData
-                                });
+                    document.addEventListener('DOMContentLoaded', () => {
+                        document
+                            .querySelectorAll('form[id^="editpropertyForm-"]')
+                            .forEach(form => {
+                                form.addEventListener('submit', async function(e) {
+                                    e.preventDefault();
+                                    const formData = new FormData(this);
+                                    const propertyId = formData.get('property_id');
+                                    try {
+                                        const res = await fetch('../functions/edit_property.php', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+                                        const result = await res.json();
 
-                                const result = await response.json();
+                                        if (result.success) {
+                                            // Safely close the modal
+                                            const modalEl = document.getElementById(`editPropertyModal-${propertyId}`);
+                                            bootstrap.Modal.getOrCreateInstance(modalEl).hide();
 
-                                if (result.success) {
-                                    // Update the property details in the table
-                                    const row = document.querySelector(`tr[data-property-id="${propertyId}"]`);
-                                    if (row) {
-                                        row.querySelector('td:nth-child(2)').innerText = propertyName;
-                                        row.querySelector('td:nth-child(3)').innerText = propertyDescription;
-                                        row.querySelector('td:nth-child(4)').innerText = propertyManagerId;
+                                            // Refresh DataTable
+                                            window.propertyTable?.ajax?.reload(null, false);
+                                            showToast('success', result.message);
+                                        } else {
+                                            showToast('error', result.error);
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        showToast('error', 'Network error');
                                     }
-                                    // Close the modal
-                                    const modalEl = this.closest('.modal');
-                                    bootstrap.Modal.getInstance(modalEl).hide();
-                                    showToast('success', result.message);
-                                } else {
-                                    showToast('error', result.error || 'An error occurred.');
-                                }
-                            } catch (error) {
-                                console.error('Fetch error:', error);
-                                showToast('error', 'A network error occurred.');
-                            }
-                        });
+                                });
+                            });
                     });
                 </script>
+
+
                 <!--Delete Property Script -->
-
                 <script>
-                    const deletePropertyForms = document.querySelectorAll('form[id^="deletePropertyForm-"]');
-                    deletePropertyForms.forEach(form => {
-                        form.addEventListener('submit', async function(e) {
-                            e.preventDefault();
-                            const formData = new FormData(this);
-                            const propertyId = formData.get('property_id');
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const deletePropertyForms = document.querySelectorAll('form[id^="deletePropertyForm-"]');
+                        deletePropertyForms.forEach(form => {
+                            form.addEventListener('submit', async function(e) {
+                                e.preventDefault();
+                                const formData = new FormData(this);
+                                const propertyId = formData.get('property_id');
 
-                            try {
-                                const response = await fetch('../functions/delete_property.php', {
-                                    method: 'POST',
-                                    body: formData
-                                });
+                                try {
+                                    const response = await fetch('../functions/delete_property.php', {
+                                        method: 'POST',
+                                        body: formData
+                                    });
 
-                                const result = await response.json();
+                                    const result = await response.json();
 
-                                if (result.success) {
-                                    // Remove the user row from the table
-                                    const row = document.querySelector(`tr[data-property-id="${propertyId}"]`);
-                                    if (row) {
-                                        row.remove();
+                                    if (result.success) {
+                                        // Close modal
+                                        bootstrap.Modal.getInstance(
+                                            document.getElementById('deletePropertyModal-' + propertyId)
+                                        ).hide();
+
+                                        // 2) Reload the DataTable
+                                        if (window.propertyTable && window.propertyTable.ajax) {
+                                            window.propertyTable.ajax.reload(null, false);
+                                        }
+                                        showToast('success', result.message);
+                                    } else {
+                                        showToast('error', result.error || 'An error occurred.');
                                     }
-                                    // Close the modal
-                                    const modalEl = this.closest('.modal');
-                                    bootstrap.Modal.getInstance(modalEl).hide();
-                                    showToast('success', result.message);
-                                } else {
-                                    showToast('error', result.error || 'An error occurred.');
+                                } catch (error) {
+                                    console.error('Fetch error:', error);
+                                    showToast('error', 'A network error occurred.');
                                 }
-                            } catch (error) {
-                                console.error('Fetch error:', error);
-                                showToast('error', 'A network error occurred.');
-                            }
+                            });
                         });
                     });
                 </script>

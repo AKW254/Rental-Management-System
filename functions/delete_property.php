@@ -18,7 +18,7 @@ header('Content-Type: application/json');
 try{
     $property_id = trim($_POST['property_id'] ?? '');
     $stmt = $mysqli->prepare("DELETE FROM properties WHERE property_id = ?");
-    // $stmt->close(); // Optional: The statement will close automatically at the end of the script.
+   $stmt->bind_param("i", $property_id);
     $stmt->execute();
     $stmt->close();
     $response['success'] = true;

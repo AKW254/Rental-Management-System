@@ -39,7 +39,11 @@
                     data-bs-toggle="modal"
                     data-bs-target="#deletePropertyModal-${row.property_id}">
               Delete
-            </button>`,
+            </button>
+           
+           
+            
+            `,
         },
       ],
       responsive: true,
