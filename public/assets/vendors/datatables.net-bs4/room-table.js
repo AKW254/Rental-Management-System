@@ -13,27 +13,27 @@
     // Initialize and store globally
     window.roomTable = $table.DataTable({
       ajax: {
-      url: "/RMS/functions/list_rooms.php", // returns JSON []
-      dataSrc: "",
+        url: "/RMS/functions/list_rooms.php",
+        dataSrc: "",
       },
       rowId: "room_id",
       columns: [
-      {
-        data: null,
-        render: (_, __, ___, meta) => meta.row + 1,
-      },
-      { 
-        data: "room_title",
-        render: (data, type, row) => 
-        `<a href="/RMS/views/room-details.php?room_id=${row.room_id}" class="text-primary">${data}</a>`,
-      },
-      { data: "property_name" },
-      { data: "room_rent_amount" },
-      { data: "room_availability" },
-      {
-        data: null,
-        orderable: false,
-        render: (row) => `
+        {
+          data: null,
+          render: (_, __, ___, meta) => meta.row + 1,
+        },
+        {
+          data: "room_title",
+          render: (data, type, row) =>
+            `<a href="/RMS/views/room-details.php?room_id=${row.room_id}" class="text-primary">${data}</a>`,
+        },
+        { data: "property_name" },
+        { data: "room_rent_amount" },
+        { data: "room_availability" },
+        {
+          data: null,
+          orderable: false,
+          render: (row) => `
         <button class="btn btn-sm btn-primary"
             data-bs-toggle="modal"
             data-bs-target="#editRoomModal-${row.room_id}">
@@ -45,7 +45,7 @@
           Delete
         </button>
         `,
-      },
+        },
       ],
       responsive: true,
       pageLength: 10,

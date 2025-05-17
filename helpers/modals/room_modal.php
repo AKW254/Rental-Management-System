@@ -9,7 +9,7 @@ while ($r = $res->fetch_assoc()) {
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editRoomModalLabel">Edit Room</h5>
+                    <h5 class="modal-title">Edit Room</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -17,18 +17,19 @@ while ($r = $res->fetch_assoc()) {
                 <div class="modal-body">
                     <form id="editroomForm-<?php echo $row['room_id'] ?>">
                         <div class="row">
+                            <input type="hidden" name="action" value="edit_room">
                             <div class="col-sm-12 col-md-6 col-xl-6">
                                 <label for="property-name" class="col-form-label">Room No:</label>
-                                <input type="text" class="form-control" id="RoomTitle" name="room_title" value="<?php echo $row['property_name'] ?>" required>
+                                <input type="text" class="form-control" id="room_title" name="room_title" value="<?php echo $row['room_title'] ?>" required>
                                 <input type="hidden" name="room_id" value="<?php echo $row['room_id'] ?>" id="room_id-<?php echo $row['room_id']; ?>">
                             </div>
                             <div class="col-sm-12 col-md-6 col-xl-6">
                                 <label for="message-text" class="col-form-label">Room Image:</label>
-                                <input type="file" class="form-control" id="room_image" name="room_image" required>
+                                <input type="file" class="form-control" id="room_image" name="room_image">
                             </div>
                             <div class="col-sm-12 col-md-6 col-xl-6">
                                 <label for="recipient-name" class="col-form-label">Room Rent:</label>
-                                <input class="form-control" id="room_rent_amount" name="room_rent_amount" value="<?php echo $row['room_rent_amount'] ?>" required>
+                                <input type="name" class="form-control" id="room_rent_amount" name="room_rent_amount" value="<?php echo $row['room_rent_amount'] ?>" required>
                             </div>
                             <div class="col-sm-12 col-md-6 col-xl-6">
                                 <label for="message-text" class="col-form-label">Select Property:</label>
@@ -38,8 +39,8 @@ while ($r = $res->fetch_assoc()) {
                                     $sql = "SELECT property_name,property_id FROM properties";
                                     $result = $mysqli->query($sql);
                                     if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            echo "<option value='" . $row['property_id'] . "'>" . $row['property_name'] . "</option>";
+                                        while ($property = $result->fetch_assoc()) {
+                                            echo "<option value='" . $property['property_id'] . "'>" . $property['property_name'] . "</option>";
                                         }
                                     }
                                     ?>
@@ -49,10 +50,9 @@ while ($r = $res->fetch_assoc()) {
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 <button type="submit" name="edit_room" class="btn btn-primary">Save changes</button>
                             </div>
+                        </div>
                     </form>
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -73,6 +73,7 @@ while ($r = $res->fetch_assoc()) {
                                 <label for="recipient-name" class="col-form-label">
                                     <p>Are you sure you want to delete this room? This process cannot be undone.</p>
                                 </label>
+                                <input type="hidden" name="action" value="delete_room">
                                 <input type="hidden" name="room_id" value="<?php echo $row['room_id'] ?>" id="room_id">
                             </div>
                         </div>
