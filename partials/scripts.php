@@ -76,5 +76,6 @@
          window.history.replaceState(null, null, window.location.href);
      }
  </script>
+ 
  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/material-design-icons@3.0.1/index.min.js"></script>

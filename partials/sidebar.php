@@ -56,17 +56,15 @@
                  </div>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#maintenances" aria-expanded="false" aria-controls="maintenances">
+                 <a class="nav-link" href="maintenances">
                      <span class="menu-icon">
-                         <i class="mdi mdi-wrench"></i>
+                         <i class="mdi mdi-account-group"></i>
                      </span>
                      <span class="menu-title">Maintenance</span>
-
                  </a>
-
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#rental_agreements" aria-expanded="false" aria-controls="rental_agreements">
+                 <a class="nav-link" href="rental_agreements">
                      <span class="menu-icon">
                          <i class="mdi mdi-file-document"></i>
                      </span>
@@ -76,7 +74,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#payments" aria-expanded="false" aria-controls="payments">
+                 <a class="nav-link" data-bs-toggle="collapse" href="payments" aria-expanded="false" aria-controls="payments">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
                      </span>
@@ -86,7 +84,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#invoices" aria-expanded="false" aria-controls="invoices">
+                 <a class="nav-link" data-bs-toggle="collapse" href="invoices" aria-expanded="false" aria-controls="invoices">
                      <span class="menu-icon">
                          <i class="mdi mdi-file-document"></i>
                      </span>
@@ -96,7 +94,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#chats" aria-expanded="false" aria-controls="chats">
+                 <a class="nav-link" data-bs-toggle="collapse" href="chats" aria-expanded="false" aria-controls="chats">
                      <span class="menu-icon">
                          <i class="mdi mdi-chat"></i>
                      </span>
@@ -104,7 +102,7 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#notifications" aria-expanded="false" aria-controls="notifications">
+                 <a class="nav-link" data-bs-toggle="collapse" href="notifications" aria-expanded="false" aria-controls="notifications">
                      <span class="menu-icon">
                          <i class="mdi mdi-bell"></i>
                      </span>

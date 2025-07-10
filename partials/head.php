@@ -26,14 +26,13 @@
 
     <link rel="stylesheet" href="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
 
-
-
     <?php
 
     if (isset($_SESSION['success'])) {
         $success = $_SESSION['success'];
         unset($_SESSION['success']);
     }
+ 
     ?>
 
 </head>

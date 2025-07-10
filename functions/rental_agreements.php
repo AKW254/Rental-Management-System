@@ -1,0 +1,173 @@
+<?php
+ session_start();
+ include('../config/config.php');
+ include('../config/checklogin.php');
+ check_login();
+
+// Set response header
+ob_clean(); // Clean any accidental output buffer
+header('Content-Type: application/json; charset=utf-8');
+ $response = ['success' => false];
+ if (!$_SESSION['user_id']) {
+     $response = ['success' => false,];
+     echo json_encode($response);
+     return;
+ }
+
+// Create a new rental agreement
+ if (isset($_POST['action']) && $_POST['action'] === 'create') {
+     // Start secure handling
+     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+ 
+     try {
+         // Sanitize inputs
+         $room_id = trim($_POST['room_id']);
+         $tenant_id = $_SESSION['user_id'] ?? null;
+         $agreement_no = "RA/" . rand(1000, 9999) . "/" . date("Y");
+
+        // Check tenant ID is valid
+        if (!$tenant_id) {
+            echo json_encode(['success' => false, 'message' => 'User session expired. Please login again.']);
+            exit;
+        }
+ 
+         // Prevent duplicate agreements
+         $check_sql = "SELECT 1 FROM rental_agreements WHERE room_id = ? AND tenant_id = ? AND agreement_status = 'Active'";
+         $check_stmt = $mysqli->prepare($check_sql);
+         $check_stmt->bind_param('ii', $room_id, $tenant_id);
+         $check_stmt->execute();
+         $check_stmt->store_result();
+
+        // When duplicate agreement exists
+        if ($check_stmt->num_rows > 0) {
+            $response['error'] = 'You already have an agreement for this room';
+            ob_clean();
+            echo json_encode($response);
+            return;
+        }
+         $check_stmt->close();
+ 
+         // Insert new agreement
+         $insert_sql = "INSERT INTO rental_agreements (agreement_no, room_id, tenant_id) VALUES (?, ?, ?)";
+         $insert_stmt = $mysqli->prepare($insert_sql);
+         $insert_stmt->bind_param('sii', $agreement_no, $room_id, $tenant_id);
+         $insert_stmt->execute();
+ 
+         echo json_encode([
+             'success' => true,
+             'message' => 'Rental agreement created successfully.',
+             'agreement_no' => $agreement_no
+         ]);
+     } catch (mysqli_sql_exception $e) {
+         $response= 'Database Error: ' . $e->getMessage();
+         ob_clean();
+            echo json_encode(['success' => false, 'message' => $response]);
+            exit;
+     }
+ }
+
+
+//Update a rental agreement
+if ($_POST['action'] === 'edit_agreemet') {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+    $agreement_id = mysqli_real_escape_string($mysqli, $_POST['agreement_id']);
+    $room_id = mysqli_real_escape_string($mysqli, $_POST['room_id']);
+    $tenant_id = mysqli_real_escape_string($mysqli, $_SESSION['user_id']);
+
+    $sql = "UPDATE rental_agreements SET room_id = ?, tenant_id = ? WHERE agreement_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param('isi', $room_id, $tenant_id, $agreement_id);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+        $response = ['success' => true, 'message' => 'Rental agreement updated successfully.'];
+    } else {
+        $response = ['success' => false, 'message' => 'Failed to update rental agreement or no changes made.'];
+    }
+
+    ob_clean();
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit;
+}
+
+
+//Changing Status of a rental agreement
+if ($_POST['action'] === 'change_agreement_status') {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    header('Content-Type: application/json');
+
+    try {
+        $agreement_id = mysqli_real_escape_string($mysqli, $_POST['agreement_id']);
+        $agreement_status = mysqli_real_escape_string($mysqli, $_POST['agreement_status']);
+
+        if (!in_array($agreement_status, ['Active', 'Terminated'])) {
+            echo json_encode(['success' => false, 'message' => 'Invalid agreement status']);
+            exit;
+        }
+
+        $stmt = null;
+
+        if ($agreement_status === 'Active') {
+            $agreement_start_date = date('Y-m-d');
+
+            // Begin transaction
+            $mysqli->begin_transaction();
+
+            // First, get the room_id and current tenant for this agreement
+            $room_info_stmt = $mysqli->prepare("SELECT room_id, tenant_id FROM rental_agreements WHERE agreement_id = ?");
+            $room_info_stmt->bind_param('i', $agreement_id);
+            $room_info_stmt->execute();
+            $room_info_stmt->bind_result($room_id, $tenant_id);
+            $room_info_stmt->fetch();
+            $room_info_stmt->close();
+
+            // Check if the room is already occupied by another active agreement
+            $check_stmt = $mysqli->prepare("SELECT agreement_id FROM rental_agreements WHERE room_id = ? AND agreement_status = 'Active' AND agreement_id != ?");
+            $check_stmt->bind_param('ii', $room_id, $agreement_id);
+            $check_stmt->execute();
+            $check_stmt->store_result();
+
+            if ($check_stmt->num_rows > 0) {
+                $check_stmt->close();
+                $mysqli->rollback();
+                echo json_encode(['success' => false, 'message' => 'Room is already occupied by another active agreement.']);
+                exit;
+            }
+            $check_stmt->close();
+
+            // Update rental agreement
+            $stmt = $mysqli->prepare("UPDATE rental_agreements SET agreement_status = ?, agreement_start_date = ? WHERE agreement_id = ?");
+            $stmt->bind_param('ssi', $agreement_status, $agreement_start_date, $agreement_id);
+            $stmt->execute();
+            $stmt->close();
+
+            // Update room status
+            $room_stmt = $mysqli->prepare("UPDATE rooms SET room_availability = 'Occupied' WHERE room_id = ?");
+            $room_stmt->bind_param('i', $room_id);
+            $room_stmt->execute();
+            $room_stmt->close();
+
+            // Commit transaction
+            $mysqli->commit();
+        } elseif ($agreement_status === 'Terminated') {
+            $agreement_end_date = date('Y-m-d');
+
+            $stmt = $mysqli->prepare("UPDATE rental_agreements SET agreement_status = ?, agreement_end_date = ? WHERE agreement_id = ?");
+            $stmt->bind_param('ssi', $agreement_status, $agreement_end_date, $agreement_id);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        echo json_encode(['success' => true, 'message' => 'Rental agreement status changed successfully.']);
+    } catch (Exception $e) {
+        if ($mysqli->errno) {
+            $mysqli->rollback(); // rollback if inside transaction
+        }
+        error_log("Agreement status change error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Failed to change rental agreement status.']);
+    }
+
+    exit;
+}

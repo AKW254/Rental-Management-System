@@ -101,7 +101,7 @@ check_login()
                                                             <div class="card-body">
                                                                 <div class="row">
                                                                     <h2>Basic inform about <?php echo $room->room_title; ?> </h2>
-                                                                    <table class="table table-bordered">
+                                                                    <table class="table table-bordered table-responsive">
                                                                         <tr>
                                                                             <td><b>Room No:</b></td>
                                                                             <td><?php echo $room->room_title ?></td>
@@ -122,15 +122,16 @@ check_login()
 
                                                                     </table>
                                                                     <h2>Rental History</h2>
-                                                                    <table class="table table-bordered">
-                                                                        <th>
-                                                                        <td>#</td>
-                                                                        <td>From</td>
-                                                                        <td>To</td>
-                                                                        <td>Rented by </td>
-                                                                        <td>Status</td>
-
-                                                                        </th>
+                                                                    <table class="table table-responsive table-bordered">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>From</th>
+                                                                                <th>To</th>
+                                                                                <th>Rented by</th>
+                                                                                <th>Status</th>
+                                                                            </tr>
+                                                                        </thead>
                                                                         <tbody>
                                                                             <?php
                                                                             $sql = "SELECT * FROM rental_agreements AS ra 
@@ -143,7 +144,7 @@ check_login()
                                                                             //Get row count
                                                                             $row_count = $res->num_rows;
                                                                             if ($row_count == 0) {
-                                                                                echo "<tr><td colspan='6' class='text-center'>No data found</td></tr>";
+                                                                                echo "<tr><td colspan='5' class='text-center'>No data found</td></tr>";
                                                                             } else {
                                                                                 $i = 0;
                                                                                 while ($rental = $res->fetch_object()) {
@@ -158,10 +159,7 @@ check_login()
                                                                                 }
                                                                             }
                                                                             ?>
-
-
                                                                         </tbody>
-
                                                                     </table>
 
                                                                 </div>
