@@ -1,3 +1,5 @@
+
+
  <nav class="navbar p-0 fixed-top d-flex flex-row">
      <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -98,7 +100,7 @@
                  <a class="nav-link" id="profileDropdown" href="#" data-bs-toggle="dropdown">
                      <div class="navbar-profile">
                          <img class="img-xs rounded-circle" src="../public/images/dummy profile.jpg" alt="">
-                         <p class="mb-0 d-none d-sm-block navbar-profile-name dynamictext" data-type="user_name"><?php echo $_SESSION['user_name']; ?></p>
+                         <p class="mb-0 d-none d-sm-block navbar-profile-name dynamictext" data-type="user_name"></p>
                          <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                      </div>
                  </a>

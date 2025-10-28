@@ -1,6 +1,6 @@
  <?php
     //Administrator
-    if (($_SESSION['role_id']) == 1) {
+    //if (($_SESSION['role_id']) == 1) {
     ?>
      <nav class="sidebar sidebar-offcanvas" id="sidebar">
          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
@@ -113,11 +113,11 @@
          </ul>
      </nav>
 
- <?php }
+ <?php //}
     //Landlord
-    elseif (($_SESSION['role_id']) == 2) {
-    }
+   // elseif (($_SESSION['role_id']) == 2) {
+   // }
     //Tenant
-    elseif (($_SESSION['role_id']) == 3) {
+   // elseif (($_SESSION['role_id']) == 3) {
         # code...
-    } ?>
+  //  } ?>
