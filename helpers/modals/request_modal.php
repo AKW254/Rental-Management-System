@@ -14,15 +14,15 @@ while ($r = $res->fetch_assoc()) {
     <!--Edit property details -->
     <div class="modal fade" id="editRequestModal-<?php echo $row['maintenance_request_id']; ?>" tabindex="-1" aria-labelledby="editRoomModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal fade" id="editRequestModal-<?php echo htmlspecialchars($row['maintenance_request_id']); ?>" tabindex="-1" aria-labelledby="editMaintenanceModalLabel" aria-hidden="true">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Room</h5>
+                    <h5 class="modal-title">Edit Maintenance Request</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="editroomForm-<?php echo $row['room_id'] ?>">
+                    <form id="editrequestForm-<?php echo $row['maintenance_request_id'] ?>">
                         <div class="row">
                             <input type="hidden" name="action" value="edit_maintenance_request">
                             <input type="hidden" name="maintenance_request_id" value="<?php echo $row['maintenance_request_id'] ?>" id="maintenance_request_id">
@@ -40,11 +40,11 @@ while ($r = $res->fetch_assoc()) {
                             </div>
                             <div class="col-sm-12 col-md-6 col-xl-6">
                                 <label for="recipient-name" class="col-form-label">Room Description:</label>
-                                <textarea class="form-control" id="room_description" name="room_description" required><?php echo $row['maintenance_request_description'] ?></textarea>
+                                <textarea class="form-control" id="maintenance_request_description" name="maintenance_request_description" required><?php echo $row['maintenance_request_description'] ?></textarea>
                             </div>
                             <div class="col-sm-12 col-md-6 col-xl-6">
-                                <label for="recipient-name" class="col-form-label">Room Status:</label>
-                                <select name="room_status" id="room_status" class="form-control p_input">
+                                <label for="recipient-name" class="col-form-label">Maintenance Status:</label>
+                                <select name="maintenance_request_status" id="maintenance_request_status" class="form-control p_input">
                                     <option value="<?php echo $row['maintenance_request_status'] ?>"><?php echo $row['maintenance_request_status'] ?></option>
                                     <option value="Pending">Pending</option>
                                     <option value="In Progress">In Progress</option>
@@ -65,9 +65,9 @@ while ($r = $res->fetch_assoc()) {
     <!--Delete User details -->
     <div class="modal fade" id="deleteRequestModal-<?php echo $row['maintenance_request_id']; ?>" tabindex="-1" aria-labelledby="deleteRoomModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal fade" id="deleteRequestModal-<?php echo htmlspecialchars($row['maintenance_request_id']); ?>" tabindex="-1" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="deleteRequestModalLabel">Delete Room No. <?php echo $row['room_title'] ?>'s maintenance request on <?php echo date('d M Y', strtotime($row['maintenance_request_submitted_at'])) ?>?</h5>
+                    <h5 class="modal-title" id="deleteRequestModalLabel">Delete Room No. <?php echo $row['room_title'] ?>'s maintenance request on <?php echo date('d M Y', strtotime($row['maintenance_request_submitted_at'])) ?></h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -75,13 +75,13 @@ while ($r = $res->fetch_assoc()) {
                 <div class="modal-body">
                     <form id="deleteRequestForm-<?php echo $row['maintenance_request_id'] ?>" method="POST">
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 col-xl-6">
+                            <div class="col-12">
                                 <label for="recipient-name" class="col-form-label">
-                                    <p>Are you sure you want to delete this room? This process cannot be undone.</p>
+                                    <p>This process cannot be undone. Are you sure you want to delete this room?</p>
                                 </label>
                                 <input type="hidden" name="action" value="delete_request">
                                 <input type="hidden" name="maintenance_request_id" value="<?php echo $row['maintenance_request_id'] ?>" id="maintenance_request_id">
-                               
+
                             </div>
                         </div>
                         <div class="modal-footer">

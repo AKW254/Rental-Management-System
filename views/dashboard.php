@@ -4,7 +4,7 @@ session_start();
 require_once('../config/config.php');
 include('../config/checklogin.php');
 check_login()
-//Check if user is logged in
+
 
 ?>
 <!DOCTYPE html>

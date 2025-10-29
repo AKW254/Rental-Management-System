@@ -3,7 +3,8 @@ session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
 check_login();
-// Set response header   
+// Set response header  
+ob_clean(); 
 header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
 if (!$_SESSION['user_id']) {
@@ -14,41 +15,71 @@ if (!$_SESSION['user_id']) {
 
 // Handles the creation of a new maintenance request by validating inputs and inserting data into the database
 if ($_POST['action'] === 'create') {
-    //Declare variables
-    $room_id = mysqli_real_escape_string($mysqli, $_POST['room_id']);
+    $room_id = filter_var($_POST['room_id'], FILTER_VALIDATE_INT);
     $maintenance_request_description = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_description']);
-    //Get agreement details
-    $sql1="SELECT agreement_id FROM rental_agreements WHERE room_id = ?";
+
+    // Get agreement details
+    $sql1 = "SELECT agreement_id FROM rental_agreements WHERE room_id = ?";
     $stmt1 = $mysqli->prepare($sql1);
     $stmt1->bind_param("i", $room_id);
-    $stmt1->execute();  
-    $stmt1->bind_result($agreement_id);
-    $stmt1->fetch();
-    $stmt1->close();
-    //Assign to landlord
-    $sql2="SELECT us.user_id FROM users AS us INNERJOIN properties as ps ON us.user_id = ps.property_manager_id INNERJOIN rooms AS rm ON ps.property_id = rm.property_id WHERE rm.room_id = ?";
-    $stmt2 = $mysqli->prepare($sql2);
-    $stmt2->bind_param("i", $room_id);
-    $stmt2->execute();
-    $stmt2->bind_result($landlord_id);
-    $stmt2->fetch();
-    $stmt2->close();
-    //Insert maintenance request
-    $stmt = $mysqli->prepare("INSERT INTO maintenance_requests (agreement_id,maintenance_request_description,assigned_to 	)
-     VALUES (?, ?)");
-    $stmt->bind_param("isi", $agreement_id,$maintenance_request_description,$landlord_id);
-    if ($stmt->execute()) {
-        $response = ['success' => true, 'message' => "Maintenance request created successfully"];
-        echo json_encode($response);
-        exit;
-    } else {
-        error_log('Database Error: ' . $mysqli->error); // Log the detailed error
+    if (!$stmt1->execute()) {
+        error_log('Execute failed for agreement lookup: ' . $stmt1->error);
         $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
         echo json_encode($response);
         exit;
-
     }
+    $result1 = $stmt1->get_result();
+    $res = $result1->fetch_assoc();
+
+    if ($res) {  // FIXED: Check if agreement EXISTS
+        $agreement_id = $res['agreement_id'];  // FIXED: Extract the value
+
+        // Get landlord details
+        $sql2 = "SELECT pr.property_manager_id AS landlord_id FROM rooms AS rs INNER JOIN properties AS pr ON rs.property_id = pr.property_id WHERE rs.room_id = ?";
+        $stmt2 = $mysqli->prepare($sql2);
+        $stmt2->bind_param("i", $room_id);
+        if (!$stmt2->execute()) {
+            error_log('Execute failed for landlord assignment: ' . $stmt2->error);
+            $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+            echo json_encode($response);
+            exit;
+        }
+        $result2 = $stmt2->get_result();
+        $res2 = $result2->fetch_assoc();
+
+        if (!$res2) {
+            $response = ['success' => false, 'message' => 'No landlord found for the selected room. Please contact support.'];
+            echo json_encode($response);
+            exit;
+        }
+
+        $landlord_id = $res2['landlord_id'];  // FIXED: Extract the value
+
+        // Create the maintenance request
+        $sql3 = "INSERT INTO maintenance_requests (agreement_id, maintenance_request_description, assigned_to) VALUES (?, ?, ?)";
+        $stmt3 = $mysqli->prepare($sql3);
+        if (!$stmt3) {
+            error_log('Prepare failed for maintenance insert: ' . $mysqli->error);
+            $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+            echo json_encode($response);
+            exit;
+        }
+        $stmt3->bind_param("isi", $agreement_id, $maintenance_request_description, $landlord_id);
+        if ($stmt3->execute()) {
+            $response = ['success' => true, 'message' => "Maintenance request created successfully"];
+        } else {
+            error_log('Database Error: ' . $mysqli->error);
+            $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+        }
+    } else {
+        $response = ['success' => false, 'message' => 'No active rental agreement found for this room.'];
+    }
+
+    echo json_encode($response);
+    exit;
 }
+
+
 // Edit maintenance request
 if ($_POST['action'] === 'edit_maintenance_request') {
     //Declare variables

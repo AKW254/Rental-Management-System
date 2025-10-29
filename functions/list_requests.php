@@ -26,13 +26,13 @@ $data = [];
 while ($row = $result->fetch_assoc()) {
     // Ensure correct typing if you care
     $data[] = [
-        'maintenanceRequestId'          => (int)   $row['maintenance_request_id'],
-        'roomTitle'        => (string)$row['room_title'],
-        'requestedBy'    => (string)$row['requested_by'],
-        'requestedTo' => (string)$row['requested_to'],
-        'maintenanceRequestDescription'         => (string)$row['maintenance_request_description'],
-        'maintenanceRequestSubmittedAt'         => (string)$row['maintenance_request_submitted_at'],
-        'maintenanceRequestStatus'         => (string)$row['maintenance_request_status'],
+        'maintenance_request_id'          => (int)   $row['maintenance_request_id'],
+        'room_title'        => (string)$row['room_title'],
+        'requested_by'    => (string)$row['requested_by'],
+        'requested_to' => (string)$row['requested_to'],
+        'maintenance_request_description'         => (string)$row['maintenance_request_description'],
+        'maintenance_request_submitted_at'         => (string)$row['maintenance_request_submitted_at'],
+        'maintenance_request_status'         => (string)$row['maintenance_request_status'],
     ];
 }
 

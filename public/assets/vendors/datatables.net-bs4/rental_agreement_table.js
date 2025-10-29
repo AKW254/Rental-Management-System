@@ -15,7 +15,7 @@
     // Initialize and store globally
     window.rentalAgreementTable = $table.DataTable({
       ajax: {
-        url: "/RMS/functions/list_rental_agreements.php",
+        url: "/Rental-Management-System/functions/list_rental_agreements.php",
         dataSrc: "",
       },
       rowId: "agreementId",

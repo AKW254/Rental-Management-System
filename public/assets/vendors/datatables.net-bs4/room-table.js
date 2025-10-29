@@ -13,7 +13,7 @@
     // Initialize and store globally
     window.roomTable = $table.DataTable({
       ajax: {
-        url: "/RMS/functions/list_rooms.php",
+        url: "/Rental-Management-System/functions/list_rooms.php",
         dataSrc: "",
       },
       rowId: "room_id",
@@ -25,7 +25,7 @@
         {
           data: "room_title",
           render: (data, type, row) =>
-            `<a href="/RMS/views/room-details.php?room_id=${row.room_id}" class="text-primary">${data}</a>`,
+            `<a href="/Rental-Management-System/views/room-details.php?room_id=${row.room_id}" class="text-primary">${data}</a>`,
         },
         { data: "property_name" },
         { data: "room_rent_amount" },

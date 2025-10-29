@@ -13,7 +13,7 @@
     // Initialize and store globally
     window.requestTable = $table.DataTable({
       ajax: {
-        url: "/RMS/functions/list_requests.php",
+        url: "/Rental-Management-System/functions/list_requests.php",
         dataSrc: "",
       },
       rowId: "maintenance_request_id",

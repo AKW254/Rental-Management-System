@@ -20,7 +20,7 @@ if (isset($_POST['login'])) {
         if (password_verify($user_password, $row->user_password) && $row) {
             $_SESSION['authenticated'] = true;
             $_SESSION['user_id'] = $row->user_id;
-            $_SESSION['user_email'] = $row->user_email;
+            $_SESSION['role_id'] = $row->role_id;
 
             // Redirect to token verification page
             if($_SESSION['authenticated']){

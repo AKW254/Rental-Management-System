@@ -13,7 +13,7 @@
     // Initialize and store globally
     window.propertyTable = $table.DataTable({
       ajax: {
-        url: "/RMS/functions/list_properties.php", // returns JSON []
+        url: "/Rental-Management-System/functions/list_properties.php", // returns JSON []
         dataSrc: "",
       },
       rowId: "property_id",

@@ -20,7 +20,7 @@ $sql = "
     p.property_description,
     u.user_name AS manager_name
   FROM properties AS p
-  JOIN users      AS u ON p.property_manager_id = u.user_id
+  JOIN users AS u ON p.property_manager_id = u.user_id
   ORDER BY p.property_name ASC
 ";
 $result = $mysqli->query($sql);

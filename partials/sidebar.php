@@ -1,6 +1,7 @@
  <?php
     //Administrator
-    //if (($_SESSION['role_id']) == 1) {
+    
+    if (($_SESSION['role_id']) == 1) {
     ?>
      <nav class="sidebar sidebar-offcanvas" id="sidebar">
          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
@@ -14,10 +15,24 @@
                              <img class="img-xs rounded-circle " src="../public/images/dummy profile.jpg" alt="">
                              <span class="count bg-success"></span>
                          </div>
+                         <?php
+                         $sql="SELECT us.user_name,rl.role_type FROM users AS us INNER JOIN roles AS rl ON us.role_id=rl.role_id WHERE us.user_id=?";
+                         $stmt=$mysqli->prepare($sql);
+                         $stmt->bind_param('i',$_SESSION['user_id']);
+                         $stmt->execute();
+                            $res=$stmt->get_result();
+                            if($res){
+                                while($user=$res->fetch_object()){
+                                    ?>
                          <div class="profile-name">
-                             <h5 class="mb-0 font-weight-normal dynamictext" data-type="user_name"><?php echo $_SESSION['user_name']; ?></h5>
-                             <span><?php echo $_SESSION['role_type']; ?></span>
+                             <h5 class="mb-0 font-weight-normal dynamictext" data-type="user_name"><?php echo htmlspecialchars($user->user_name, ENT_QUOTES, 'UTF-8'); ?></h5>
+                             <span><?php echo htmlspecialchars($user->role_type, ENT_QUOTES, 'UTF-8'); ?></span>
                          </div>
+                                <?php
+                                }
+                            }
+                            $stmt->close(); 
+                            ?>
                      </div>
                  </div>
              </li>
@@ -113,11 +128,12 @@
          </ul>
      </nav>
 
- <?php //}
+ <?php }
     //Landlord
-   // elseif (($_SESSION['role_id']) == 2) {
-   // }
+    elseif (($_SESSION['role_id']) == 2) {
+    }
     //Tenant
-   // elseif (($_SESSION['role_id']) == 3) {
+    elseif (($_SESSION['role_id']) == 3) {
         # code...
-  //  } ?>
+    } 
+    ?>
