@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Mar 13, 2025 at 02:54 PM
+-- Host: 127.0.0.1
+-- Generation Time: Oct 29, 2025 at 01:10 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -55,6 +55,23 @@ CREATE TABLE `invoices` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `mailer_settings`
+--
+
+CREATE TABLE `mailer_settings` (
+  `id` int(11) NOT NULL,
+  `mailer_host` varchar(200) DEFAULT NULL,
+  `mailer_port` varchar(200) DEFAULT NULL,
+  `mailer_protocol` varchar(200) DEFAULT NULL,
+  `mailer_username` varchar(200) DEFAULT NULL,
+  `mailer_mail_from_name` varchar(200) DEFAULT NULL,
+  `mailer_mail_from_email` varchar(200) DEFAULT NULL,
+  `mailer_password` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `maintenance_requests`
 --
 
@@ -62,26 +79,18 @@ CREATE TABLE `maintenance_requests` (
   `maintenance_request_id` int(11) NOT NULL,
   `agreement_id` int(11) NOT NULL,
   `maintenance_request_description` text NOT NULL,
-  `maintenance_request_status` enum('submitted','in_progress','resolved','rejected') DEFAULT 'submitted',
+  `maintenance_request_status` varchar(200) DEFAULT 'submitted',
   `maintenance_request_submitted_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `maintenance_request_updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `assigned_to` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `notices`
+-- Dumping data for table `maintenance_requests`
 --
 
-CREATE TABLE `notices` (
-  `notice_id` int(11) NOT NULL,
-  `notice_title` varchar(150) NOT NULL,
-  `notice_message` text NOT NULL,
-  `posted_by` int(11) DEFAULT NULL,
-  `notice_posted_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `notice_updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `maintenance_requests` (`maintenance_request_id`, `agreement_id`, `maintenance_request_description`, `maintenance_request_status`, `maintenance_request_submitted_at`, `maintenance_request_updated_at`, `assigned_to`) VALUES
+(2, 16, 'yyjuku', 'In Progress', '2025-10-29 10:15:45', '2025-10-29 12:02:40', 54);
 
 -- --------------------------------------------------------
 
@@ -119,21 +128,69 @@ CREATE TABLE `payments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `properties`
+--
+
+CREATE TABLE `properties` (
+  `property_id` int(11) NOT NULL,
+  `property_manager_id` int(11) DEFAULT NULL,
+  `property_name` varchar(100) NOT NULL,
+  `property_location` varchar(255) DEFAULT NULL,
+  `property_description` text DEFAULT NULL,
+  `property_created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `properties`
+--
+
+INSERT INTO `properties` (`property_id`, `property_manager_id`, `property_name`, `property_location`, `property_description`, `property_created_at`) VALUES
+(1, 54, 'Maple Grove', 'Eldoret, Kenya', 'Family-oriented estate with schools and hospitals nearby.', '2025-05-15 14:39:10'),
+(2, 54, 'Maple Grove', 'Eldoret, Kenya', 'Family-oriented estate with schools and hospitals nearby.', '2025-05-15 15:24:11'),
+(3, 54, 'Ocean Breeze Suites', 'Diani, Kenya', 'Serviced apartments ideal for short and long stays near the coast', '2025-05-15 15:28:02'),
+(4, 54, 'Ocean Breeze Suites', 'Diani, Kenya', 'Serviced apartments ideal for short and long stays near the coast', '2025-05-15 15:32:35'),
+(5, 54, 'Savannah Estate', 'Machakos, Kenya', 'Gated community with playgrounds.', '2025-05-15 15:37:20'),
+(7, 54, 'Greenfields Apartments', 'Thika, Kenya', 'Modern apartments steps from the mall.', '2025-05-15 16:17:24'),
+(9, 54, 'Tenent Apartment', 'Mamboleo', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend', '2025-10-29 07:26:27');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rating`
+--
+
+CREATE TABLE `rating` (
+  `rating_id` int(11) NOT NULL,
+  `rating_rental_agreement_id` int(11) NOT NULL,
+  `rating_number_star` varchar(200) NOT NULL,
+  `rating_comment` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rental_agreements`
 --
 
 CREATE TABLE `rental_agreements` (
   `agreement_id` int(11) NOT NULL,
-  `renter_id` int(11) NOT NULL,
+  `agreement_no` varchar(200) NOT NULL,
+  `tenant_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
-  `agreement_start_date` date NOT NULL,
+  `agreement_start_date` date DEFAULT NULL,
   `agreement_end_date` date DEFAULT NULL,
-  `agreement_rent_amount` decimal(10,2) NOT NULL,
-  `agreement_deposit` decimal(10,2) DEFAULT NULL,
   `agreement_status` enum('Active','Terminated','Pending') DEFAULT 'Pending',
   `agreement_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `agreement_updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `rental_agreements`
+--
+
+INSERT INTO `rental_agreements` (`agreement_id`, `agreement_no`, `tenant_id`, `room_id`, `agreement_start_date`, `agreement_end_date`, `agreement_status`, `agreement_created_at`, `agreement_updated_at`) VALUES
+(16, 'RA/2646/2025', 69, 3, '2025-10-29', '2025-10-29', 'Terminated', '2025-10-29 07:45:20', '2025-10-29 07:51:05'),
+(17, 'RA/4076/2025', 69, 10, NULL, NULL, 'Pending', '2025-10-29 07:53:40', '2025-10-29 07:53:40');
 
 -- --------------------------------------------------------
 
@@ -146,6 +203,15 @@ CREATE TABLE `roles` (
   `role_type` enum('Administrator','Landlord','Tenant') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`role_id`, `role_type`) VALUES
+(1, 'Administrator'),
+(2, 'Landlord'),
+(3, 'Tenant');
+
 -- --------------------------------------------------------
 
 --
@@ -155,14 +221,24 @@ CREATE TABLE `roles` (
 CREATE TABLE `rooms` (
   `room_id` int(11) NOT NULL,
   `room_title` varchar(100) NOT NULL,
-  `room_description` text DEFAULT NULL,
   `room_image` varchar(255) DEFAULT NULL,
   `room_rent_amount` decimal(10,2) NOT NULL,
-  `room_availability` tinyint(1) DEFAULT 1,
-  `property_manager_id` int(11) DEFAULT NULL,
+  `room_availability` varchar(200) DEFAULT 'Available',
+  `property_id` int(11) DEFAULT NULL,
   `room_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `room_updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `rooms`
+--
+
+INSERT INTO `rooms` (`room_id`, `room_title`, `room_image`, `room_rent_amount`, `room_availability`, `property_id`, `room_created_at`, `room_updated_at`) VALUES
+(2, 'room-12', '682afd1f797e7_dummy room photo.jpg', 3456.00, 'Occupied', 4, '2025-05-17 09:55:44', '2025-07-10 13:02:45'),
+(3, 'ROOM-2', '682afd65e0508_dummy room photo.jpg', 3000.00, 'Occupied', 4, '2025-05-17 09:57:17', '2025-10-29 07:45:49'),
+(6, 'Room-001', '682afceed2fa3_dummy room photo.jpg', 3000.00, 'Occupied', 5, '2025-05-17 11:34:50', '2025-07-10 13:01:39'),
+(8, 'Room-07', '', 2000.00, 'Occupied', 3, '2025-05-17 12:11:21', '2025-07-10 13:01:59'),
+(10, 'Room-0034', '', 36635.00, 'Available', 3, '2025-05-19 09:47:48', '2025-10-29 08:07:16');
 
 -- --------------------------------------------------------
 
@@ -787,11 +863,12 @@ INSERT INTO `timezones` (`timezone_id`, `timezone_name`, `timezone_utcoffset`) V
 CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `user_name` varchar(50) NOT NULL,
-  `user_password` varchar(255) NOT NULL,
-  `user_password_reset_code` varchar(250) DEFAULT NULL,
   `user_email` varchar(100) NOT NULL,
   `user_phone` varchar(20) DEFAULT NULL,
+  `user_pic` varchar(200) NOT NULL,
   `role_id` int(11) DEFAULT NULL,
+  `user_password` varchar(255) NOT NULL,
+  `user_password_reset_code` varchar(250) DEFAULT NULL,
   `user_created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -800,8 +877,36 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_name`, `user_password`, `user_password_reset_code`, `user_email`, `user_phone`, `role_id`, `user_created_at`, `user_updated_at`) VALUES
-(33, 'Test', '$2y$10$TNwhfyAZUoCM8RObT.LxA.softNK88.FTwIsYBRkKZqUtnyXF1upi', '763298', 'test@mail.com', 'wf', NULL, '2025-03-12 15:17:37', '2025-03-13 08:20:05');
+INSERT INTO `users` (`user_id`, `user_name`, `user_email`, `user_phone`, `user_pic`, `role_id`, `user_password`, `user_password_reset_code`, `user_created_at`, `user_updated_at`) VALUES
+(33, 'Kilonzo', 'test@mail.com', 'wf', '', NULL, '$2y$10$TNwhfyAZUoCM8RObT.LxA.softNK88.FTwIsYBRkKZqUtnyXF1upi', '4H8G', '2025-03-12 15:17:37', '2025-06-18 08:38:35'),
+(34, 'scs', 'test@test.com', NULL, '', NULL, '$2y$10$VjYLN90eHTZXjZmMV7dTqOYOkWz9qBjJKOLaWQUqcubqyt7ppt89i', NULL, '2025-03-15 10:51:47', '2025-03-15 10:51:47'),
+(53, 'Updated User', 'user@gmail.com', '0787878787', '', 3, '$2y$10$3YhG4GrKv/etJXAIgVRp6.TH8/eNpXbL/c4AMStuGSAp8iYQ6cfuK', NULL, '2025-03-21 14:59:05', '2025-05-14 11:42:19'),
+(54, 'Anatoli2', 'kilonzowa@gmail.com', '072000013', '', 2, '$2y$10$0PTNUTcW5sdzRyUge0BdJOLn4WVr27e/QubVpfaQbhsmku2SMIbs2', NULL, '2025-03-21 15:00:10', '2025-05-14 13:19:56'),
+(69, 'anatoli', 'kilonzowambua254@gmail.com', '07898989', '', 1, '$2y$10$mDCVrt5vXyFkLwv3ngeIL.hqE.GYFxZZqGwtOOhpd001K84UHmmXW', NULL, '2025-05-14 12:36:56', '2025-10-29 06:08:55');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_locations`
+--
+
+CREATE TABLE `user_locations` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `latitude` decimal(10,6) NOT NULL,
+  `longitude` decimal(10,6) NOT NULL,
+  `logged_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_locations`
+--
+
+INSERT INTO `user_locations` (`id`, `user_id`, `latitude`, `longitude`, `logged_at`) VALUES
+(1, 33, -1.292100, 36.821900, '2025-05-08 12:11:03'),
+(2, 34, 40.712800, -74.006000, '2025-05-08 12:11:03'),
+(7, 53, 19.076000, 72.877700, '2025-05-08 12:11:03'),
+(8, 54, -34.603700, -58.381600, '2025-05-08 12:11:03');
 
 --
 -- Indexes for dumped tables
@@ -823,19 +928,18 @@ ALTER TABLE `invoices`
   ADD KEY `agreement_id` (`agreement_id`);
 
 --
+-- Indexes for table `mailer_settings`
+--
+ALTER TABLE `mailer_settings`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `maintenance_requests`
 --
 ALTER TABLE `maintenance_requests`
   ADD PRIMARY KEY (`maintenance_request_id`),
   ADD KEY `agreement_id` (`agreement_id`),
   ADD KEY `assigned_to` (`assigned_to`);
-
---
--- Indexes for table `notices`
---
-ALTER TABLE `notices`
-  ADD PRIMARY KEY (`notice_id`),
-  ADD KEY `posted_by` (`posted_by`);
 
 --
 -- Indexes for table `notifications`
@@ -852,11 +956,25 @@ ALTER TABLE `payments`
   ADD KEY `invoice_id` (`invoice_id`);
 
 --
+-- Indexes for table `properties`
+--
+ALTER TABLE `properties`
+  ADD PRIMARY KEY (`property_id`),
+  ADD KEY `property_manager_id` (`property_manager_id`);
+
+--
+-- Indexes for table `rating`
+--
+ALTER TABLE `rating`
+  ADD PRIMARY KEY (`rating_id`),
+  ADD KEY `AR` (`rating_rental_agreement_id`);
+
+--
 -- Indexes for table `rental_agreements`
 --
 ALTER TABLE `rental_agreements`
   ADD PRIMARY KEY (`agreement_id`),
-  ADD KEY `renter_id` (`renter_id`),
+  ADD KEY `renter_id` (`tenant_id`),
   ADD KEY `room_id` (`room_id`);
 
 --
@@ -870,7 +988,7 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`room_id`),
-  ADD KEY `property_manager_id` (`property_manager_id`);
+  ADD KEY `rooms_ibfk_1` (`property_id`);
 
 --
 -- Indexes for table `timezones`
@@ -883,9 +1001,15 @@ ALTER TABLE `timezones`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
-  ADD UNIQUE KEY `user_username` (`user_name`),
   ADD UNIQUE KEY `user_email` (`user_email`),
-  ADD KEY `role_id` (`role_id`);
+  ADD KEY `users_ibfk_1` (`role_id`);
+
+--
+-- Indexes for table `user_locations`
+--
+ALTER TABLE `user_locations`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_locations_ibfk_1` (`user_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -907,13 +1031,7 @@ ALTER TABLE `invoices`
 -- AUTO_INCREMENT for table `maintenance_requests`
 --
 ALTER TABLE `maintenance_requests`
-  MODIFY `maintenance_request_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `notices`
---
-ALTER TABLE `notices`
-  MODIFY `notice_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `maintenance_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `notifications`
@@ -928,22 +1046,34 @@ ALTER TABLE `payments`
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `properties`
+--
+ALTER TABLE `properties`
+  MODIFY `property_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `rating`
+--
+ALTER TABLE `rating`
+  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `rental_agreements`
 --
 ALTER TABLE `rental_agreements`
-  MODIFY `agreement_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `agreement_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `room_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `timezones`
@@ -955,7 +1085,13 @@ ALTER TABLE `timezones`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+
+--
+-- AUTO_INCREMENT for table `user_locations`
+--
+ALTER TABLE `user_locations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Constraints for dumped tables
@@ -982,12 +1118,6 @@ ALTER TABLE `maintenance_requests`
   ADD CONSTRAINT `maintenance_requests_ibfk_2` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`user_id`);
 
 --
--- Constraints for table `notices`
---
-ALTER TABLE `notices`
-  ADD CONSTRAINT `notices_ibfk_1` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`);
-
---
 -- Constraints for table `notifications`
 --
 ALTER TABLE `notifications`
@@ -1000,23 +1130,41 @@ ALTER TABLE `payments`
   ADD CONSTRAINT `payments_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`invoice_id`);
 
 --
+-- Constraints for table `properties`
+--
+ALTER TABLE `properties`
+  ADD CONSTRAINT `properties_ibfk_1` FOREIGN KEY (`property_manager_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `rating`
+--
+ALTER TABLE `rating`
+  ADD CONSTRAINT `AR` FOREIGN KEY (`rating_rental_agreement_id`) REFERENCES `rental_agreements` (`agreement_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Constraints for table `rental_agreements`
 --
 ALTER TABLE `rental_agreements`
-  ADD CONSTRAINT `rental_agreements_ibfk_1` FOREIGN KEY (`renter_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `rental_agreements_ibfk_1` FOREIGN KEY (`tenant_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `rental_agreements_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`);
 
 --
 -- Constraints for table `rooms`
 --
 ALTER TABLE `rooms`
-  ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`property_manager_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`property_id`) REFERENCES `properties` (`property_id`);
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`);
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `roles` (`role_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `user_locations`
+--
+ALTER TABLE `user_locations`
+  ADD CONSTRAINT `user_locations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
