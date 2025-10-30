@@ -53,6 +53,7 @@ check_login()
                                                         <form id="createInvoiceForm" method="POST">
                                                             <div class="row">
                                                                 <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <input type="hidden" name="action" value="create_invoice">
                                                                     <label for="property_id" class="col-form-label">Property:</label>
                                                                     <select name="property_id" id="property_id" class="form-control p_input">
                                                                         <?php
@@ -75,8 +76,11 @@ check_login()
                                                                         <option value="">Select a property first</option>
                                                                     </select>
                                                                 </div>
+                                                                <div class="col-sm-12 col-md-6 col-xl-6">
+                                                                    <label for="invoice_due_date" class="col-form-label">Invoice Due Date:</label>
+                                                                    <input type="date" name="invoice_due_date" id="invoice_due_date" class="form-control p_input" required> 
 
-
+                                                                </div>
 
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -103,6 +107,7 @@ check_login()
                                                     <th>Invoice No</th>
                                                     <th>Room No</th>
                                                     <th>Amount</th>
+                                                    <th>Invoice Date</th>
                                                     <th>Due Date</th>
                                                     <th>Status</th>
                                                     <th>Actions</th>
@@ -113,7 +118,7 @@ check_login()
                                             </tbody>
 
                                         </table>
-                                        <?php include '../helpers/modals/property_modal.php'; ?>
+                                        <?php include '../helpers/modals/invoice_modal.php'; ?>
                                     </div>
                                 </div>
                             </div>
@@ -123,7 +128,7 @@ check_login()
                 <!-- main-panel ends -->
                 <!-- container-scroller -->
                 <?php include('../functions/custom_alerts.php'); ?>
-                // Property selection and room filtering script
+                <!-- Property selection and room filtering script -->
                 <?php
                 // Prepare rooms grouped by property_id for client-side filtering
                 $rooms_by_property = [];
@@ -179,16 +184,16 @@ check_login()
                     })();
                 </script>
 
-                <!--Add Property Script -->
+                <!--Create Invoice Manually Script -->
                 <script>
-                    document.getElementById('createPropertyForm').addEventListener('submit', async function(e) {
+                    document.getElementById('createInvoiceForm').addEventListener('submit', async function(e) {
                         e.preventDefault();
                         const form = this;
                         const formData = new FormData(form);
 
 
                         try {
-                            const res = await fetch('../functions/create_property.php', {
+                            const res = await fetch('../functions/Manage_invoice.php', {
                                 method: 'POST',
                                 body: formData
                             });
@@ -199,12 +204,12 @@ check_login()
                             }
 
                             // 1) Close the correct modal
-                            const modalEl = document.getElementById(`addPropertyModal`);
+                            const modalEl = document.getElementById(`createInvoiceModal`);
                             bootstrap.Modal.getOrCreateInstance(modalEl).hide();
 
                             // 2) Refresh the DataTable
-                            if (window.propertyTable && window.propertyTable.ajax) {
-                                window.propertyTable.ajax.reload(null, false);
+                            if (window.invoiceTable && window.invoiceTable.ajax) {
+                                window.invoiceTable.ajax.reload(null, false);
                             }
                             // 3) Show success message
                             showToast('success', result.message);

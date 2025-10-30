@@ -13,10 +13,20 @@
     // Initialize and store globally
     window.invoiceTable = $table.DataTable({
       ajax: {
-        url: "/Rental-Management-System/functions/list_invoices.php", // returns JSON []
+        url: "/Rental-Management-System/functions/list_invoices.php",
         dataSrc: "",
       },
       rowId: "invoice_id",
+      createdRow: (row, data) => {
+        const status = (data.invoice_status || "").toLowerCase();
+        if (status === "overdue") {
+          $(row).addClass("table-danger");
+        } else if (status === "paid") {
+          $(row).addClass("table-success");
+        } else if (status === "pending" || status === "unpaid") {
+          $(row).addClass("table-warning");
+        }
+      },
       columns: [
         {
           data: null,
@@ -24,14 +34,38 @@
         },
         { data: "invoice_id" },
         { data: "room_title" },
-        { data: "invoice_amount" },
+        {
+          data: "invoice_amount",
+          render: (amount) => {
+            // Format as currency (adjust locale/currency as needed)
+            try {
+              return new Intl.NumberFormat("en-KE", {
+                style: "currency",
+                currency: "KES",
+              }).format(Number(amount));
+            } catch {
+              return amount;
+            }
+          },
+        },
+        { data: "invoice_date" },
         { data: "invoice_due_date" },
-        { data: "invoice_status" },
+        {
+          data: "invoice_status",
+          render: (status) => {
+            const s = (status || "").toString();
+            const key = s.toLowerCase();
+            let cls = "secondary";
+            if (key === "paid") cls = "success";
+            else if (key === "overdue") cls = "danger";
+            else if (key === "pending" || key === "unpaid") cls = "warning";
+            return `<span class="badge bg-${cls}">${s}</span>`;
+          },
+        },
         {
           data: null,
           orderable: false,
           render: (row) => `
-         
             <button class="btn btn-sm btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#editinvoiceModal-${row.invoice_id}">
@@ -42,8 +76,7 @@
                     data-bs-target="#deleteInvoiceModal-${row.invoice_id}">
               Delete
             </button>
-            
-            `,
+          `,
         },
       ],
       responsive: true,
