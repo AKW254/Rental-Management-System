@@ -58,7 +58,7 @@ FROM
     ) AS months
 LEFT JOIN
     payments AS p ON DATE_FORMAT(p.payment_created_at, '%Y-%m') = DATE_FORMAT(months.month_start, '%Y-%m')
-                 AND p.payment_status = 'success'
+                
 WHERE
     YEAR(months.month_start) = YEAR(CURDATE())
 GROUP BY

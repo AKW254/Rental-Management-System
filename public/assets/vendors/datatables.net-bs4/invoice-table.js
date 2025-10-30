@@ -65,23 +65,42 @@
         {
           data: null,
           orderable: false,
-          render: (row) => `
-           <button class="btn btn-sm btn-info"
-                    data-bs-toggle="modal"
-                    data-bs-target="#payinvoiceModal-${row.invoice_id}">
-              Pay
-            </button>
-            <button class="btn btn-sm btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#editinvoiceModal-${row.invoice_id}">
-              Edit
-            </button>
-            <button class="btn btn-sm btn-danger"
-                    data-bs-toggle="modal"
-                    data-bs-target="#deleteInvoiceModal-${row.invoice_id}">
-              Delete
-            </button>
-          `,
+          render: (row) => {
+            // ✅ Use `invoice_status` instead of `status` for clarity
+            const status = (row.invoice_status || "").toLowerCase();
+
+            // ✅ Check if invoice is unpaid or pending
+            const isUnpaid =
+              status === "unpaid" ||
+              status === "pending" ||
+              (row.balance && Number(row.balance) > 0);
+
+            // ✅ Conditionally show Pay button
+            const payButton = isUnpaid
+              ? `
+                <button class="btn btn-sm btn-info"
+                        data-bs-toggle="modal"
+                        data-bs-target="#payinvoiceModal-${row.invoice_id}">
+                  Pay
+                </button>`
+              : `
+                <span class="badge bg-success">Paid</span>`;
+
+            // ✅ Other buttons (always shown)
+            return `
+              ${payButton}
+              <button class="btn btn-sm btn-primary"
+                      data-bs-toggle="modal"
+                      data-bs-target="#editinvoiceModal-${row.invoice_id}">
+                Edit
+              </button>
+              <button class="btn btn-sm btn-danger"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteInvoiceModal-${row.invoice_id}">
+                Delete
+              </button>
+            `;
+          },
         },
       ],
       responsive: true,
