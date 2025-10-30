@@ -191,7 +191,6 @@ check_login()
                         const form = this;
                         const formData = new FormData(form);
 
-
                         try {
                             const res = await fetch('../functions/Manage_invoice.php', {
                                 method: 'POST',
@@ -295,6 +294,43 @@ check_login()
                                 }
                             });
                         });
+                    });
+                </script>
+                <!-- Pay Invoice Script -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        document
+                            .querySelectorAll('form[id^="payinvoiceForm-"]')
+                            .forEach(form => {
+                                form.addEventListener('submit', async function(e) {
+                                    e.preventDefault();
+                                    const formData = new FormData(this);
+                                    const invoiceId = formData.get('invoice_id');
+                                    try {
+                                        const res = await fetch('../functions/manage_payments.php', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+                                        const result = await res.json();
+
+                                        if (result.success) {
+                                            // Close modal
+                                            bootstrap.Modal.getInstance(
+                                                document.getElementById('payinvoiceModal-' + invoiceId)
+                                            ).hide();
+
+                                            // Refresh DataTable
+                                            window.invoiceTable?.ajax?.reload(null, false);
+                                            showToast('success', result.message);
+                                        } else {
+                                            showToast('error', result.error);
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        showToast('error', 'Network error');
+                                    }
+                                });
+                            });
                     });
                 </script>
                 <!-- Script to get the role type from the selected role -->

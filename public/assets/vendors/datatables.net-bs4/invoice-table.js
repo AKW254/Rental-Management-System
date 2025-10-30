@@ -66,6 +66,11 @@
           data: null,
           orderable: false,
           render: (row) => `
+           <button class="btn btn-sm btn-info"
+                    data-bs-toggle="modal"
+                    data-bs-target="#payinvoiceModal-${row.invoice_id}">
+              Pay
+            </button>
             <button class="btn btn-sm btn-primary"
                     data-bs-toggle="modal"
                     data-bs-target="#editinvoiceModal-${row.invoice_id}">

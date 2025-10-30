@@ -99,7 +99,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="payments" aria-expanded="false" aria-controls="payments">
+                 <a class="nav-link"  href="payments">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
                      </span>
