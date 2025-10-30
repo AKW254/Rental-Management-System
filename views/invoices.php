@@ -96,18 +96,19 @@ check_login()
                                 </div>
                                 <div class="col-12">
                                     <div class="table-responsive">
-                                        <table id="propertyTable" class="table">
+                                        <table id="invoiceTable" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Property Name</th>
-                                                    <th>Location</th>
-                                                    <th>Description</th>
-                                                    <th>Manager</th>
+                                                    <th>Invoice No</th>
+                                                    <th>Room No</th>
+                                                    <th>Amount</th>
+                                                    <th>Due Date</th>
+                                                    <th>Status</th>
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody id="propertyTableBody">
+                                            <tbody id="invoiceTableBody">
                                                 <!-- DataTables will populate via Datatable initilazation -->
                                             </tbody>
 
@@ -153,7 +154,7 @@ check_login()
                             if (rooms.length === 0) {
                                 const opt = document.createElement('option');
                                 opt.value = '';
-                                opt.textContent = 'No rooms available';
+                                opt.textContent = 'No rented rooms available';
                                 roomSelect.appendChild(opt);
                                 return;
                             }
