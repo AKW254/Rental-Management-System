@@ -1,6 +1,6 @@
  <?php
     //Administrator
-    
+
     if (($_SESSION['role_id']) == 1) {
     ?>
      <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -16,22 +16,22 @@
                              <span class="count bg-success"></span>
                          </div>
                          <?php
-                         $sql="SELECT us.user_name,rl.role_type FROM users AS us INNER JOIN roles AS rl ON us.role_id=rl.role_id WHERE us.user_id=?";
-                         $stmt=$mysqli->prepare($sql);
-                         $stmt->bind_param('i',$_SESSION['user_id']);
-                         $stmt->execute();
-                            $res=$stmt->get_result();
-                            if($res){
-                                while($user=$res->fetch_object()){
-                                    ?>
-                         <div class="profile-name">
-                             <h5 class="mb-0 font-weight-normal dynamictext" data-type="user_name"><?php echo htmlspecialchars($user->user_name, ENT_QUOTES, 'UTF-8'); ?></h5>
-                             <span><?php echo htmlspecialchars($user->role_type, ENT_QUOTES, 'UTF-8'); ?></span>
-                         </div>
-                                <?php
+                            $sql = "SELECT us.user_name,rl.role_type FROM users AS us INNER JOIN roles AS rl ON us.role_id=rl.role_id WHERE us.user_id=?";
+                            $stmt = $mysqli->prepare($sql);
+                            $stmt->bind_param('i', $_SESSION['user_id']);
+                            $stmt->execute();
+                            $res = $stmt->get_result();
+                            if ($res) {
+                                while ($user = $res->fetch_object()) {
+                            ?>
+                                 <div class="profile-name">
+                                     <h5 class="mb-0 font-weight-normal dynamictext" data-type="user_name"><?php echo htmlspecialchars($user->user_name, ENT_QUOTES, 'UTF-8'); ?></h5>
+                                     <span><?php echo htmlspecialchars($user->role_type, ENT_QUOTES, 'UTF-8'); ?></span>
+                                 </div>
+                         <?php
                                 }
                             }
-                            $stmt->close(); 
+                            $stmt->close();
                             ?>
                      </div>
                  </div>
@@ -89,25 +89,26 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="payments" aria-expanded="false" aria-controls="payments">
+                 <a class="nav-link" href="invoices">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
-                     </span>
-                     <span class="menu-title">Payments</span>
-
-                 </a>
-
-             </li>
-             <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="invoices" aria-expanded="false" aria-controls="invoices">
-                     <span class="menu-icon">
-                         <i class="mdi mdi-file-document"></i>
                      </span>
                      <span class="menu-title">Invoices</span>
 
                  </a>
 
              </li>
+             <li class="nav-item menu-items">
+                 <a class="nav-link" data-bs-toggle="collapse" href="payments" aria-expanded="false" aria-controls="payments">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-wallet"></i>
+                     </span>
+                     <span class="menu-title">Payment</span>
+
+                 </a>
+
+             </li>
+
              <li class="nav-item menu-items">
                  <a class="nav-link" data-bs-toggle="collapse" href="chats" aria-expanded="false" aria-controls="chats">
                      <span class="menu-icon">
@@ -135,5 +136,5 @@
     //Tenant
     elseif (($_SESSION['role_id']) == 3) {
         # code...
-    } 
+    }
     ?>
