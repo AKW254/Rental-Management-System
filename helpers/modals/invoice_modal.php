@@ -53,10 +53,10 @@ while ($r = $res->fetch_assoc()) {
                 <div class="modal-body">
                     <form id="deleteInvoiceForm-<?php echo $row['invoice_id'] ?>" method="POST">
                         <div class="row">
-                            <div class="col-sm-12 col-md-6 col-xl-6">
-                                <label for="recipient-name" class="col-form-label">
+                            <div class="col-sm-12 col-md-12 col-xl-12">
+                               
                                     <p>Are you sure you want to delete this invoice? This process cannot be undone.</p>
-                                </label>
+                            
                                 <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id'] ?>" id="invoice_id">
                             </div>
                         </div>

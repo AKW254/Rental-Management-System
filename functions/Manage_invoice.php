@@ -78,4 +78,26 @@ if(isset($_POST['action']) && $_POST['action'] === 'edit_invoice') {
     $response['message'] = 'Invoice updated successfully.';
     echo json_encode($response);
     exit;
-}           
+}  
+// 4) Delete an invoice
+if (isset($_POST['invoice_id'])) {  
+    $invoice_id = trim($_POST['invoice_id'] ?? '');
+
+    // SQL query
+    $sql = "DELETE FROM invoices WHERE invoice_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $invoice_id);
+
+    if (!$stmt->execute()) {
+        $response['error'] = 'Failed to delete invoice. Error: ' . $stmt->error;
+        echo json_encode($response);
+        exit;
+    }
+
+    $stmt->close();
+
+    $response['success'] = true;
+    $response['message'] = 'Invoice deleted successfully.';
+    echo json_encode($response);
+    exit;
+}                

@@ -257,18 +257,18 @@ check_login()
                 </script>
 
 
-                <!--Delete Property Script -->
+                <!--Delete Invoice Script -->
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
-                        const deletePropertyForms = document.querySelectorAll('form[id^="deletePropertyForm-"]');
-                        deletePropertyForms.forEach(form => {
+                        const deleteInvoiceForms = document.querySelectorAll('form[id^="deleteInvoiceForm-"]');
+                        deleteInvoiceForms.forEach(form => {
                             form.addEventListener('submit', async function(e) {
                                 e.preventDefault();
                                 const formData = new FormData(this);
-                                const propertyId = formData.get('property_id');
+                                const invoiceId = formData.get('invoice_id');
 
                                 try {
-                                    const response = await fetch('../functions/delete_property.php', {
+                                    const response = await fetch('../functions/manage_invoice.php', {
                                         method: 'POST',
                                         body: formData
                                     });
@@ -278,12 +278,12 @@ check_login()
                                     if (result.success) {
                                         // Close modal
                                         bootstrap.Modal.getInstance(
-                                            document.getElementById('deletePropertyModal-' + propertyId)
+                                            document.getElementById('deleteInvoiceModal-' + invoiceId)
                                         ).hide();
 
                                         // 2) Reload the DataTable
-                                        if (window.propertyTable && window.propertyTable.ajax) {
-                                            window.propertyTable.ajax.reload(null, false);
+                                        if (window.invoiceTable && window.invoiceTable.ajax) {
+                                            window.invoiceTable.ajax.reload(null, false);
                                         }
                                         showToast('success', result.message);
                                     } else {
@@ -298,7 +298,6 @@ check_login()
                     });
                 </script>
                 <!-- Script to get the role type from the selected role -->
-                <script src="../public/assets/vendors/js/twoinone.js"> </script>
                 <script src="../public/assets/vendors/modal/modal-demo.js"></script>
                 <?php include('../partials/scripts.php') ?>
                 <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
