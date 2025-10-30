@@ -53,3 +53,29 @@ if(isset($_POST['action']) && $_POST['action'] === 'create_invoice') {
     echo json_encode($response);
     exit;
 }
+
+// 3) Edit an invoice
+if(isset($_POST['action']) && $_POST['action'] === 'edit_invoice') {
+    // Declare variables
+    $invoice_id = trim($_POST['invoice_id'] ?? '');
+    $invoice_amount = trim($_POST['invoice_amount'] ?? '');
+    $invoice_due_date = trim($_POST['invoice_due_date'] ?? '');
+
+    // SQL query
+    $sql = "UPDATE invoices SET invoice_amount = ?, invoice_due_date = ? WHERE invoice_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("ssi", $invoice_amount, $invoice_due_date, $invoice_id);
+
+    if (!$stmt->execute()) {
+        $response['error'] = 'Failed to update invoice. Error: ' . $stmt->error;
+        echo json_encode($response);
+        exit;
+    }
+
+    $stmt->close();
+
+    $response['success'] = true;
+    $response['message'] = 'Invoice updated successfully.';
+    echo json_encode($response);
+    exit;
+}           

@@ -17,6 +17,7 @@ while ($r = $res->fetch_assoc()) {
                     <form id="editinvoiceForm-<?php echo $row['invoice_id'] ?>">
                         <div class="row">
                             <div class="col-sm-12 col-md-6 col-xl-6">
+                                <input type="hidden" class="form-control"  name="action" value="edit_invoice" required>
                                 <label for="property-name" class="col-form-label">Invoice Amount:</label>
                                 <input type="text" class="form-control" id="invoice_amount" name="invoice_amount" value="<?php echo $row['invoice_amount'] ?>" required>
                                 <input type="hidden" name="invoice_id" value="<?php echo $row['invoice_id'] ?>" id="invoice_id-<?php echo $row['invoice_id']; ?>">
@@ -25,14 +26,7 @@ while ($r = $res->fetch_assoc()) {
                                 <label for="property-location" class="col-form-label">Invoice Due Date:</label>
                                 <input type="date" class="form-control" id="invoice_due_date" name="invoice_due_date" value="<?php echo $row['invoice_due_date'] ?>" required>
                             </div>
-                            <div class="col-sm-12 col-md-6 col-xl-6">
-                                <label for="property-price" class="col-form-label">Invoice Status:</label>
-                                <select class="form-control" id="invoice_status" name="invoice_status" required>
-                                    <option value="Paid" <?php if ($row['invoice_status'] == 'Paid') echo 'selected'; ?>>Paid</option>
-                                    <option value="Unpaid" <?php if ($row['invoice_status'] == 'Unpaid') echo 'selected'; ?>>Unpaid</option>
-                                    <option value="Overdue" <?php if ($row['invoice_status'] == 'Overdue') echo 'selected'; ?>>Overdue</option>
-                                </select>
-                            </div>
+                            
                            
                         </div>
                         <div class="modal-footer">

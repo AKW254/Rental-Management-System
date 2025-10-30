@@ -78,7 +78,7 @@ check_login()
                                                                 </div>
                                                                 <div class="col-sm-12 col-md-6 col-xl-6">
                                                                     <label for="invoice_due_date" class="col-form-label">Invoice Due Date:</label>
-                                                                    <input type="date" name="invoice_due_date" id="invoice_due_date" class="form-control p_input" required> 
+                                                                    <input type="date" name="invoice_due_date" id="invoice_due_date" class="form-control p_input" required>
 
                                                                 </div>
 
@@ -219,18 +219,18 @@ check_login()
                         }
                     });
                 </script>
-                <!--Edit Property Script -->
+                <!--Edit Invoice Script -->
                 <script>
                     document.addEventListener('DOMContentLoaded', () => {
                         document
-                            .querySelectorAll('form[id^="editpropertyForm-"]')
+                            .querySelectorAll('form[id^="editinvoiceForm-"]')
                             .forEach(form => {
                                 form.addEventListener('submit', async function(e) {
                                     e.preventDefault();
                                     const formData = new FormData(this);
-                                    const propertyId = formData.get('property_id');
+                                    const invoiceId = formData.get('invoice_id');
                                     try {
-                                        const res = await fetch('../functions/edit_property.php', {
+                                        const res = await fetch('../functions/manage_invoice.php', {
                                             method: 'POST',
                                             body: formData
                                         });
@@ -238,11 +238,11 @@ check_login()
 
                                         if (result.success) {
                                             // Safely close the modal
-                                            const modalEl = document.getElementById(`editPropertyModal-${propertyId}`);
+                                            const modalEl = document.getElementById(`editinvoiceModal-${invoiceId}`);
                                             bootstrap.Modal.getOrCreateInstance(modalEl).hide();
 
                                             // Refresh DataTable
-                                            window.propertyTable?.ajax?.reload(null, false);
+                                            window.invoiceTable?.ajax?.reload(null, false);
                                             showToast('success', result.message);
                                         } else {
                                             showToast('error', result.error);
@@ -303,7 +303,7 @@ check_login()
                 <?php include('../partials/scripts.php') ?>
                 <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-                <script src="../public/assets/vendors/datatables.net-bs4/property-table.js"></script>
+                <script src="../public/assets/vendors/datatables.net-bs4/invoice-table.js"></script>
 
 
 

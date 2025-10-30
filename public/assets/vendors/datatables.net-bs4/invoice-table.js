@@ -39,7 +39,7 @@
           render: (amount) => {
             // Format as currency (adjust locale/currency as needed)
             try {
-              return new Intl.NumberFormat("en-KE", {
+              return new Intl.NumberFormat("en-Kenya", {
                 style: "currency",
                 currency: "KES",
               }).format(Number(amount));
