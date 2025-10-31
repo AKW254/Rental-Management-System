@@ -34,7 +34,7 @@ while ($r = $res->fetch_assoc()) {
 
                             <div class="col-sm-12 col-md-6 col-xl-6" id="mpesa_phone_group-<?php echo $row['invoice_id']; ?>" style="display:none;">
                                 <label for="mpesa_phone-<?php echo $row['invoice_id']; ?>" class="col-form-label">Mpesa Phone Number:</label>
-                                <input type="tel" class="form-control" id="mpesa_phone-<?php echo $row['invoice_id']; ?>" name="mpesa_phone" placeholder="2547XXXXXXXX" pattern="[0-9]{9,12}">
+                                <input type="tel" class="form-control" id="mpesa_phone-<?php echo $row['invoice_id']; ?>" name="mpesa_phone" placeholder="2547XXXXXXXX" pattern="[0-9]{9,13}">
                             </div>
 
                             <script>

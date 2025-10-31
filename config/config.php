@@ -32,8 +32,8 @@ $mpesa_settings=$res->fetch_object();
 return [
     'consumerKey' => $mpesa_settings->consumer_key,
     'consumerSecret' => $mpesa_settings->consumer_secret,
-    'shortcode' => $mpesa_settings->lipa_na_mpesa_online_shortcode,
-    'lipaNaMpesaOnlinePasskey' => $mpesa_settings->lipa_na_mpesa_online_passkey,
-    'lipaNaMpesaOnlineShortcode' => $mpesa_settings->lipa_na_mpesa_online_shortcode,
+   //shortcode' => $mpesa_settings->lipa_na_mpesa_online_shortcode,
+    //ipaNaMpesaOnlinePasskey' => $mpesa_settings->lipa_na_mpesa_online_passkey,
+    //ipaNaMpesaOnlineShortcode' => $mpesa_settings->lipa_na_mpesa_online_shortcode,
     'callbackUrl' => $mpesa_settings->callback_url,
 ];

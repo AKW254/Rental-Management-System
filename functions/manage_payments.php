@@ -1,6 +1,10 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1); // set to 1 if debugging locally
+
 session_start();
 include('../config/config.php');
+$config = include('../config/config.php');
 include('../config/checklogin.php');
 require_once('../config/daraja.php');
 $daraja = new Daraja($config);
@@ -47,7 +51,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'pay_invoice') {
 
         $payment = $daraja->lipaNaMpesaOnline([
             'TransactionType' => 'CustomerPayBillOnline',
-            'Amount' => $payment_amount,
+            'Amount' => '1', 
             'PartyA' => $phone,
             'PhoneNumber' => $phone,
             'CallBackURL' => $config['callbackUrl'] . '?invoice_id=' . $invoice_id,
