@@ -52,6 +52,29 @@ header('Content-Type: application/json; charset=utf-8');
          $insert_stmt = $mysqli->prepare($insert_sql);
          $insert_stmt->bind_param('sii', $agreement_no, $room_id, $tenant_id);
          $insert_stmt->execute();
+         // Fetch related details for email
+         $sql="SELECT rs.room_title, p.property_name, p.property_location, pm.user_name AS property_manager_name, pm.user_email AS property_manager_email, t.user_name AS tenant_name, ra.agreement_created_at FROM rental_agreements AS ra
+         INNER JOIN rooms AS rs ON ra.room_id = rs.room_id 
+            INNER JOIN properties AS p ON rs.property_id = p.property_id
+            INNER JOIN users AS pm ON p.property_manager_id = pm.user_id
+            INNER JOIN users AS t ON ra.tenant_id = t.user_id
+            WHERE ra.agreement_no = ?";
+            $mail_stmt = $mysqli->prepare($sql);
+            $mail_stmt->bind_param('s', $agreement_no);
+            $mail_stmt->execute();
+            $mail_res = $mail_stmt->get_result();
+            $mail_data = $mail_res->fetch_object();
+            $property_manager_name = $mail_data->property_manager_name;
+            $property_manager_email = $mail_data->property_manager_email;
+            $tenant_name = $mail_data->tenant_name;
+            $agreement_created_at= $mail_data->agreement_created_at;
+            $room_title = $mail_data->room_title;
+            $property_name = $mail_data->property_name;
+            $property_location = $mail_data->property_location;
+            $mail_stmt->close();
+         //Notify property manager About new rental agreement
+         include('../mailers/new_rental_agreement.php');
+            $mail->send();
  
          echo json_encode([
              'success' => true,

@@ -119,7 +119,7 @@ if ($_POST['action'] === 'edit_maintenance_request') {
     } elseif ($maintenance_request_status === 'Rejected') {
         include('../mailers/request_reject_maintenance.php');
     }
-    if ($stmt->execute() && (!isset($mail) || $mail->send())) {
+    if ($stmt->execute() || $mail->send()) {
         $response = ['success' => true, 'message' => "Maintanance request updated successfully"];
         echo json_encode($response);
         exit;
