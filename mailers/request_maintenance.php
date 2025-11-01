@@ -13,22 +13,22 @@ $stmt->execute(); //ok
 $res = $stmt->get_result();
 while ($mailer = $res->fetch_object()) {
 
-    $mail = new PHPMailer\PHPMailer\PHPMailer();
-    $mail->setFrom($mailer->mailer_mail_from_email);
-    $mail->addAddress($property_manager_email);
-    $mail->FromName = $mailer->mailer_mail_from_name;
-    $mail->isHTML(true);
-    $mail->IsSMTP();
-    $mail->SMTPSecure = $mailer->mailer_protocol;
-    $mail->Host = $mailer->mailer_host;
-    $mail->SMTPAuth = true;
-    $mail->Port = $mailer->mailer_port;
-    $mail->Username = $mailer->mailer_username;
-    $mail->Password = $mailer->mailer_password;
-    $mail->Subject = 'Property On-boarding';
- 
-    /* Custom Mail Body */
-    $mail->Body = '<!DOCTYPE html>
+  $mail = new PHPMailer\PHPMailer\PHPMailer();
+  $mail->setFrom($mailer->mailer_mail_from_email);
+  $mail->addAddress($property_manager_email);
+  $mail->FromName = $mailer->mailer_mail_from_name;
+  $mail->isHTML(true);
+  $mail->IsSMTP();
+  $mail->SMTPSecure = $mailer->mailer_protocol;
+  $mail->Host = $mailer->mailer_host;
+  $mail->SMTPAuth = true;
+  $mail->Port = $mailer->mailer_port;
+  $mail->Username = $mailer->mailer_username;
+  $mail->Password = $mailer->mailer_password;
+  $mail->Subject = 'Requst for Maintenance';
+
+  /* Custom Mail Body */
+  $mail->Body = '<!DOCTYPE html>
   <html lang="en">
 
   <head>
@@ -36,7 +36,7 @@ while ($mailer = $res->fetch_object()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Property On-boarding</title>
+    <title>Request for Maintenance</title>
     <style>
     body {
       margin: 0;
@@ -128,12 +128,12 @@ while ($mailer = $res->fetch_object()) {
   <body>
     <div class="container">
     <div class="header">
-      <h1>Property On-Boarding</h1>
+      <h1>Request for Maintenance</h1>
     </div>
     <div class="content">
       <h2>Hello ' . $property_manager_name . ',</h2>
-      <p>Congratulations on successfully adding a new property called '. $property_name .' located at '. $property_location .' to the Rental Management System!</p>
-      <p>If you have any questions or need assistance, feel free to reach out to our support team. We are here to help you every step of the way.</p>
+      <p>You have a pending request for maintenance by ' . $tenant_name . '  for ' . $room_title . '.  </p>
+      <p>Please Login to process the request.</p>
     </div>
     <div class="footer">
       <p>Thank you for choosing Rental Management System.</p>

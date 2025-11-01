@@ -19,7 +19,10 @@ if ($_POST['action'] === 'create') {
     $maintenance_request_description = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_description']);
 
     // Get agreement details
-    $sql1 = "SELECT agreement_id FROM rental_agreements WHERE room_id = ?";
+    $sql1 = "SELECT ra.agreement_id,us.user_name AS tenant_name,rm.room_title FROM rental_agreements AS ra
+    INNER JOIN users AS us ON ra.tenant_id = us.user_id
+    INNER JOIN rooms AS rm ON ra.room_id = rm.room_id
+     WHERE rm.room_id = ?";
     $stmt1 = $mysqli->prepare($sql1);
     $stmt1->bind_param("i", $room_id);
     if (!$stmt1->execute()) {
@@ -32,10 +35,15 @@ if ($_POST['action'] === 'create') {
     $res = $result1->fetch_assoc();
 
     if ($res) {  // FIXED: Check if agreement EXISTS
-        $agreement_id = $res['agreement_id'];  // FIXED: Extract the value
+        $agreement_id = $res['agreement_id'];  
+        $tenant_name = $res['tenant_name'];
+        $room_title = $res['room_title'];
 
         // Get landlord details
-        $sql2 = "SELECT pr.property_manager_id AS landlord_id FROM rooms AS rs INNER JOIN properties AS pr ON rs.property_id = pr.property_id WHERE rs.room_id = ?";
+        $sql2 = "SELECT pr.property_manager_id AS landlord_id,us.user_name AS property_manager_name,us.user_email AS property_manager_email  FROM rooms AS rs
+         INNER JOIN properties AS pr ON rs.property_id = pr.property_id 
+         INNER JOIN users AS us ON pr.property_manager_id = us.user_id
+         WHERE room_id = ?";
         $stmt2 = $mysqli->prepare($sql2);
         $stmt2->bind_param("i", $room_id);
         if (!$stmt2->execute()) {
@@ -53,7 +61,9 @@ if ($_POST['action'] === 'create') {
             exit;
         }
 
-        $landlord_id = $res2['landlord_id'];  // FIXED: Extract the value
+        $landlord_id = $res2['landlord_id'];  
+        $property_manager_name = $res2['property_manager_name'];
+        $property_manager_email = $res2['property_manager_email'];
 
         // Create the maintenance request
         $sql3 = "INSERT INTO maintenance_requests (agreement_id, maintenance_request_description, assigned_to) VALUES (?, ?, ?)";
@@ -65,7 +75,10 @@ if ($_POST['action'] === 'create') {
             exit;
         }
         $stmt3->bind_param("isi", $agreement_id, $maintenance_request_description, $landlord_id);
-        if ($stmt3->execute()) {
+        // Send email notification to landlord
+        include('../mailers/request_maintenance.php');
+        if ($stmt3->execute() && $mail->send()) {
+            
             $response = ['success' => true, 'message' => "Maintenance request created successfully"];
         } else {
             error_log('Database Error: ' . $mysqli->error);
@@ -82,12 +95,22 @@ if ($_POST['action'] === 'create') {
 
 // Edit maintenance request
 if ($_POST['action'] === 'edit_maintenance_request') {
-    //Declare variables
+   # Declare and sanitize inputs
     $maintenance_request_id = filter_var($_POST['maintenance_request_id'], FILTER_VALIDATE_INT);
     $maintenance_request_description = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_description']);
     $maintenance_request_status = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_status']);
+    if ($maintenance_request_status === '') {
+        # code...
+    }elseif ($maintenance_request_status === '') {
+        # code...
+    }
     $stmt = $mysqli->prepare("UPDATE maintenance_requests SET maintenance_request_description = ?, maintenance_request_status = ? WHERE maintenance_request_id = ?");
     $stmt->bind_param("ssi", $maintenance_request_description, $maintenance_request_status, $maintenance_request_id);
+    if ($maintenance_request_status === '') {
+        # code...
+    } elseif ($maintenance_request_status === '') {
+        # code...
+    }
     if ($stmt->execute()) {
         $response = ['success' => true, 'message' => "Maintanance request updated successfully"];
         echo json_encode($response);

@@ -59,7 +59,7 @@ check_login();
                                                                 <select name="room_id" id="room_id" class="form-control p_input">
 
                                                                     <?php
-                                                                    $sql = "SELECT rs.room_title, rl.room_id FROM rooms AS rs INNER JOIN rental_agreements AS rl ON rs.room_id = rl.room_id WHERE rl.tenant_id = ?";
+                                                                    $sql = "SELECT rs.room_title, rl.room_id FROM rooms AS rs INNER JOIN rental_agreements AS rl ON rs.room_id = rl.room_id WHERE rl.tenant_id = ? AND rl.agreement_status = 'Active'";
                                                                     $stmt = $mysqli->prepare($sql);
                                                                     $stmt->bind_param("s", $_SESSION['user_id']);
                                                                     $stmt->execute();
