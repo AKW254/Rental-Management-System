@@ -15,7 +15,7 @@ while ($mailer = $res->fetch_object()) {
 
   $mail = new PHPMailer\PHPMailer\PHPMailer();
   $mail->setFrom($mailer->mailer_mail_from_email);
-  $mail->addAddress($property_manager_email);
+  $mail->addAddress($tenant_email);
   $mail->FromName = $mailer->mailer_mail_from_name;
   $mail->isHTML(true);
   $mail->IsSMTP();
@@ -25,7 +25,7 @@ while ($mailer = $res->fetch_object()) {
   $mail->Port = $mailer->mailer_port;
   $mail->Username = $mailer->mailer_username;
   $mail->Password = $mailer->mailer_password;
-  $mail->Subject = 'Request for Maintenance';
+  $mail->Subject = 'Requst for Maintenance Rejection';
 
   /* Custom Mail Body */
   $mail->Body = '<!DOCTYPE html>
@@ -36,7 +36,7 @@ while ($mailer = $res->fetch_object()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Request for Maintenance</title>
+    <title>Request for Maintenance Rejection</title>
     <style>
     body {
       margin: 0;
@@ -131,9 +131,10 @@ while ($mailer = $res->fetch_object()) {
       <h1>Request for Maintenance</h1>
     </div>
     <div class="content">
-      <h2>Hello ' . $property_manager_name . ',</h2>
-      <p>You have a pending request for maintenance by ' . $tenant_name . '  for ' . $room_title . '.  </p>
-      <p>Please Login to process the request.</p>
+      <h2>Hello ' . $tenant_name . ',</h2>
+      <p>Your request for maintenance has been rejected.</p>
+      <p><strong>Maintenance Description:</strong> ' . $maintenance_request_description . '</p>
+     
     </div>
     <div class="footer">
       <p>Thank you for choosing Rental Management System.</p>

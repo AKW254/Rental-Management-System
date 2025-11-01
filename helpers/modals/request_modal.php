@@ -46,9 +46,9 @@ while ($r = $res->fetch_assoc()) {
                                 <label for="recipient-name" class="col-form-label">Maintenance Status:</label>
                                 <select name="maintenance_request_status" id="maintenance_request_status" class="form-control p_input">
                                     <option value="<?php echo $row['maintenance_request_status'] ?>"><?php echo $row['maintenance_request_status'] ?></option>
-                                    <option value="Pending">Pending</option>
-                                    <option value="In Progress">In Progress</option>
-                                    <option value="Completed">Completed</option>
+
+                                    <option value="Approved">Approved</option>
+                                    <option value="Rejected">Rejected</option>
                                 </select>
                             </div>
 

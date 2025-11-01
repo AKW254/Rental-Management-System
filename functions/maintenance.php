@@ -99,19 +99,27 @@ if ($_POST['action'] === 'edit_maintenance_request') {
     $maintenance_request_id = filter_var($_POST['maintenance_request_id'], FILTER_VALIDATE_INT);
     $maintenance_request_description = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_description']);
     $maintenance_request_status = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_status']);
-    if ($maintenance_request_status === '') {
-        # code...
-    }elseif ($maintenance_request_status === '') {
-        # code...
-    }
+    /*Get Tenant Details */
+    $sql="SELECT us.user_name AS tenant_name,us.user_email AS tenant_email,rs.room_title FROM maintenance_requests AS mr
+    INNER JOIN rental_agreements AS ra ON mr.agreement_id = ra.agreement_id
+    INNER JOIN rooms AS rs ON ra.room_id = rs.room_id
+    INNER JOIN users AS us ON ra.tenant_id = us.user_id
+    WHERE mr.maintenance_request_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("i", $maintenance_request_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $tenant = $result->fetch_assoc();
+    $tenant_name = $tenant['tenant_name'];
+    $tenant_email = $tenant['tenant_email'];
     $stmt = $mysqli->prepare("UPDATE maintenance_requests SET maintenance_request_description = ?, maintenance_request_status = ? WHERE maintenance_request_id = ?");
     $stmt->bind_param("ssi", $maintenance_request_description, $maintenance_request_status, $maintenance_request_id);
-    if ($maintenance_request_status === '') {
-        # code...
-    } elseif ($maintenance_request_status === '') {
-        # code...
+    if ($maintenance_request_status === 'Approved') {
+        include('../mailers/request_approval_maintenance.php');
+    } elseif ($maintenance_request_status === 'Rejected') {
+        include('../mailers/request_reject_maintenance.php');
     }
-    if ($stmt->execute()) {
+    if ($stmt->execute() && (!isset($mail) || $mail->send())) {
         $response = ['success' => true, 'message' => "Maintanance request updated successfully"];
         echo json_encode($response);
         exit;
