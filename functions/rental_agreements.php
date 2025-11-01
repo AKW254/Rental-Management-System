@@ -119,39 +119,46 @@ if ($_POST['action'] === 'edit_agreemet') {
 
 //Changing Status of a rental agreement
 if ($_POST['action'] === 'change_agreement_status') {
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     header('Content-Type: application/json');
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     try {
-        $agreement_id = mysqli_real_escape_string($mysqli, $_POST['agreement_id']);
-        $agreement_status = mysqli_real_escape_string($mysqli, $_POST['agreement_status']);
+        $agreement_id = (int)($_POST['agreement_id'] ?? 0);
+        $agreement_status = trim($_POST['agreement_status'] ?? '');
 
-        if (!in_array($agreement_status, ['Active', 'Terminated'])) {
-            echo json_encode(['success' => false, 'message' => 'Invalid agreement status']);
+        if (!$agreement_id || !in_array($agreement_status, ['Active', 'Terminated'])) {
+            echo json_encode(['success' => false, 'message' => 'Invalid agreement ID or status.']);
             exit;
         }
 
-        $stmt = null;
-
-        if ($agreement_status === 'Active') {
-            $agreement_start_date = date('Y-m-d');
-
-            // Begin transaction
-            $mysqli->begin_transaction();
-
-            // First, get the room_id and current tenant for this agreement
-            $room_info_stmt = $mysqli->prepare("SELECT ra.room_id, ra.tenant_id, ra.agreement_start_date, rs.room_rent_amount AS room_rent, t.user_name AS tenant_name, p.property_name AS property_name, p.property_location AS property_location ,t.user_email AS tenant_email,ra.agreement_end_date FROM rental_agreements AS ra 
+        // Fetch agreement and room details once
+        $info_query = "
+            SELECT ra.room_id, ra.tenant_id, ra.agreement_start_date, ra.agreement_end_date,
+                   rs.room_rent_amount AS room_rent, t.user_name AS tenant_name, 
+                   t.user_email AS tenant_email, p.property_name, p.property_location
+            FROM rental_agreements AS ra
             INNER JOIN rooms AS rs ON ra.room_id = rs.room_id
             INNER JOIN properties AS p ON rs.property_id = p.property_id
             INNER JOIN users AS t ON ra.tenant_id = t.user_id
-            WHERE ra.agreement_id = ?");
-            $room_info_stmt->bind_param('i', $agreement_id);
-            $room_info_stmt->execute();
-            $room_info_stmt->bind_result($room_id, $tenant_id, $agreement_start_date, $room_rent, $tenant_name, $property_name, $property_location, $tenant_email, $agreement_end_date);
-            $room_info_stmt->fetch();
-            $room_info_stmt->close();
+            WHERE ra.agreement_id = ?
+        ";
+        $info_stmt = $mysqli->prepare($info_query);
+        $info_stmt->bind_param('i', $agreement_id);
+        $info_stmt->execute();
+        $info_stmt->bind_result($room_id, $tenant_id, $agreement_start_date, $agreement_end_date, $room_rent, $tenant_name, $tenant_email, $property_name, $property_location);
+        $info_stmt->fetch();
+        $info_stmt->close();
 
-            // Check if the room is already occupied by another active agreement
+        if (!$room_id) {
+            echo json_encode(['success' => false, 'message' => 'Agreement not found.']);
+            exit;
+        }
+
+        // --- Activate Agreement ---
+        if ($agreement_status === 'Active') {
+            $mysqli->begin_transaction();
+
+            // Check room occupancy
             $check_stmt = $mysqli->prepare("SELECT agreement_id FROM rental_agreements WHERE room_id = ? AND agreement_status = 'Active' AND agreement_id != ?");
             $check_stmt->bind_param('ii', $room_id, $agreement_id);
             $check_stmt->execute();
@@ -165,57 +172,49 @@ if ($_POST['action'] === 'change_agreement_status') {
             }
             $check_stmt->close();
 
-            // Update rental agreement
+            // Update agreement
+            $start_date = date('Y-m-d');
             $stmt = $mysqli->prepare("UPDATE rental_agreements SET agreement_status = ?, agreement_start_date = ? WHERE agreement_id = ?");
-            $stmt->bind_param('ssi', $agreement_status, $agreement_start_date, $agreement_id);
+            $stmt->bind_param('ssi', $agreement_status, $start_date, $agreement_id);
             $stmt->execute();
             $stmt->close();
 
-            // Update room status
+            // Update room
             $room_stmt = $mysqli->prepare("UPDATE rooms SET room_availability = 'Occupied' WHERE room_id = ?");
             $room_stmt->bind_param('i', $room_id);
             $room_stmt->execute();
-            //Notify tenant about agreement activation  
-            include('../mailers/agreement_activated.php');
-            $mail->send();
             $room_stmt->close();
 
-            // Commit transaction
-            $mysqli->commit();
-        } elseif ($agreement_status === 'Terminated') {
-            // First, get the room_id and current tenant for this agreement
-            $room_info_stmt = $mysqli->prepare("SELECT ra.room_id, ra.tenant_id, ra.agreement_start_date, rs.room_rent_amount AS room_rent, t.user_name AS tenant_name, p.property_name AS property_name, p.property_location AS property_location ,t.user_email AS tenant_email,ra.agreement_end_date FROM rental_agreements AS ra 
-            INNER JOIN rooms AS rs ON ra.room_id = rs.room_id
-            INNER JOIN properties AS p ON rs.property_id = p.property_id
-            INNER JOIN users AS t ON ra.tenant_id = t.user_id
-            WHERE ra.agreement_id = ?");
-            $room_info_stmt->bind_param('i', $agreement_id);
-            $room_info_stmt->execute();
-            $room_info_stmt->bind_result($room_id, $tenant_id, $agreement_start_date, $room_rent, $tenant_name, $property_name, $property_location, $tenant_email, $agreement_end_date);
-            $room_info_stmt->fetch();
-            $room_info_stmt->close();
+            // Send notification
+            include('../mailers/agreement_activated.php');
+            if (isset($mail)) $mail->send();
 
-            $agreement_end_date = date('Y-m-d');
+            $mysqli->commit();
+        }
+
+        // --- Terminate Agreement ---
+        if ($agreement_status === 'Terminated') {
+            $end_date = date('Y-m-d');
 
             $stmt = $mysqli->prepare("UPDATE rental_agreements SET agreement_status = ?, agreement_end_date = ? WHERE agreement_id = ?");
-            $stmt->bind_param('ssi', $agreement_status, $agreement_end_date, $agreement_id);
+            $stmt->bind_param('ssi', $agreement_status, $end_date, $agreement_id);
             $stmt->execute();
             $stmt->close();
-            // Update room status to Available
-            $room_stmt = $mysqli->prepare("UPDATE rooms SET room_availability = 'Available' WHERE room_id = (SELECT room_id FROM rental_agreements WHERE agreement_id = ?)");
-            $room_stmt->bind_param('i', $agreement_id);
+
+            // Update room availability
+            $room_stmt = $mysqli->prepare("UPDATE rooms SET room_availability = 'Available' WHERE room_id = ?");
+            $room_stmt->bind_param('i', $room_id);
             $room_stmt->execute();
             $room_stmt->close();
-            //  email notification for termination in this implementation
+
+            // Send notification
             include('../mailers/agreement_terminated.php');
-            $mail->send();
+            if (isset($mail)) $mail->send();
         }
 
         echo json_encode(['success' => true, 'message' => 'Rental agreement status changed successfully.']);
     } catch (Exception $e) {
-        if ($mysqli->errno) {
-            $mysqli->rollback(); // rollback if inside transaction
-        }
+      
         error_log("Agreement status change error: " . $e->getMessage());
         echo json_encode(['success' => false, 'message' => 'Failed to change rental agreement status.']);
     }
