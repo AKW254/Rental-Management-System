@@ -206,17 +206,23 @@ if ($_POST['action'] === 'change_agreement_status') {
             $room_stmt->bind_param('i', $room_id);
             $room_stmt->execute();
             $room_stmt->close();
-
+           
             // Send notification
             include('../mailers/agreement_terminated.php');
             if (isset($mail)) $mail->send();
         }
-
-        echo json_encode(['success' => true, 'message' => 'Rental agreement status changed successfully.']);
+        $response = ['success' => true, 'message' => "Rental agreement status changed successfully."];
+        ob_clean();
+        echo json_encode($response);
+        exit;
     } catch (Exception $e) {
       
         error_log("Agreement status change error: " . $e->getMessage());
-        echo json_encode(['success' => false, 'message' => 'Failed to change rental agreement status.']);
+
+        $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+        ob_clean();
+        echo json_encode($response);
+        exit;
     }
 
     exit;
