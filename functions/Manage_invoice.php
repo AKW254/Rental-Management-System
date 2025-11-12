@@ -3,6 +3,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+include('../vendor/autoload');
 check_login();
 
 $response = ['success' => false];
@@ -45,6 +46,10 @@ if(isset($_POST['action']) && $_POST['action'] === 'create_invoice') {
         echo json_encode($response);
         exit;
     }
+//Generate Invoices
+include('invoice_genetor.php');
+//Mailer the Invoice
+
 
     $stmt->close();
 
