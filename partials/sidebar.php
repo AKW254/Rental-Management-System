@@ -3,7 +3,7 @@
 
     if (($_SESSION['role_id']) == 1) {
     ?>
-     <nav class="sidebar sidebar-offcanvas" id="sidebar">
+     <nav class="sidebar sidebar-offcanvas fixed" id="sidebar">
          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
              <a class="navbar-brand" href="/">RMS</a>
          </div>
@@ -99,7 +99,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link"  href="payments">
+                 <a class="nav-link" href="payments">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
                      </span>
@@ -110,7 +110,7 @@
              </li>
 
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="chats" aria-expanded="false" aria-controls="chats">
+                 <a class="nav-link" href="chats">
                      <span class="menu-icon">
                          <i class="mdi mdi-chat"></i>
                      </span>
@@ -118,7 +118,7 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="notifications" aria-expanded="false" aria-controls="notifications">
+                 <a class="nav-link" href="notifications">
                      <span class="menu-icon">
                          <i class="mdi mdi-bell"></i>
                      </span>

@@ -1,6 +1,7 @@
 {
     "require": {
         "phpmailer/phpmailer": "^6.9",
-        "crunzphp/crunz": "^3.8"
+        "crunzphp/crunz": "^3.8",
+        "dompdf/dompdf": "^3.1"
     }
 }

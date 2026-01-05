@@ -94,6 +94,7 @@ while ($mailer = $res->fetch_object()) {
     $mail->Username = $mailer->mailer_username;
     $mail->Password = $mailer->mailer_password;
     $mail->Subject = 'Welcome Aboard';
+   
     /* Custom Mail Body */
     $mail->Body = '
             <!DOCTYPE html>

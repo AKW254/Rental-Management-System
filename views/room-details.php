@@ -15,7 +15,7 @@ check_login()
 <?php include('../partials/head.php') ?>
 
 
-<body>
+<body class="sidebar-icon-only sidebar-fixed">
 
     <div class="container-scroller">
 

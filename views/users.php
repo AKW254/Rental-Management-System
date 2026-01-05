@@ -12,7 +12,7 @@ check_login()
 
 <?php include('../partials/head.php') ?>
 
-<body>
+<body class="sidebar-icon-only sidebar-fixed">
     <div class="container-scroller">
 
         <!-- partial:partials/_sidebar.html -->
@@ -318,7 +318,7 @@ check_login()
                 <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
                 <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
-                
+
                 <?php include('../partials/scripts.php') ?>
 
 

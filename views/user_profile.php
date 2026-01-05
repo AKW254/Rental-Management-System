@@ -9,7 +9,7 @@ check_login();
 <html lang="en">
 <?php include('../partials/head.php'); ?>
 
-<body>
+<body class="sidebar-icon-only sidebar-fixed">
     <div class="container-scroller">
         <!-- partial:partials/_sidebar.html -->
         <?php include('../partials/sidebar.php') ?>
@@ -281,7 +281,7 @@ check_login();
                                                                 <th>Property Name</th>
                                                                 <th>Property location</th>
                                                                 <th>Since</th>
-                                                                
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -302,7 +302,7 @@ check_login();
                                                                 echo "<td>" . htmlspecialchars($row['property_name']) . "</td>";
                                                                 echo "<td>" . htmlspecialchars($row['property_location']) . "</td>";
                                                                 echo "<td>" . htmlspecialchars(date('d M Y', strtotime($row['property_created_at']))) . "</td>";
-                                                               
+
                                                                 echo "</tr>";
                                                             } else {
                                                                 echo "<tr><td colspan='5' class='text-center'>No property history found.</td></tr>";
@@ -312,7 +312,7 @@ check_login();
                                                     </table>
                                                 </div>
                                                 <div class="tab-pane fade" id="rentalAgreements">
-                                                    <table class="table table-bordered">                                                       
+                                                    <table class="table table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
@@ -320,7 +320,7 @@ check_login();
                                                                 <th>Room No</th>
                                                                 <th>Start Date</th>
                                                                 <th>End Date</th>
-                                                               
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
