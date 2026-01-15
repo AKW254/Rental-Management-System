@@ -26419,6 +26419,44 @@ dl li {
   margin-right: 0;
 }
 
+/* Make email wrapper fill viewport */
+.email-wrapper {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+/* Ensure grid column stretches fully */
+.email-wrapper > .row,
+.email-wrapper > .row > [class*="col-"] {
+  height: 100%;
+}
+
+/* Make right panel stretch */
+.email-wrapper .mail-list-container {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* If inside Bootstrap columns */
+.mail-list-container.col-lg-9,
+.mail-list-container.col-md-8,
+.mail-list-container.col-sm-12 {
+  height: calc(100vh - 140px); /* navbar + header space */
+  overflow-y: auto;
+}
+
+/* Sticky search/header support */
+.mail-list-container .sticky-top {
+  z-index: 10;
+}
+
+/* Prevent body scroll conflict */
+body {
+  overflow: hidden;
+}
 /*-------------------------------------------------------------------*/
 /* === Plugin overrides === */
 /* Ace Editor */

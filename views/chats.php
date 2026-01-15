@@ -34,87 +34,15 @@ check_login()
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 grid-margin stretch-card">
+                        <div class="col-12">
                             <div class="email-wrapper wrapper">
-                                <div class="row align-items-stretch">
-                                    <div class="mail-sidebar col-4 pt-3 bg-dark">
-                                        <div class="menu-bar">
-                                            <ul class="menu-items">
-                                                <li class="compose mb-3"><button class="btn btn-primary btn-block" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></li>
-                                                <li class="active"><a href="#"><i class="mdi mdi-email-outline"></i> Inbox</a><span class="badge badge-pill badge-success">8</span></li>
-                                                <li><a href="#"><i class="mdi mdi-share"></i> Sent</a></li>
-
-                                            </ul>
-                                            <div class="wrapper">
-                                                <div class="online-status d-flex justify-content-between align-items-center">
-                                                    <p class="chat">Chats</p> <span class="status offline online"></span>
-                                                </div>
+                                    <div class="mail-list-container  pt-0 pb-2 border-right bg-dark">
+                                       
+                                            <div class="sticky-top bg-dark border-bottom px-3 py-3 d-flex gap-2" style="top:0;">
+                                                <input class="form-control flex-grow-1" type="search" placeholder="Search message" id="mail-search">
+                                                <div class="compose mb-3"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
                                             </div>
-                                            <ul class="profile-list">
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face1.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">David</p>
-                                                            <p class="u-designation">Python Developer</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face2.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Stella Johnson</p>
-                                                            <p class="u-designation">SEO Expert</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face20.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Catherine</p>
-                                                            <p class="u-designation">IOS Developer</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face12.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">John Doe</p>
-                                                            <p class="u-designation">Business Analyst</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face25.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Daniel Russell</p>
-                                                            <p class="u-designation">Tester</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face10.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Sarah Graves</p>
-                                                            <p class="u-designation">Admin</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face23.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Sophia Lara</p>
-                                                            <p class="u-designation">UI/UX</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face11.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Catherine Myers</p>
-                                                            <p class="u-designation">Business Analyst</p>
-                                                        </div>
-                                                    </a></li>
-                                                <li class="profile-list-item"> <a href="#"> <span class="pro-pic"><img src="../../../assets/images/faces/face9.jpg" alt=""></span>
-                                                        <div class="user">
-                                                            <p class="u-name">Tim</p>
-                                                            <p class="u-designation">PHP Developer</p>
-                                                        </div>
-                                                    </a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="mail-list-container col-sm-8 col-lg-8 col-md-8 pt-4 pb-2 border-right bg-dark">
-                                        <div class="border-bottom pb-4 mb-3 px-3">
-                                            <div class="border-bottom pb-3 mb-3 px-3 sticky-top bg-dark d-flex gap-2">
-                                                <input class="form-control w-100" type="search" placeholder="Search message" id="mail-search">
-                                                <div class="compose mb-3"><button class="btn btn-primary btn-block" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="mail-list">
 
                                             <div class="content">
@@ -228,17 +156,14 @@ check_login()
 
                                         </div>
                                         <!-- NO RESULTS MESSAGE -->
-                                        <div class="mail-list col-8" id="no-results"
-                                            class="content"
-                                            style=" display:none;">
+                                        <div class="mail-list" id="no-results" style="display:none;">
                                             <div class="message_text">
                                                 No messages found for your search.Please try again with different keywords.
                                             </div>
                                         </div>
-
                                     </div>
                                     <!--Message view-->
-                                    <div class="mail-view d-none col-md-8 col-lg-8 pt-4 pb-2 border-right bg-dark" id="mail-view">
+                                    <div class="mail-view d-none  pt-4 pb-2 border-right bg-dark" id="mail-view">
                                         <div class="row">
                                             <div class="col-sm-8 col-lg-8 col-md-8 mb-4 mt-4">
                                                 <div class="btn-toolbar">
@@ -290,7 +215,7 @@ check_login()
                                                 </ul>
                                             </div>
                                             <!--Reply section-->
-                                            <div class="reply-section d-none d-block">
+                                            <div class="reply-section d-none">
                                                 <h5 class="mb-3">Reply</h5>
                                                 <form>
                                                     <div class="form-group">
@@ -373,131 +298,131 @@ check_login()
                                                 .addEventListener('keyup', debounce(filterMails, 300));
                                         });
                                     </script>
-
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
+            <!-- main-panel ends -->
         </div>
-
-        <!-- main-panel ends -->
         <!-- container-scroller -->
-        <?php include('../functions/custom_alerts.php'); ?>
+    </div>
 
-        <!--Open conversation Script -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const mails = document.querySelectorAll('.mail-list');
-                const mailView = document.getElementById('mail-view');
 
-                const viewSender = document.getElementById('view-sender');
-                const viewContent = document.getElementById('view-content');
-                const mailListContainer = document.querySelector('.mail-list-container');
+    <?php include('../functions/custom_alerts.php'); ?>
 
-                mails.forEach(mail => {
-                    mail.addEventListener('click', () => {
-                        const sender = mail.querySelector('.sender-name').textContent;
-                        const message = mail.querySelector('.message_text').textContent;
+    <!--Open conversation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mails = document.querySelectorAll('.mail-list');
+            const mailView = document.getElementById('mail-view');
 
-                        // Populate the mail view
+            const viewSender = document.getElementById('view-sender');
+            const viewContent = document.getElementById('view-content');
+            const mailListContainer = document.querySelector('.mail-list-container');
 
-                        viewSender.textContent = sender;
-                        viewContent.textContent = message;
+            mails.forEach(mail => {
+                mail.addEventListener('click', () => {
+                    const sender = mail.querySelector('.sender-name').textContent;
+                    const message = mail.querySelector('.message_text').textContent;
 
-                        // Show the mail view panel
-                        mailView.classList.remove('d-none');
-                        // Optionally, you can hide the mail list panel if needed
-                        // mailListContainer.classList.add('d-none');
-                        // Hide the whole mail list
-                        mailListContainer.classList.add('d-none');
+                    // Populate the mail view
+
+                    viewSender.textContent = sender;
+                    viewContent.textContent = message;
+
+                    // Show the mail view panel
+                    mailView.classList.remove('d-none');
+                    // Optionally, you can hide the mail list panel if needed
+                    // mailListContainer.classList.add('d-none');
+                    // Hide the whole mail list
+                    mailListContainer.classList.add('d-none');
+                });
+            });
+        });
+    </script>
+    <!--Back to mail list script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const backToListButton = document.getElementById('back-to-list');
+            const mailView = document.getElementById('mail-view');
+            const mailListContainer = document.querySelector('.mail-list-container');
+
+            backToListButton.addEventListener('click', () => {
+                // Hide the mail view panel
+                mailView.classList.add('d-none');
+                // Show the mail list panel
+                mailListContainer.classList.remove('d-none');
+            });
+        });
+    </script>
+    <!--Print conversation Script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const printButton = document.querySelector('.btn-outline-secondary i.mdi-printer').parentElement;
+            const viewContent = document.querySelector('.message-body');
+
+            printButton.addEventListener('click', () => {
+                const printWindow = window.open('', '', 'height=600,width=800');
+                //Print div contents into the new window 
+                printWindow.document.write('<html><head><title>Print Message</title>');
+                printWindow.document.write('</head><body >');
+                printWindow.document.write(viewContent.innerHTML);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+                printWindow.print();
+            });
+        });
+    </script>
+    <!--Show reply section Script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const replyButton = document.querySelector('.btn-outline-secondary i.mdi-reply').parentElement;
+            const replySection = document.querySelector('.reply-section');
+
+            replyButton.addEventListener('click', () => {
+                replySection.classList.toggle('d-none');
+            });
+        });
+    </script>
+    <!--Compose message Post Backend -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const composeButton = document.getElementById('sendBtn');
+            composeButton.addEventListener('click', () => {
+                // Get variables from the form
+                const to = document.getElementById('username').value;
+                const message = document.getElementById('message').value;
+
+                // Post to backend php file using fetch API
+                fetch('../functions/compose_message.php', {
+                        method: 'POST',
+                        body: new FormData(form)
+                    }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('success', data.message);
+                            // Close the modal
+                            const modal = document.getElementById('exampleModal');
+                            const modalInstance = bootstrap.Modal.getInstance(modal);
+                            modalInstance.hide();
+                        } else {
+                            showToast('error', data.message || data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while sending the message.');
                     });
-                });
             });
-        </script>
-        <!--Back to mail list script-->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const backToListButton = document.getElementById('back-to-list');
-                const mailView = document.getElementById('mail-view');
-                const mailListContainer = document.querySelector('.mail-list-container');
+        });
+    </script>
+    <script src="../public/assets/vendors/modal/modal-demo.js"></script>
+    <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
+    <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
 
-                backToListButton.addEventListener('click', () => {
-                    // Hide the mail view panel
-                    mailView.classList.add('d-none');
-                    // Show the mail list panel
-                    mailListContainer.classList.remove('d-none');
-                });
-            });
-        </script>
-        <!--Print conversation Script-->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const printButton = document.querySelector('.btn-outline-secondary i.mdi-printer').parentElement;
-                const viewContent = document.querySelector('.message-body');
-
-                printButton.addEventListener('click', () => {
-                    const printWindow = window.open('', '', 'height=600,width=800');
-                    //Print div contents into the new window 
-                    printWindow.document.write('<html><head><title>Print Message</title>');
-                    printWindow.document.write('</head><body >');
-                    printWindow.document.write(viewContent.innerHTML);
-                    printWindow.document.write('</body></html>');
-                    printWindow.document.close();
-                    printWindow.print();
-                });
-            });
-        </script>
-        <!--Show reply section Script-->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const replyButton = document.querySelector('.btn-outline-secondary i.mdi-reply').parentElement;
-                const replySection = document.querySelector('.reply-section');
-
-                replyButton.addEventListener('click', () => {
-                    replySection.classList.toggle('d-none');
-                });
-            });
-        </script>
-        <!--Compose message Post Backend -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const composeButton = document.getElementById('sendBtn');
-                composeButton.addEventListener('click', () => {
-                    // Get variables from the form
-                    const to = document.getElementById('username').value;
-                    const message = document.getElementById('message').value;
-
-                    // Post to backend php file using fetch API
-                    fetch('../functions/compose_message.php', {
-                            method: 'POST',
-                            body: new FormData(form)
-                        }).then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                showToast('success', data.message);
-                                // Close the modal
-                                const modal = document.getElementById('exampleModal');
-                                const modalInstance = bootstrap.Modal.getInstance(modal);
-                                modalInstance.hide();
-                            } else {
-                                showToast('error', data.message || data.error);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('An error occurred while sending the message.');
-                        });
-                });
-            });
-        </script>
-        <script src="../public/assets/vendors/modal/modal-demo.js"></script>
-        <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-        <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-        <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
-
-        <?php include('../partials/scripts.php') ?>
+    <?php include('../partials/scripts.php') ?>
 
 
 </body>
