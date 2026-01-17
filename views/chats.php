@@ -34,130 +34,18 @@ check_login()
                         </nav>
                     </div>
                     <div class="row">
-                        <div class="col-12">
+                        <div class="container">
                             <div class="email-wrapper wrapper">
                                 <div class="mail-list-container  pt-0 pb-2 border-right bg-dark">
-
                                     <div class="sticky-top bg-dark border-bottom px-3 py-3 d-flex gap-2" style="top:0;">
                                         <input class="form-control flex-grow-1" type="search" placeholder="Search message" id="mail-search">
                                         <div class="compose mb-3"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
                                     </div>
-
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">David Moore</p>
-                                            <p class="message_text">Hi Emily, Please be informed that the new project presentation is due Monday.</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Microsoft Account Password Change</p>
-                                            <p class="message_text">Change the password for your Microsoft Account using the security code 35525 </p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Sophia Lara</p>
-                                            <p class="message_text">Hello, last date for registering for the annual music event is closing in </p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Stella Davidson</p>
-                                            <p class="message_text">Hey there, can you send me this year’s holiday calendar?</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">David Moore</p>
-                                            <p class="message_text">FYI</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Daniel Russel</p>
-                                            <p class="message_text">Hi, Please find this week’s update..</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Sarah Graves</p>
-                                            <p class="message_text">Hey, can you send me this year’s holiday calendar ?</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Bruno King</p>
-                                            <p class="message_text">Hi, Please find this week’s monitoring report in the attachment.</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Me, Mark</p>
-                                            <p class="message_text">Hi, Testing is complete. The system is ready to go live.</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Catherine Myers</p>
-                                            <p class="message_text">Template Market: Limited Period Offer!!! 50% Discount on all Templates.</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Daniel Russell</p>
-                                            <p class="message_text">Hi Emily, Please approve my leaves for 10 days from 10th May to 20th May. </p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Sarah Graves</p>
-                                            <p class="message_text">Hello there, Make the most of the limited period offer. Grab your favorites </p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">John Doe</p>
-                                            <p class="message_text">This is the first reminder to complete the online cybersecurity course</p>
-                                        </div>
-
-                                    </div>
-                                    <div class="mail-list">
-
-                                        <div class="content">
-                                            <p class="sender-name">Bruno</p>
-                                            <p class="message_text">Dear Employee, As per the regulations all employees are required to complete </p>
-                                        </div>
-
+                                    <div class="mail-list" id="mailList">
                                     </div>
                                     <!-- NO RESULTS MESSAGE -->
                                     <div class="mail-list" id="no-results" style="display:none;">
-                                        <div class="message_text">
+                                        <div class="col-10 mail-list d-flex flex-column">
                                             No messages found for your search.Please try again with different keywords.
                                         </div>
                                     </div>
@@ -226,86 +114,87 @@ check_login()
                                         </div>
                                     </div>
                                 </div>
-                                <!--Compose Modal -->
-                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
-                                    <div class="modal-dialog modal-lg" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Compose Message</h5>
-                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">×</span>
-                                                </button>
-                                            </div>
-                                            <form id="composeForm" method="Post">
-                                                <div class="modal-body">
-                                                    <div class="form-group">
-                                                        <label for="username" class="col-form-label">To:</label>
-                                                        <input type="text" class="form-control" id="username" name="username" placeholder="Username">
-                                                    </div>
-
-                                                    <div class="form-group">
-                                                        <label for="message">Message</label>
-                                                        <textarea class="form-control" id="message" name="message" rows="4"></textarea>
-                                                    </div>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" id="sendBtn" class="btn btn-success">Send</button>
-                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                                </div>
-                                            </form>
-
+                            </div>
+                            <!--Compose Modal -->
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Compose Message</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
                                         </div>
+                                        <form id="composeForm" method="Post">
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="username" class="col-form-label">To:</label>
+                                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="message">Message</label>
+                                                    <textarea class="form-control" id="message" name="message" rows="4"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" id="sendBtn" class="btn btn-success">Send</button>
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', () => {
-                                        function debounce(fn, delay = 300) {
-                                            let timeout;
-                                            return function(...args) {
-                                                clearTimeout(timeout);
-                                                timeout = setTimeout(() => fn.apply(this, args), delay);
-                                            };
-                                        }
-
-                                        function filterMails() {
-                                            const input = document.getElementById('mail-search');
-                                            const filter = input.value.toLowerCase();
-                                            const mails = document.querySelectorAll('.mail-list');
-                                            const noResults = document.getElementById('no-results');
-
-
-                                            let visibleCount = 0;
-
-                                            mails.forEach(mail => {
-                                                const sender = mail.querySelector('.sender-name')?.textContent.toLowerCase() || '';
-                                                const message = mail.querySelector('.message_text')?.textContent.toLowerCase() || '';
-
-                                                if (sender.includes(filter) || message.includes(filter)) {
-                                                    mail.style.display = '';
-                                                    visibleCount++;
-                                                } else {
-                                                    mail.style.display = 'none';
-                                                }
-                                            });
-
-                                            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-
-                                        }
-
-                                        document
-                                            .getElementById('mail-search')
-                                            .addEventListener('keyup', debounce(filterMails, 300));
-                                    });
-                                </script>
                             </div>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    function debounce(fn, delay = 300) {
+                                        let timeout;
+                                        return function(...args) {
+                                            clearTimeout(timeout);
+                                            timeout = setTimeout(() => fn.apply(this, args), delay);
+                                        };
+                                    }
+
+                                    function filterMails() {
+                                        const input = document.getElementById('mail-search');
+                                        const filter = input.value.toLowerCase();
+                                        const mails = document.querySelectorAll('.mail-list');
+                                        const noResults = document.getElementById('no-results');
+
+
+                                        let visibleCount = 0;
+
+                                        mails.forEach(mail => {
+                                            const sender = mail.querySelector('.sender-name')?.textContent.toLowerCase() || '';
+                                            const message = mail.querySelector('.message_text')?.textContent.toLowerCase() || '';
+
+                                            if (sender.includes(filter) || message.includes(filter)) {
+                                                mail.style.display = '';
+                                                visibleCount++;
+                                            } else {
+                                                mail.style.display = 'none';
+                                            }
+                                        });
+
+                                        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+
+                                    }
+
+                                    document
+                                        .getElementById('mail-search')
+                                        .addEventListener('keyup', debounce(filterMails, 300));
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- main-panel ends -->
         </div>
-        <!-- container-scroller -->
+        <!-- main-panel ends -->
+    </div>
+    <!-- container-scroller -->
     </div>
 
 
@@ -427,8 +316,23 @@ check_login()
             });
         });
     </script>
+    <!-- Reload Chats after message is sent -->
+    <script>
+        function loadMessages() {
+            fetch('../functions/chats.php').then(response => response.text()).then(html => {
+                document.getElementById('mailList').innerHTML = html;
+            }).catch(error => {
+                console.error('Error loading messages:', error);
+            });
+        }
+        // Initial load
+        loadMessages();
 
+        // Optional: auto-refresh every 10 seconds
+        setInterval(loadMessages, 10000);
+    </script>
     <script src="../public/assets/vendors/modal/modal-demo.js"></script>
+    </script>
     <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
     <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
     <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
