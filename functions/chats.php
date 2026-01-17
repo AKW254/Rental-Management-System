@@ -25,9 +25,12 @@ if ($res->num_rows === 0) {
         $senderName = ($row['sender_id'] === $user_id) ? 'You' : htmlspecialchars($row['user_name']);
 
         echo '
+         <div class="mail-list">
     <div class="col-10 container d-flex justify-content-between" style="cursor: pointer;">
         <p class="sender-name">' . $senderName . '</p>
         <span class="message_text">' . htmlspecialchars($row['chat_message']) . '</span>
-    </div>';
+    </div>
+    </div>
+        ';
     }
 }

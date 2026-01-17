@@ -41,16 +41,14 @@ check_login()
                                         <input class="form-control flex-grow-1" type="search" placeholder="Search message" id="mail-search">
                                         <div class="compose mb-3"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
                                     </div>
-                                    <div class="mail-list" id="mailList">
-                                    </div>
+                                    <div  id="mailList"></div>
                                     <!-- NO RESULTS MESSAGE -->
                                     <div class="mail-list" id="no-results" style="display:none;">
                                         <div class="col-10 mail-list d-flex flex-column">
                                             No messages found for your search.Please try again with different keywords.
                                         </div>
                                     </div>
-                                </div>
-                                <!--Message view-->
+                                     <!--Message view-->
                                 <div class="mail-view d-none  pt-4 pb-2 border-right bg-dark" id="mail-view">
                                     <div class="row">
                                         <div class="col-sm-8 col-lg-8 col-md-8 mb-4 mt-4">
@@ -114,6 +112,8 @@ check_login()
                                         </div>
                                     </div>
                                 </div>
+                                </div>
+                               
                             </div>
                             <!--Compose Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
@@ -202,33 +202,36 @@ check_login()
 
     <!--Open conversation Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mails = document.querySelectorAll('.mail-list');
-            const mailView = document.getElementById('mail-view');
+document.addEventListener('DOMContentLoaded', () => {
 
-            const viewSender = document.getElementById('view-sender');
-            const viewContent = document.getElementById('view-content');
-            const mailListContainer = document.querySelector('.mail-list-container');
+    const mailView = document.getElementById('mail-view');
+    const viewSender = document.getElementById('view-sender');
+    const viewContent = document.getElementById('view-content');
+    const mailListContainer = document.querySelector('.mail-list-container');
 
-            mails.forEach(mail => {
-                mail.addEventListener('click', () => {
-                    const sender = mail.querySelector('.sender-name').textContent;
-                    const message = mail.querySelector('.message_text').textContent;
+    // EVENT DELEGATION
+    document.addEventListener('click', (e) => {
 
-                    // Populate the mail view
+        const mail = e.target.closest('.mail-list');
+        if (!mail) return; // not a mail item
 
-                    viewSender.textContent = sender;
-                    viewContent.textContent = message;
+        const sender = mail.querySelector('.sender-name')?.textContent;
+        const message = mail.querySelector('.message_text')?.textContent;
 
-                    // Show the mail view panel
-                    mailView.classList.remove('d-none');
-                    // Optionally, you can hide the mail list panel if needed
-                    // mailListContainer.classList.add('d-none');
-                    // Hide the whole mail list
-                    mailListContainer.classList.add('d-none');
-                });
-            });
-        });
+        if (!sender || !message) return;
+
+        // Populate mail view
+        viewSender.textContent = sender;
+        viewContent.textContent = message;
+
+        // Show mail view, hide list
+        mailView.classList.remove('d-none');
+        mailListContainer.classList.add('d-none');
+    });
+
+});
+</script>
+
     </script>
     <!--Back to mail list script-->
     <script>
