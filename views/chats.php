@@ -41,79 +41,53 @@ check_login()
                                         <input class="form-control flex-grow-1" type="search" placeholder="Search message" id="mail-search">
                                         <div class="compose mb-3"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
                                     </div>
-                                    <div  id="mailList"></div>
+                                    <div id="mailList"></div>
                                     <!-- NO RESULTS MESSAGE -->
                                     <div class="mail-list" id="no-results" style="display:none;">
                                         <div class="col-10 mail-list d-flex flex-column">
                                             No messages found for your search.Please try again with different keywords.
                                         </div>
                                     </div>
-                                     <!--Message view-->
-                                <div class="mail-view d-none  pt-4 pb-2 border-right bg-dark" id="mail-view">
-                                    <div class="row">
-                                        <div class="col-sm-8 col-lg-8 col-md-8 mb-4 mt-4">
-                                            <div class="btn-toolbar">
-                                                <div class="btn-group">
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-reply text-primary"></i> Reply</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-delete text-primary"></i>Delete</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-printer text-primary"></i>Print</button>
-                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="back-to-list"><i class="mdi mdi-arrow-left text-primary"></i>Back</button>
+                                    <!--Message view-->
+                                    <div class="mail-view d-none  pt-4 pb-2 border-right bg-dark" id="mail-view">
+                                        <div class="row">
+                                            <div class="col-sm-8 col-lg-8 col-md-8 mb-4 mt-4">
+                                                <div class="btn-toolbar">
+                                                    <div class="btn-group">
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-reply text-primary"></i> Reply</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-delete text-primary"></i>Delete</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-printer text-primary"></i>Print</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="back-to-list"><i class="mdi mdi-arrow-left text-primary"></i>Back</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="message-body">
-                                        <div class="sender-details">
-                                            <img class="img-sm rounded-circle me-3" src="../../../assets/images/faces/face11.jpg" alt="No profile image">
-                                            <div class="details">
+                                        <div class="message-body">
+                                            <div class="sender-details">
+                                                <img class="img-sm rounded-circle me-3" src="../../../assets/images/faces/face11.jpg" alt="No profile image">
+                                                <div class="details">
 
-                                                <p class="sender-email">From: <span id="view-sender"></span></p>
+                                                    <p class="sender-email">From: <span id="view-sender"></span></p>
+                                                </div>
+                                            </div>
+                                            <div class="message-content" id="view-content">
+                                            </div>
+
+                                            <!--Reply section-->
+                                            <div class="reply-section d-none">
+                                                <h5 class="mb-3">Reply</h5>
+                                                <form id="replyForm" method="Post">
+                                                    <div class="form-group">
+                                                        <input type="hidden" name="chat_code" id="chat-code" />
+                                                        <textarea class="form-control" id="reply-message" rows="4" placeholder="Type your message here..."></textarea>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary mt-2">Send Reply</button>
+                                                </form>
                                             </div>
                                         </div>
-                                        <div class="message-content" id="view-content">
-
-
-                                        </div>
-                                        <div class="attachments-sections">
-                                            <ul>
-                                                <li>
-                                                    <div class="thumb"><i class="mdi mdi-file-pdf"></i></div>
-                                                    <div class="details">
-                                                        <p class="file-name">Seminar Reports.pdf</p>
-                                                        <div class="buttons">
-                                                            <p class="file-size">678Kb</p>
-                                                            <a href="#" class="view">View</a>
-                                                            <a href="#" class="download">Download</a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li>
-                                                    <div class="thumb"><i class="mdi mdi-file-image"></i></div>
-                                                    <div class="details">
-                                                        <p class="file-name">Product Design.jpg</p>
-                                                        <div class="buttons">
-                                                            <p class="file-size">1.96Mb</p>
-                                                            <a href="#" class="view">View</a>
-                                                            <a href="#" class="download">Download</a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <!--Reply section-->
-                                        <div class="reply-section d-none">
-                                            <h5 class="mb-3">Reply</h5>
-                                            <form>
-                                                <div class="form-group">
-                                                    <textarea class="form-control" id="reply-message" rows="4" placeholder="Type your message here..."></textarea>
-                                                </div>
-                                                <button type="submit" class="btn btn-primary mt-2">Send Reply</button>
-                                            </form>
-                                        </div>
                                     </div>
                                 </div>
-                                </div>
-                               
+
                             </div>
                             <!--Compose Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
@@ -202,36 +176,42 @@ check_login()
 
     <!--Open conversation Script -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
 
-    const mailView = document.getElementById('mail-view');
-    const viewSender = document.getElementById('view-sender');
-    const viewContent = document.getElementById('view-content');
-    const mailListContainer = document.querySelector('.mail-list-container');
+            const mailView = document.getElementById('mail-view');
+            const viewSender = document.getElementById('view-sender');
+            const viewContent = document.getElementById('view-content');
+            const mailListContainer = document.getElementById('mailList');
+            const backBtn = document.getElementById('back-to-list');
 
-    // EVENT DELEGATION
-    document.addEventListener('click', (e) => {
+            // OPEN MESSAGE
+            mailListContainer.addEventListener('click', (e) => {
 
-        const mail = e.target.closest('.mail-list');
-        if (!mail) return; // not a mail item
+                const mail = e.target.closest('.mail-list');
+                if (!mail) return;
 
-        const sender = mail.querySelector('.sender-name')?.textContent;
-        const message = mail.querySelector('.message_text')?.textContent;
+                viewSender.textContent = mail.dataset.sender;
+                viewContent.textContent = mail.dataset.message;
+                viewContent.dataset.chatCode = mail.dataset.chatCode;
 
-        if (!sender || !message) return;
+                mailView.classList.remove('d-none');
+                mailListContainer.classList.add('d-none');
+            });
 
-        // Populate mail view
-        viewSender.textContent = sender;
-        viewContent.textContent = message;
+            // BACK TO LIST
+            backBtn.addEventListener('click', () => {
+                mailView.classList.add('d-none');
+                mailListContainer.classList.remove('d-none');
+            });
 
-        // Show mail view, hide list
-        mailView.classList.remove('d-none');
-        mailListContainer.classList.add('d-none');
-    });
+            // REPLY TOGGLE
+            document.querySelector('.mdi-reply').closest('button')
+                .addEventListener('click', () => {
+                    document.querySelector('.reply-section')
+                        .classList.toggle('d-none');
+                });
 
-});
-</script>
-
+        });
     </script>
     <!--Back to mail list script-->
     <script>
@@ -263,17 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 printWindow.document.write('</body></html>');
                 printWindow.document.close();
                 printWindow.print();
-            });
-        });
-    </script>
-    <!--Show reply section Script-->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const replyButton = document.querySelector('.btn-outline-secondary i.mdi-reply').parentElement;
-            const replySection = document.querySelector('.reply-section');
-
-            replyButton.addEventListener('click', () => {
-                replySection.classList.toggle('d-none');
             });
         });
     </script>
@@ -332,14 +301,61 @@ document.addEventListener('DOMContentLoaded', () => {
         loadMessages();
 
         // Optional: auto-refresh every 10 seconds
-        setInterval(loadMessages, 10000);
+        let refreshInterval = setInterval(loadMessages, 10000);
+
+        // When opening mail
+        clearInterval(refreshInterval);
+    </script>
+    <!-- Reply to message Script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const replyForm = document.getElementById('replyForm');
+            if (!replyForm) return;
+
+            const replyMessageInput = document.getElementById('reply-message');
+            
+
+                replyForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+
+                    const replyMessage = replyMessageInput.value.trim();
+                    const chatCode = document.getElementById('view-content').dataset.chatCode;
+
+                    if (!replyMessage) {
+                        showToast('error', 'Please enter a message to reply.');
+                        return;
+                    }
+
+                    fetch('../functions/reply_message.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                chat_code: chatCode,
+                                message: replyMessage
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                showToast('success', data.message);
+                                replyMessageInput.value = '';
+                            } else {
+                                showToast('error', data.message || 'Reply failed');
+                            }
+                        })
+                        .catch(() => {
+                            showToast('error', 'Network error');
+                        });
+                });
+        });
     </script>
     <script src="../public/assets/vendors/modal/modal-demo.js"></script>
-    </script>
     <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
     <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
     <script src="../public/assets/vendors/datatables.net-bs4/data-table.js"></script>
-
     <?php include('../partials/scripts.php') ?>
 
 
