@@ -55,7 +55,9 @@ check_login()
                                                 <div class="btn-toolbar">
                                                     <div class="btn-group">
                                                         <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-reply text-primary"></i> Reply</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-delete text-primary"></i>Delete</button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="delete-message">
+                                                            <i class="mdi mdi-delete text-primary"></i> Delete
+                                                        </button>
                                                         <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-printer text-primary"></i>Print</button>
                                                         <button type="button" class="btn btn-sm btn-outline-secondary" id="back-to-list"><i class="mdi mdi-arrow-left text-primary"></i>Back</button>
                                                     </div>
@@ -64,7 +66,6 @@ check_login()
                                         </div>
                                         <div class="message-body">
                                             <div class="sender-details">
-                                                <img class="img-sm rounded-circle me-3" src="../../../assets/images/faces/face11.jpg" alt="No profile image">
                                                 <div class="details">
 
                                                     <p class="sender-email">From: <span id="view-sender"></span></p>
@@ -190,9 +191,11 @@ check_login()
                 const mail = e.target.closest('.mail-list');
                 if (!mail) return;
 
-                viewSender.textContent = mail.dataset.sender;
+                viewSender.textContent = mail.dataset.senderName;
                 viewContent.textContent = mail.dataset.message;
+                viewContent.dataset.chatId = mail.dataset.chatId;
                 viewContent.dataset.chatCode = mail.dataset.chatCode;
+
 
                 mailView.classList.remove('d-none');
                 mailListContainer.classList.add('d-none');
@@ -314,42 +317,89 @@ check_login()
             if (!replyForm) return;
 
             const replyMessageInput = document.getElementById('reply-message');
-            
 
-                replyForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
 
-                    const replyMessage = replyMessageInput.value.trim();
-                    const chatCode = document.getElementById('view-content').dataset.chatCode;
+            replyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
 
-                    if (!replyMessage) {
-                        showToast('error', 'Please enter a message to reply.');
-                        return;
-                    }
+                const replyMessage = replyMessageInput.value.trim();
+                const chatCode = document.getElementById('view-content').dataset.chatCode;
 
-                    fetch('../functions/reply_message.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                chat_code: chatCode,
-                                message: replyMessage
-                            })
+                if (!replyMessage) {
+                    showToast('error', 'Please enter a message to reply.');
+                    return;
+                }
+
+                fetch('../functions/reply_message.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_code: chatCode,
+                            message: replyMessage
                         })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                showToast('success', data.message);
-                                replyMessageInput.value = '';
-                            } else {
-                                showToast('error', data.message || 'Reply failed');
-                            }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('success', data.message);
+                            replyMessageInput.value = '';
+                            document.getElementById('back-to-list').click();
+                            loadMessages();
+
+                        } else {
+                            showToast('error', data.message || 'Reply failed');
+                        }
+                    })
+                    .catch(() => {
+                        showToast('error', 'Network error');
+                    });
+            });
+        });
+    </script>
+    <!--Delete message Script-->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButton = document.querySelector('.btn-outline-secondary i.mdi-delete').parentElement;
+            const viewContent = document.getElementById('view-content');
+
+            deleteButton.addEventListener('click', () => {
+                const chatId = viewContent.dataset.chatId;
+
+                if (!chatId) {
+                    showToast('error', 'No message selected to delete.');
+                    return;
+                }
+
+                if (!confirm('Are you sure you want to delete this message?')) {
+                    return;
+                }
+
+                fetch('../functions/delete_message.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            chat_id: chatId
                         })
-                        .catch(() => {
-                            showToast('error', 'Network error');
-                        });
-                });
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            showToast('success', data.message);
+                            // Optionally, refresh the message list or navigate back
+                            document.getElementById('back-to-list').click();
+                            loadMessages();
+                        } else {
+                            showToast('error', data.message || 'Delete failed');
+                        }
+                    })
+                    .catch(() => {
+                        showToast('error', 'Network error');
+                    });
+            });
         });
     </script>
     <script src="../public/assets/vendors/modal/modal-demo.js"></script>
