@@ -2,6 +2,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+include('../functions/create_notification.php');
 check_login();
 // Set response header  
 ob_clean(); 
@@ -9,6 +10,7 @@ header('Content-Type: application/json; charset=utf-8');
 $response = ['success' => false];
 if (!$_SESSION['user_id']) {
     $response = ['success' => false,];
+create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to maintenance functions', 1);
     echo json_encode($response);
     return;
 }
@@ -28,6 +30,7 @@ if ($_POST['action'] === 'create') {
     if (!$stmt1->execute()) {
         error_log('Execute failed for agreement lookup: ' . $stmt1->error);
         $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request - agreement lookup error', 1);
         echo json_encode($response);
         exit;
     }
@@ -49,6 +52,7 @@ if ($_POST['action'] === 'create') {
         if (!$stmt2->execute()) {
             error_log('Execute failed for landlord assignment: ' . $stmt2->error);
             $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request - landlord lookup error', 1);
             echo json_encode($response);
             exit;
         }
@@ -57,6 +61,7 @@ if ($_POST['action'] === 'create') {
 
         if (!$res2) {
             $response = ['success' => false, 'message' => 'No landlord found for the selected room. Please contact support.'];
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request - no landlord found', 1);
             echo json_encode($response);
             exit;
         }
@@ -71,6 +76,7 @@ if ($_POST['action'] === 'create') {
         if (!$stmt3) {
             error_log('Prepare failed for maintenance insert: ' . $mysqli->error);
             $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request - insert prepare error', 1);
             echo json_encode($response);
             exit;
         }
@@ -80,12 +86,15 @@ if ($_POST['action'] === 'create') {
         if ($stmt3->execute() && $mail->send()) {
             
             $response = ['success' => true, 'message' => "Maintenance request created successfully"];
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request created successfully', 1);
         } else {
             error_log('Database Error: ' . $mysqli->error);
             $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request', 1);
         }
     } else {
         $response = ['success' => false, 'message' => 'No active rental agreement found for this room.'];
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create maintenance request - no active agreement', 1);
     }
 
     echo json_encode($response);
@@ -114,17 +123,18 @@ if ($_POST['action'] === 'edit_maintenance_request') {
     $tenant_email = $tenant['tenant_email'];
     $stmt = $mysqli->prepare("UPDATE maintenance_requests SET maintenance_request_description = ?, maintenance_request_status = ? WHERE maintenance_request_id = ?");
     $stmt->bind_param("ssi", $maintenance_request_description, $maintenance_request_status, $maintenance_request_id);
-    if ($maintenance_request_status === 'Approved') {
+    if ($maintenance_request_status === 'Approved' && create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request approved', 1)) {
         include('../mailers/request_approval_maintenance.php');
     } elseif ($maintenance_request_status === 'Rejected') {
         include('../mailers/request_reject_maintenance.php');
     }
-    if ($stmt->execute() || $mail->send()) {
+    if ($stmt->execute() || $mail->send() && create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request updated successfully', 1)) {
         $response = ['success' => true, 'message' => "Maintanance request updated successfully"];
         echo json_encode($response);
         exit;
     } else {
         error_log('Database Error: ' . $mysqli->error); // Log the detailed error
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to edit maintenance request', 1);
         $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
         echo json_encode($response);
         exit;
@@ -136,6 +146,7 @@ if ($_POST['action'] === 'delete_request') {
     $maintenance_request_id = filter_var($_POST['maintenance_request_id'], FILTER_VALIDATE_INT);
     if ($maintenance_request_id === false) {
         $response['error'] = 'Invalid Maintenance Request ID';
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete maintenance request - invalid ID', 1);
         echo json_encode($response);
         exit;
     }
@@ -146,6 +157,7 @@ if ($_POST['action'] === 'delete_request') {
     $check_result = $check_stmt->get_result();
     if ($check_result->num_rows === 0) {
         $response = ['success' => false, 'message' => 'Maintenance request not found.'];
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete maintenance request - not found', 1);
         echo json_encode($response);
         exit;
     }
@@ -155,10 +167,12 @@ if ($_POST['action'] === 'delete_request') {
     $stmt->bind_param("i", $maintenance_request_id);
     if ($stmt->execute()) {
         $response = ['success' => true, 'message' => "Maintenance request deleted successfully"];
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request deleted successfully', 1);
         echo json_encode($response);
         exit;
     } else {
         $response = ['success' => false, 'message' => 'Error: ' . $mysqli->error];
+        create_notification($mysqli,$_SESSION['user_id'],'3','Error: ' . $mysqli->error,1);
         echo json_encode($response);
         exit;
     }
