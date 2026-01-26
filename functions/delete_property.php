@@ -2,6 +2,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+require_once('../functions/create_notification.php');
 check_login();
 
 $response = ['success' => false];
@@ -9,6 +10,7 @@ $response = ['success' => false];
 if(!isset($_SESSION['user_id'])){
     $response['error'] = 'Unauthorized access.';
     header('Content-Type: application/json');
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to delete property', 1);
     echo json_encode($response);
     exit;
 }
@@ -23,11 +25,13 @@ try{
     $stmt->close();
     $response['success'] = true;
     $response['message'] = 'Property deleted successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Property deleted successfully', 1);
     echo json_encode($response);
     exit;
 } catch (Exception $e) {
     $response['error'] = 'Error deleting property: ' . $e->getMessage();
     $response['message'] = 'Error deleting property.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete property', 1);
     echo json_encode($response);
     exit;
 }
