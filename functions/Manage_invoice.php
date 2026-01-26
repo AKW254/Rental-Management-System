@@ -3,6 +3,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+include('../functions/create_notification.php');
 include('../vendor/autoload');
 check_login();
 
@@ -11,6 +12,7 @@ $response = ['success' => false];
 if (!$_SESSION['user_id']) {
     $response['error'] = 'User not authenticated.';
     header('Content-Type: application/json');
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to manage invoice', 1);
     echo json_encode($response);
     exit;
 }
@@ -32,6 +34,7 @@ if(isset($_POST['action']) && $_POST['action'] === 'create_invoice') {
         $invoice_amount = $row_rent['rent_amount'];
     } else {
         $response['error'] = 'Failed to retrieve room rent amount.';
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to retrieve room rent amount', 1);
         echo json_encode($response);
         exit;
     }
@@ -43,6 +46,7 @@ if(isset($_POST['action']) && $_POST['action'] === 'create_invoice') {
 
     if (!$stmt->execute()) {
         $response['error'] = 'Failed to create invoice. Error: ' . $stmt->error;
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create invoice', 1);
         echo json_encode($response);
         exit;
     }
@@ -55,6 +59,7 @@ include('invoice_genetor.php');
 
     $response['success'] = true;
     $response['message'] = 'Invoice created successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Invoice created successfully', 1);
     echo json_encode($response);
     exit;
 }
@@ -73,6 +78,7 @@ if(isset($_POST['action']) && $_POST['action'] === 'edit_invoice') {
 
     if (!$stmt->execute()) {
         $response['error'] = 'Failed to update invoice. Error: ' . $stmt->error;
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to edit invoice', 1);
         echo json_encode($response);
         exit;
     }
@@ -81,6 +87,7 @@ if(isset($_POST['action']) && $_POST['action'] === 'edit_invoice') {
 
     $response['success'] = true;
     $response['message'] = 'Invoice updated successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Invoice edited successfully', 1);
     echo json_encode($response);
     exit;
 }  
@@ -95,6 +102,7 @@ if (isset($_POST['invoice_id'])) {
 
     if (!$stmt->execute()) {
         $response['error'] = 'Failed to delete invoice. Error: ' . $stmt->error;
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete invoice', 1);
         echo json_encode($response);
         exit;
     }
@@ -103,6 +111,7 @@ if (isset($_POST['invoice_id'])) {
 
     $response['success'] = true;
     $response['message'] = 'Invoice deleted successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Invoice deleted successfully', 1);
     echo json_encode($response);
     exit;
 }                
