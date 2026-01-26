@@ -2,12 +2,14 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+require_once('../functions/create_notification.php');
 check_login();
 // Set response header
 header('Content-Type: application/json');
 $response = ['success' => false];
 if (empty($_SESSION['user_id'])) {
     $response['error'] = 'Unauthorized access.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to compose message', 1);
     echo json_encode($response);
     exit;
 }
@@ -25,6 +27,7 @@ $to_user = $result->fetch_assoc();
 $stmt->close();
 if (!$to_user) {
     $response['error'] = 'Recipient user not found.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to compose message - recipient not found', 1);
     echo json_encode($response);
     exit;
 }
@@ -39,11 +42,14 @@ try {
     //Send success response
     $response['success'] = true;
     $response['message'] = 'Message sent successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Message composed successfully', 1);
+
     echo json_encode($response);
     exit;
 } catch (Exception $e) {
     $response['error'] = $e->getMessage();
     $response['message'] = 'Failed to send message.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to compose message', 1);
     echo json_encode($response);
     exit;
 }
