@@ -55,6 +55,7 @@ try {
             create_notification($mysqli, $_SESSION['user_id'], '3', 'User deleted another user successfully', 1);
         } else {
             throw new Exception('Error deleting record: ' . $delete->error);
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete user', 1);
         }
     }
 } catch (Exception $e) {

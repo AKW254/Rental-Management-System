@@ -3,6 +3,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+include('../functions/create_notification.php');
 check_login();
 
 $response = ['success' => false];
@@ -11,6 +12,7 @@ if (!$_SESSION['user_id']) {
     $response['error'] = 'User not authenticated.';
     header('Content-Type: application/json');
     echo json_encode($response);
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to edit property', 1);
     exit;
 }
 
@@ -26,6 +28,8 @@ $property_manager_id = trim($_POST['property_manager_id'] ?? '');
 if (empty($property_id)) {
     $response['error'] = 'Invalid property ID.';
     $response['error'] = 'Property ID is required and cannot be empty.';
+    echo json_encode($response);
+     create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to edit property - missing property ID', 1);
     exit;
 }
 
@@ -47,6 +51,7 @@ $stmt->bind_param("sssii", $property_name, $property_location, $property_descrip
 
 if (!$stmt->execute()) {
     $response['error'] = 'Failed to update property. Error: ' . $stmt->error;
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to edit property', 1);
     echo json_encode($response);
     exit;
 }
@@ -62,11 +67,13 @@ $response['updated_details'] = [
     'property_description' => $property_description,
     'property_manager_id' => $property_manager_id
 ];
+create_notification($mysqli, $_SESSION['user_id'], '3', 'Property edited successfully', 1);
 echo json_encode($response);
 exit;
     $stmt->close();
 } else {
     $response['message'] = 'No changes detected. Property details remain the same.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'No changes made to property during edit', 1);
     echo json_encode($response);
     exit;
 }
@@ -74,6 +81,7 @@ exit;
 // Check if the update was successful
 if ($stmt->error) {
     $response['error'] = 'Failed to update property. Error: ' . $stmt->error;
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to edit property', 1);
     echo json_encode($response);
     exit;
 }
@@ -82,5 +90,6 @@ $stmt->close();
 
 $response['success'] = true;
 $response['message'] = 'Property updated successfully.';
+create_notification($mysqli, $_SESSION['user_id'], '3', 'Property edited successfully', 1);
 echo json_encode($response);
 exit;
