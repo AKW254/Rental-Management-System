@@ -2,6 +2,7 @@
  session_start();
  include('../config/config.php');
  include('../config/checklogin.php');
+ include('../functions/create_notification.php');
  check_login();
 
 // Set response header
@@ -10,6 +11,7 @@ header('Content-Type: application/json; charset=utf-8');
  $response = ['success' => false];
  if (!$_SESSION['user_id']) {
      $response = ['success' => false,];
+     create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to rental agreements', 1);
      echo json_encode($response);
      return;
  }
@@ -28,6 +30,7 @@ header('Content-Type: application/json; charset=utf-8');
 
         // Check tenant ID is valid
         if (!$tenant_id) {
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create rental agreement - user session expired', 1);
             echo json_encode(['success' => false, 'message' => 'User session expired. Please login again.']);
             exit;
         }
@@ -41,6 +44,7 @@ header('Content-Type: application/json; charset=utf-8');
 
         // When duplicate agreement exists
         if ($check_stmt->num_rows > 0) {
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create rental agreement - duplicate active agreement', 1);
             $response['error'] = 'You already have an agreement for this room';
             ob_clean();
             echo json_encode($response);
@@ -75,7 +79,7 @@ header('Content-Type: application/json; charset=utf-8');
             $mail_stmt->close();
          //Notify property manager About new rental agreement
          include('../mailers/new_rental_agreement.php');
-            $mail->send();
+            $mail->send() && create_notification($mysqli, $_SESSION['user_id'], '1', 'New rental agreement created successfully', 1);
  
          echo json_encode([
              'success' => true,
@@ -85,6 +89,7 @@ header('Content-Type: application/json; charset=utf-8');
      } catch (mysqli_sql_exception $e) {
          $response= 'Database Error: ' . $e->getMessage();
          ob_clean();
+         create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create rental agreement', 1);   
             echo json_encode(['success' => false, 'message' => $response]);
             exit;
      }
@@ -105,8 +110,10 @@ if ($_POST['action'] === 'edit_agreemet') {
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
+        create_notification($mysqli, $_SESSION['user_id'], '1', 'Rental agreement updated successfully', 1);
         $response = ['success' => true, 'message' => 'Rental agreement updated successfully.'];
     } else {
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'No changes made to rental agreement', 1);
         $response = ['success' => false, 'message' => 'Failed to update rental agreement or no changes made.'];
     }
 
@@ -127,6 +134,7 @@ if ($_POST['action'] === 'change_agreement_status') {
         $agreement_status = trim($_POST['agreement_status'] ?? '');
 
         if (!$agreement_id || !in_array($agreement_status, ['Active', 'Terminated'])) {
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to change rental agreement status - invalid input', 1);
             echo json_encode(['success' => false, 'message' => 'Invalid agreement ID or status.']);
             exit;
         }
@@ -150,6 +158,7 @@ if ($_POST['action'] === 'change_agreement_status') {
         $info_stmt->close();
 
         if (!$room_id) {
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to change rental agreement status - agreement not found', 1);
             echo json_encode(['success' => false, 'message' => 'Agreement not found.']);
             exit;
         }
@@ -167,6 +176,7 @@ if ($_POST['action'] === 'change_agreement_status') {
             if ($check_stmt->num_rows > 0) {
                 $check_stmt->close();
                 $mysqli->rollback();
+                create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to activate rental agreement - room already occupied', 1);
                 echo json_encode(['success' => false, 'message' => 'Room is already occupied by another active agreement.']);
                 exit;
             }
@@ -187,7 +197,7 @@ if ($_POST['action'] === 'change_agreement_status') {
 
             // Send notification
             include('../mailers/agreement_activated.php');
-            if (isset($mail)) $mail->send();
+            if (isset($mail)) $mail->send() && create_notification($mysqli, $_SESSION['user_id'], '1', 'Rental agreement activated successfully', 1)    ;
 
             $mysqli->commit();
         }
@@ -209,7 +219,7 @@ if ($_POST['action'] === 'change_agreement_status') {
            
             // Send notification
             include('../mailers/agreement_terminated.php');
-            if (isset($mail)) $mail->send();
+            if (isset($mail)) $mail->send() && create_notification($mysqli, $_SESSION['user_id'], '1', 'Rental agreement terminated successfully', 1);
         }
         $response = ['success' => true, 'message' => "Rental agreement status changed successfully."];
         ob_clean();
@@ -218,6 +228,8 @@ if ($_POST['action'] === 'change_agreement_status') {
     } catch (Exception $e) {
       
         error_log("Agreement status change error: " . $e->getMessage());
+        $mysqli->rollback();
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to change rental agreement status', 1);
 
         $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
         ob_clean();
