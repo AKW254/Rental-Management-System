@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once('../config/config.php');
+require_once('../config/checklogin.php');
+require_once('../functions/create_notification.php');
+check_login();
 
 // Set response header
 header('Content-Type: application/json');
@@ -9,6 +12,7 @@ $response = ['success' => false];
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
+
     respondWithError('Unauthorized access.');
 }
 
@@ -37,6 +41,7 @@ if (password_verify($user_password, $stored_hashed_password)) {
 
 // Hash the new password and update it in the database
 if (updatePassword($mysqli, $user_id, $user_password)) {
+ create_notification($mysqli, $_SESSION['user_id'], '1', 'Password updated successfully', 1);
     $response['success'] = true;
     $response['message'] = 'Password updated successfully.';
 } else {
