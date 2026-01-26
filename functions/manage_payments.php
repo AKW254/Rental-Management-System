@@ -7,6 +7,7 @@ include('../config/config.php');
 $config = include('../config/config.php');
 include('../config/checklogin.php');
 require_once('../config/daraja.php');
+require_once('../functions/create_notification.php');
 $daraja = new Daraja($config);
 
 check_login();
@@ -33,6 +34,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'pay_invoice') {
 
     // Validate inputs
     if (empty($invoice_id) || empty($payment_amount) || empty($payment_method)) {
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to process payment due to missing fields', 1);
         echo json_encode(['error' => 'Missing required fields.']);
         exit;
     }
@@ -74,11 +76,13 @@ if (isset($_POST['action']) && $_POST['action'] === 'pay_invoice') {
         }
     
 } else {
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to process payment due to invalid method', 1);
         echo json_encode(['error' => 'Invalid payment method.']);
         exit;
     }
 
     if (!$payment_success) {
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to process payment', 1);
         echo json_encode(['error' => 'Failed to process payment.']);
         exit;
     }
@@ -90,17 +94,20 @@ if (isset($_POST['action']) && $_POST['action'] === 'pay_invoice') {
     if ($stmt_update_invoice) {
         $stmt_update_invoice->bind_param("i", $invoice_id);
         if (!$stmt_update_invoice->execute()) {
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to update invoice status after payment', 1);
             echo json_encode(['error' => 'Failed to update invoice: ' . $stmt_update_invoice->error]);
             exit;
         }
         $stmt_update_invoice->close();
     } else {
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to prepare invoice update statement', 1);
         echo json_encode(['error' => 'Failed to prepare invoice update statement.']);
         exit;
     }
-
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Payment processed successfully', 1);
     echo json_encode([
         'success' => true,
+       
         'message' => 'Payment processed successfully.'
     ]);
     exit;
