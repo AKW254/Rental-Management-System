@@ -2,11 +2,13 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+include('../functions/create_notification.php');
 
 check_login();
 
 // Ensure user is logged in
 if (!isset($_SESSION['user_id'])) {
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to reply message', 1);
     echo json_encode([
         'success' => false,
         'message' => 'Unauthorized access'
@@ -24,6 +26,7 @@ $message   = trim($data['message'] ?? '');
 
 // Validate input
 if (empty($chat_code) || empty($message)) {
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to reply message - missing chat code or message', 1);
     echo json_encode([
         'success' => false,
         'message' => 'Missing chat code or message'
@@ -47,6 +50,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to reply message - invalid chat thread', 1);
     echo json_encode([
         'success' => false,
         'message' => 'Invalid chat thread'
@@ -66,11 +70,13 @@ $stmt = $mysqli->prepare($insert);
 $stmt->bind_param('siis', $chat_code, $user_id, $receiver_id, $message);
 
 if ($stmt->execute()) {
+    create_notification($mysqli, $_SESSION['user_id'], '1', 'Replied to message successfully', 1);
     echo json_encode([
         'success' => true,
         'message' => 'Reply sent successfully'
     ]);
 } else {
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to reply message', 1);
     echo json_encode([
         'success' => false,
         'message' => 'Failed to send reply'
