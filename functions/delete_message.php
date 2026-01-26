@@ -2,6 +2,7 @@
 include('../config/config.php');
 session_start();
 include('../config/checklogin.php');
+require_once('../functions/create_notification.php');
 check_login();
 $user_id = $_SESSION['user_id'];
 
@@ -16,11 +17,13 @@ $stmt->execute();
 if ($stmt->affected_rows > 0) {
     $response['success'] = true;
     $response['message'] = 'Message deleted successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Message deleted successfully', 1);
     echo json_encode($response);
     exit;
 } else {
     $response['success'] = false;
     $response['message'] = 'Failed to delete message or message not found.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete message', 1);
     echo json_encode($response);
     exit;
 }
