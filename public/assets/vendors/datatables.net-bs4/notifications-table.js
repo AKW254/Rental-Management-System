@@ -1,10 +1,6 @@
-// assets/js/property-table.js
 (() => {
-  // Ensure DataTables library is loaded
   if (typeof $.fn.DataTable === "undefined") {
-    console.error(
-      "DataTables library is not loaded. Please include the required DataTables JS and CSS files."
-    );
+    console.error("DataTables library is not loaded.");
     return;
   }
 
@@ -12,10 +8,9 @@
     const $table = $("#notificationTable");
     if (!$table.length) return;
 
-    // Initialize and store globally
     window.notificationTable = $table.DataTable({
       ajax: {
-        url: "/Rental-Management-System/functions/list_notifications.php", // returns JSON []
+        url: "/Rental-Management-System/functions/list_notifications.php",
         dataSrc: "",
       },
       rowId: "notification_id",
@@ -29,15 +24,10 @@
         { data: "notification_message" },
         { data: "sent_at" },
         { data: "notification_status" },
-        
-        {
-          data: null,
-          orderable: false
-        },
       ],
       responsive: true,
       pageLength: 10,
-      order: [[1, "asc"]],
+      order: [[4, "desc"]],
     });
   });
 })();

@@ -35,7 +35,7 @@ check_login();
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                            
+
                                 <div class="col-12">
                                     <div class="table-responsive">
                                         <table id="notificationTable" class="table">
@@ -47,10 +47,10 @@ check_login();
                                                     <th>Notification message</th>
                                                     <th>Notification Date</th>
                                                     <th>Status</th>
-                                                   
+
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="notificationTableBody">
                                                 <!-- Data populated by DataTables -->
                                             </tbody>
                                           
@@ -66,13 +66,10 @@ check_login();
             <!-- main-panel ends -->
             <!-- container-scroller -->
             <?php include('../functions/custom_alerts.php'); ?>
-
-      
-
             <?php include('../partials/scripts.php') ?>
-            <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-            <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-            <script src="../public/assets/vendors/datatables.net-bs4/notifications-table.js"></script>
+            <script src=" ../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+         <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
+                    <script src="../public/assets/vendors/datatables.net-bs4/notifications-table.js"></script>
 
 
 </body>

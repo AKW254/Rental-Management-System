@@ -10,7 +10,7 @@ if(!$_SESSION['user_id']) {
 exit;
 }
 //2.Query Notification record
-$sql= "SELECT us.user_name,nt.notification_id,
+$sql= "SELECT nt.notification_id,us.user_name,
 nt.notification_type,nt.notification_message,nt.sent_at,nt.notification_status FROM notifications AS nt INNER JOIN users AS us ON nt.user_id = us.user_id";
 $result = $mysqli->query($sql);
 $notifications = [];
