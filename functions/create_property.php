@@ -2,6 +2,7 @@
 session_start();
 include('../config/config.php');
 include('../config/checklogin.php');
+require_once('../functions/create_notification.php');
 check_login();
 // Set response header
 header('Content-Type: application/json');
@@ -10,6 +11,7 @@ $response = ['success' => false];
 
 if(!$_SESSION['user_id']) {
     $response['error'] = 'Unauthorized access.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to create property', 1);
     echo json_encode($response);
     exit;
 }
@@ -37,6 +39,7 @@ try{
     //Check if property was created successfully
     if (!$property) {
         $response['error'] = 'Failed to create property.';
+        create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create property', 1);
         echo json_encode($response);
         exit;
     }
@@ -55,11 +58,13 @@ try{
     //Send propertyid with response
     $response['success'] = true;
     $response['message'] = 'Property created successfully.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Property created successfully', 1);
     echo json_encode($response);
     exit;
 } catch (Exception $e) {
     $response['error'] = $e->getMessage();
     $response['message'] = 'Failed to create property.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to create property', 1);
     echo json_encode($response);
     exit;
 }
