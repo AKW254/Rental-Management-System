@@ -1,11 +1,15 @@
 <?php 
 session_start();
 include('../config/config.php');
+include('../config/checklogin.php');
+check_login();
+include('../functions/create_notification.php');
 // Set response header
 header('Content-Type: application/json');
 $response = ['success' => false];
 if (!isset($_SESSION['user_id'])) {
     $response['error'] = 'Unauthorized access.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to delete user', 1);
     echo json_encode($response);
     exit;
 }
@@ -14,6 +18,7 @@ $user_id = trim($_POST['user_id'] ?? '');
 // Basic validation
 if (empty($user_id)) {
     $response['error'] = 'User ID is required.';
+    create_notification($mysqli, $_SESSION['user_id'], '3', 'Failed to delete user - missing user ID', 1);
     echo json_encode($response);
     exit;
 }
@@ -30,6 +35,9 @@ try {
         if ($delete->execute()) {
             $response['success'] = true;
             $response['message'] = 'User deleted successfully. You have been logged out.';
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'User deleted self account successfully', 1);
+            // Destroy session
+            session_destroy();
             exit;
         } else {
             throw new Exception('Error deleting record: ' . $delete->error);
@@ -44,6 +52,7 @@ try {
         if ($delete->execute()) {
             $response['success'] = true;
             $response['message'] = 'User deleted successfully.';
+            create_notification($mysqli, $_SESSION['user_id'], '3', 'User deleted another user successfully', 1);
         } else {
             throw new Exception('Error deleting record: ' . $delete->error);
         }
