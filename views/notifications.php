@@ -50,12 +50,12 @@ check_login();
 
                                                 </tr>
                                             </thead>
-                                            <tbody id="notificationTableBody">
+                                            <tbody>
                                                 <!-- Data populated by DataTables -->
                                             </tbody>
-                                          
+
                                         </table>
-                                       
+
                                     </div>
                                 </div>
                             </div>
@@ -68,8 +68,8 @@ check_login();
             <?php include('../functions/custom_alerts.php'); ?>
             <?php include('../partials/scripts.php') ?>
             <script src=" ../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
-         <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-                    <script src="../public/assets/vendors/datatables.net-bs4/notifications-table.js"></script>
+            <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
+            <script src="../public/assets/vendors/datatables.net-bs4/notifications-table.js"></script>
 
 
 </body>
