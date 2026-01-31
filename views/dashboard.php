@@ -93,7 +93,7 @@ check_login()
                             <div class="card-body">
                                 <h4 class="card-title">Users Roles</h4>
                                 <div class="doughnutjs-wrapper">
-                                    <canvas id="doughnutChart" style="height: 250px; display: block; box-sizing: border-box; width: 250px;" width="250" height="250"></canvas>
+                                    <canvas id="doughnutChart" width="250" height="350"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -101,16 +101,14 @@ check_login()
                         <div class="col-sm-12 col-md-6 col-xl-8">
                             <div class="card-body">
                                 <h4 class="card-title">Annual Collected Rent</h4>
-                                <div class="height: auto; width: 100%; display: block; box-sizing: border-box;">
-                                    <canvas id="areaChart" style="height: 250px; display: block; box-sizing: border-box; width: 250px;" width="250" height="250"></canvas>
-                                </div>
+                                    <canvas id="areaChart" width="250" height="100"></canvas>
                             </div>
                         </div>
                         <!-- Line chart for tenant and landlord registration -->
                         <div class="col-sm-12 col-md-6 col-xl-8">
                             <div class="card-body">
                                 <h4 class="card-title">Tenant and Landlord Registration</h4>
-                                <div class="height: auto; width: 100%; display: block; box-sizing: border-box;">
+                                <div class="height: auto; width: 50%; display: block; box-sizing: border-box;">
                                     <canvas id="lineChart"></canvas>
                                 </div>
                             </div>
@@ -120,7 +118,7 @@ check_login()
                             <div class="card-body">
                                 <h4 class="card-title">Visits</h4>
                                 <div class="">
-                                    <div id="geochart-markers" style="width: 100%; height: 600px;"></div>
+                                    <div id="map" style="height:500px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -142,6 +140,30 @@ check_login()
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <?php include('../helpers/visualization/admin_charts.php'); ?>
         <?php include('../partials/scripts.php') ?>
+        <!-- Leaflet Map Visualization -->
+        <script>
+            // Initialize the map
+            var map = L.map('map').setView([20, 0], 2); // Centered at [20, 0] with zoom level 2
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Fetch location data from the server
+            fetch('../functions/fetch_locations.php')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(location => {
+                        var lat = location.latitude;
+                        var lon = location.longitude;
+
+                        // Add a marker for each location
+                        L.marker([lat, lon]).addTo(map);
+                    });
+                })
+                .catch(error => console.error('Error fetching location data:', error));
+                </script>
 
 
 </body>
