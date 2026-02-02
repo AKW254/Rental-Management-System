@@ -169,7 +169,7 @@
                  <span class="nav-link">Navigation</span>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="dashboard">
+                 <a class="nav-link" href="landlord_dashboard">
                      <span class="menu-icon">
                          <i class="mdi mdi-speedometer"></i>
                      </span>
@@ -177,7 +177,7 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="users">
+                 <a class="nav-link" href="landlord_tenant">
                      <span class="menu-icon">
                          <i class="mdi mdi-account-group"></i>
                      </span>
@@ -185,22 +185,22 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#properties" aria-expanded="false" aria-controls="properties">
+                 <a class="nav-link" data-bs-toggle="collapse" href="#properties" aria-expanded="false" aria-controls="landlord_properties">
                      <span class="menu-icon">
                          <i class="mdi mdi-home"></i>
                      </span>
                      <span class="menu-title">Assets</span>
 
                  </a>
-                 <div class="collapse" id="properties">
+                 <div class="collapse" id="landlord_properties">
                      <ul class="nav flex-column sub-menu">
-                         <li class="nav-item"> <a class="nav-link" href="properties">Properties</a></li>
-                         <li class="nav-item"> <a class="nav-link" href="rooms">Rooms</a></li>
+                         <li class="nav-item"> <a class="nav-link" href="landlord_properties">Properties</a></li>
+                         <li class="nav-item"> <a class="nav-link" href="landlord_rooms">Rooms</a></li>
                      </ul>
                  </div>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="maintenances">
+                 <a class="nav-link" href="landlord_maintenances">
                      <span class="menu-icon">
                          <i class="mdi mdi-account-group"></i>
                      </span>
@@ -208,7 +208,7 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="rental_agreements">
+                 <a class="nav-link" href="landlord_rental_agreements">
                      <span class="menu-icon">
                          <i class="mdi mdi-file-document"></i>
                      </span>
@@ -218,7 +218,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="invoices">
+                 <a class="nav-link" href="landlord_invoices">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
                      </span>
@@ -228,7 +228,7 @@
 
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="payments">
+                 <a class="nav-link" href="landlord_payments">
                      <span class="menu-icon">
                          <i class="mdi mdi-wallet"></i>
                      </span>
@@ -239,14 +239,14 @@
              </li>
 
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="chats">
+                 <a class="nav-link" href="landlord_chats">
                      <span class="menu-icon">
                          <i class="mdi mdi-chat"></i>
                      </span>
                      <span class="menu-title">Chats</span>
                  </a>
              </li>
-            
+
          </ul>
      </nav>
 
