@@ -24,14 +24,14 @@ check_login()
             <!-- partial -->
             <div class="main-panel">
                 <div class="content-wrapper">
-                    <?php require_once('../helpers/analysis/admin.php') ?>
+                    <?php require_once('../helpers/analysis/landlord.php') ?>
                     <div class="row g-4">
                         <!-- Total Properties -->
                         <div class="col-md-4 col-xl-3">
                             <div class="card shadow-sm border-0">
                                 <div class="card-body">
                                     <h6 class="text-muted">Number of Properties</h6>
-                                    <h3 class="fw-bold mb-0"><?php echo $total_properties ?></h3>
+                                    <h3 class="fw-bold mb-0"><?php echo $no_of_properties ?></h3>
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@ check_login()
                             <div class="card shadow-sm border-0">
                                 <div class="card-body">
                                     <h6 class="text-muted">Number of Rooms</h6>
-                                    <h3 class="fw-bold mb-0"><?php echo $total_rooms ?></h3>
+                                    <h3 class="fw-bold mb-0"><?php echo $no_of_rooms ?></h3>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +80,7 @@ check_login()
                             <div class="card shadow-sm border-0">
                                 <div class="card-body">
                                     <h6 class="text-muted">Revenue collected</h6>
-                                    <h3 class="fw-bold mb-0"><?php //echo $revenue_collected_per_landlord 
+                                    <h3 class="fw-bold mb-0"><?php echo $revenue_collected_per_landlord 
                                                                 ?></h3>
                                 </div>
                             </div>
