@@ -23,19 +23,18 @@ if (isset($_POST['login'])) {
             $_SESSION['role_id'] = $row->role_id;
 
             // Redirect to token verification page
-            if($_SESSION['authenticated']){
+            if ($_SESSION['authenticated'] &&  $row->role_type == 'Administrator') {
                 header("Location:dashboard");
-             
+            } elseif ($_SESSION['authenticated'] &&  $row->role_type == 'Landlord') {
+                header("location:landloard_dashboard");
+            } elseif ($_SESSION['authenticated'] &&  $row->role_type == 'Tenant') {
+                header("location:tenant_dashboard");
+            } else {
+                $err = "Invalid email or password!";
             }
-           
-        } else {
-            $err = "Invalid email or password!";
-           
         }
-    
+    }
 }
-}
-
 
 // Logout on token expiry or manual logout
 if (isset($_GET['action']) && $_GET['action'] === "logout") {
@@ -56,33 +55,33 @@ if (isset($_GET['action']) && $_GET['action'] === "logout") {
                 <div class="content-wrapper full-page-wrapper auth login-2 login-bg">
                     <div class="card col-6">
                         <div class="card-body px-5 py-5">
-                            
 
-                         
-                                <h3 class="card-title text-start mb-3">Login</h3>
-                                <form method="POST" action="">
-                                    <div class="form-group">
-                                        <label>User email *</label>
-                                        <input type="text" class="form-control p_input" name="user_email" required>
+
+
+                            <h3 class="card-title text-start mb-3">Login</h3>
+                            <form method="POST" action="">
+                                <div class="form-group">
+                                    <label>User email *</label>
+                                    <input type="text" class="form-control p_input" name="user_email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password *</label>
+                                    <input type="password" name="user_password" class="form-control p_input" required>
+                                </div>
+                                <div class="form-group d-flex align-items-center justify-content-between">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input" name="remember"> Remember me
+                                        </label>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Password *</label>
-                                        <input type="password" name="user_password" class="form-control p_input" required>
-                                    </div>
-                                    <div class="form-group d-flex align-items-center justify-content-between">
-                                        <div class="form-check">
-                                            <label class="form-check-label">
-                                                <input type="checkbox" class="form-check-input" name="remember"> Remember me
-                                            </label>
-                                        </div>
-                                        <a href="reset_password.php" class="forgot-pass">Forgot password</a>
-                                    </div>
-                                    <div class="text-center d-grid gap-2">
-                                        <button type="submit" name="login" class="btn btn-primary btn-block enter-btn">Login</button>
-                                    </div>
-                                    <p class="sign-up">Don't have an Account? <a href="register.php"> Register Here</a></p>
-                                </form>
-                            
+                                    <a href="reset_password.php" class="forgot-pass">Forgot password</a>
+                                </div>
+                                <div class="text-center d-grid gap-2">
+                                    <button type="submit" name="login" class="btn btn-primary btn-block enter-btn">Login</button>
+                                </div>
+                                <p class="sign-up">Don't have an Account? <a href="register.php"> Register Here</a></p>
+                            </form>
+
                         </div>
 
                     </div>
