@@ -185,7 +185,7 @@
                  </a>
              </li>
              <li class="nav-item menu-items">
-                 <a class="nav-link" data-bs-toggle="collapse" href="#properties" aria-expanded="false" aria-controls="landlord_properties">
+                 <a class="nav-link" data-bs-toggle="collapse" href="#landlord_properties" aria-expanded="false" aria-controls="landlord_properties">
                      <span class="menu-icon">
                          <i class="mdi mdi-home"></i>
                      </span>
