@@ -151,8 +151,8 @@ check_login()
                                                                                     $i++;
                                                                                     echo "<tr>";
                                                                                     echo "<td>" . $i . "</td>";
-                                                                                    echo "<td>" . date('d M Y', strtotime($rental->rental_start_date)) . "</td>";
-                                                                                    echo "<td>" . date('d M Y', strtotime($rental->rental_end_date)) . "</td>";
+                                                                                    echo "<td>" . date('d M Y', strtotime($rental->agreement_start_date)) . "</td>";
+                                                                                    echo "<td>" . date('d M Y', strtotime($rental->agreement_end_date)) . "</td>";
                                                                                     echo "<td>" . $rental->user_name . "</td>";
                                                                                     echo "<td>" . $rental->agreement_status . "</td>";
                                                                                     echo "</tr>";
