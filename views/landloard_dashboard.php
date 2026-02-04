@@ -88,25 +88,47 @@ check_login()
                     </div>
                     <div class="contain-fluid mx-2 my-2 px-2 py-2">
                         <div class="col-12">
-                            <h3>Tenant Risk analysis</h3>
-                            <table id="requestTable" class="table">
+                            <h3>Tenant Risk Analysis (ML)</h3>
+                            <table class="table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Room No</th>
-                                        <th>Requested By</th>
-                                        <th>Request To</th>
-                                        <th>Maintenance Request Description</th>
-                                        <th>Request Date</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
+                                        <th>Tenant</th>
+                                        <th>Room</th>
+                                        <th>Overdue</th>
+                                        <th>Unpaid</th>
+                                        <th>Late</th>
+                                        <th>Failed</th>
+                                        <th>Open Maint.</th>
+                                        <th>Last Payment</th>
+                                        <th>Risk Score</th>
+                                        <th>Risk Level</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- DataTables will populate via Datatable initilazation -->
+                                    <?php if (!empty($tenant_risk_rows)) : ?>
+                                        <?php foreach ($tenant_risk_rows as $index => $t) : ?>
+                                            <tr>
+                                                <td><?php echo $index + 1; ?></td>
+                                                <td><?php echo htmlspecialchars($t['user_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($t['room_title']); ?></td>
+                                                <td><?php echo (int)$t['overdue_invoices']; ?></td>
+                                                <td><?php echo (int)$t['unpaid_invoices']; ?></td>
+                                                <td><?php echo (int)$t['late_payments']; ?></td>
+                                                <td><?php echo (int)$t['failed_payments']; ?></td>
+                                                <td><?php echo (int)$t['open_maintenance']; ?></td>
+                                                <td><?php echo $t['last_payment_date'] ? htmlspecialchars($t['last_payment_date']) : '—'; ?></td>
+                                                <td><?php echo (int)$t['risk_score']; ?></td>
+                                                <td><?php echo htmlspecialchars($t['risk_level']); ?></td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    <?php else : ?>
+                                        <tr>
+                                            <td colspan="11">No active tenants found.</td>
+                                        </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
-
                         </div>
 
 

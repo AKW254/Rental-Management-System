@@ -66,7 +66,10 @@ INNER JOIN properties AS ps ON rm.property_id = ps.property_id
  WHERE ps.property_manager_id = ? AND inv.invoice_status = 'Paid'";
  $Revenue_stmt = $mysqli->prepare($Revenue_sql);
  $Revenue_stmt->bind_param('i', $_SESSION['user_id']);
-    $Revenue_stmt->execute();
-    $result_Revenue = $Revenue_stmt->get_result();
-    $row_Revenue = $result_Revenue->fetch_assoc();
-    $revenue_collected_per_landlord = $row_Revenue['total'];    
+$Revenue_stmt->execute();
+$result_Revenue = $Revenue_stmt->get_result();
+$row_Revenue = $result_Revenue->fetch_assoc();
+$revenue_collected_per_landlord = $row_Revenue['total'];    
+
+// Tenant Risk Analysis (ML-based clustering)
+require_once __DIR__ . '/tenant_risk.php';

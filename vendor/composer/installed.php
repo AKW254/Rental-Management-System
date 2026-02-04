@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'dc01f34e2c7f1e1068e2b28526d29d42b9104909',
+        'reference' => '1d72b7689ddc2a5626fa70285d608786c3a73d5c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'dc01f34e2c7f1e1068e2b28526d29d42b9104909',
+            'reference' => '1d72b7689ddc2a5626fa70285d608786c3a73d5c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -105,6 +105,15 @@
             'replaced' => array(
                 0 => '^1.0',
             ),
+        ),
+        'php-ai/php-ml' => array(
+            'pretty_version' => '0.10.0',
+            'version' => '0.10.0.0',
+            'reference' => '543f11158c57bf64ef8ddecd5bab51d396d39f50',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../php-ai/php-ml',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'phpmailer/phpmailer' => array(
             'pretty_version' => 'v6.9.3',
