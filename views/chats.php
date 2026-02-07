@@ -429,7 +429,7 @@ check_login()
                                             <div class="modal-body">
                                                 <div class="form-group">
                                                     <label for="username" class="col-form-label">To:</label>
-                                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username">
+                                                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter recipient's email or username">
                                                 </div>
 
                                                 <div class="form-group">

@@ -19,8 +19,8 @@ $message = trim($_POST['message'] ?? '');
 $from_user_id = $_SESSION['user_id'];
 $chat_code = bin2hex(random_bytes(8));
 //Fetch recipient user id
-$stmt = $mysqli->prepare("SELECT user_id,user_name FROM users WHERE user_name = ?");
-$stmt->bind_param("s", $to_username);
+$stmt = $mysqli->prepare("SELECT user_id,user_name FROM users WHERE user_name = ? OR user_email = ?");
+$stmt->bind_param("ss", $to_username, $to_username);
 $stmt->execute();
 $result = $stmt->get_result();
 $to_user = $result->fetch_assoc();
