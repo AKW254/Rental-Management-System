@@ -26,7 +26,7 @@ if (isset($_POST['login'])) {
             if ($_SESSION['authenticated'] &&  $row->role_type == 'Administrator') {
                 header("Location:dashboard");
             } elseif ($_SESSION['authenticated'] &&  $row->role_type == 'Landlord') {
-                header("location:landloard_dashboard");
+                header("location:landlord_dashboard");
             } elseif ($_SESSION['authenticated'] &&  $row->role_type == 'Tenant') {
                 header("location:tenant_dashboard");
             } else {
