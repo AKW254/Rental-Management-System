@@ -239,7 +239,7 @@
              </li>
 
              <li class="nav-item menu-items">
-                 <a class="nav-link" href="landlord_chats">
+                 <a class="nav-link" href="chats">
                      <span class="menu-icon">
                          <i class="mdi mdi-chat"></i>
                      </span>

@@ -27,16 +27,24 @@ $res = $stmt->get_result();
 while ($row = $res->fetch_assoc()) {
 
     $isMe = $row['sender_id'] == $user_id;
-    $chatClass = $isMe ? 'chat-message me' : 'chat-message other';
-    $senderName = $isMe ? 'Me' : htmlspecialchars($row['user_name']);
-    $chatMessage = htmlspecialchars($row['chat_message']);
-    $chatId = htmlspecialchars($row['chat_message_id']);
-    $chatCode = htmlspecialchars($row['chat_code']);
+    $chatClass = $isMe ? 'is-me' : 'is-other';
+    $senderName = $isMe ? 'Me' : htmlspecialchars($row['user_name'], ENT_QUOTES, 'UTF-8');
+    $chatMessage = htmlspecialchars($row['chat_message'], ENT_QUOTES, 'UTF-8');
+    $chatId = htmlspecialchars($row['chat_message_id'], ENT_QUOTES, 'UTF-8');
+    $chatCode = htmlspecialchars($row['chat_code'], ENT_QUOTES, 'UTF-8');
     $chatTime = date('d M Y h:i A', strtotime($row['chat_sent_at']));
-    echo "<div class=\"mail-list\" id=\"mailList\" data-sender-name=\"{$senderName}\" data-message=\"{$chatMessage}\" data-chat-id=\"{$chatId}\" data-chat-code=\"{$chatCode}\">
-    <div class=\"col-10 container d-flex justify-content-between\" style=\"cursor: pointer;\">
-        <p class=\"sender-name\" id=\"sender-name\">{$senderName}</p>
-        <span class=\"message_text\" id=\"message-text\">{$chatMessage}</span>
+    $senderInitial = strtoupper(substr($senderName, 0, 1));
+    if ($senderInitial === '') {
+        $senderInitial = '?';
+    }
+    echo "<div class=\"mail-list chat-list-item {$chatClass}\" data-sender-name=\"{$senderName}\" data-message=\"{$chatMessage}\" data-chat-id=\"{$chatId}\" data-chat-code=\"{$chatCode}\" data-chat-time=\"{$chatTime}\">
+    <div class=\"chat-list-avatar\" aria-hidden=\"true\">{$senderInitial}</div>
+    <div class=\"chat-list-body\">
+        <div class=\"chat-list-top\">
+            <span class=\"sender-name\">{$senderName}</span>
+            <span class=\"chat-time\">{$chatTime}</span>
+        </div>
+        <div class=\"message_text\">{$chatMessage}</div>
     </div>
 </div>";
  

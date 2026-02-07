@@ -12,7 +12,331 @@ check_login()
 
 <?php include('../partials/head.php') ?>
 
-<body class="sidebar-icon-only sidebar-fixed" style="background-color: black;">
+<body class="sidebar-icon-only sidebar-fixed chat-page">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Sora:wght@500;600;700&display=swap');
+
+        :root {
+            --chat-bg: #0b1220;
+            --chat-surface: #0f172a;
+            --chat-surface-2: #141d33;
+            --chat-surface-3: #0c1425;
+            --chat-border: rgba(148, 163, 184, 0.18);
+            --chat-text: #e5e7eb;
+            --chat-muted: #94a3b8;
+            --chat-accent: #22d3ee;
+            --chat-accent-2: #f59e0b;
+            --chat-shadow: 0 24px 48px rgba(2, 6, 23, 0.45);
+        }
+
+        body.chat-page {
+            background: radial-gradient(1200px 600px at 10% -20%, rgba(34, 211, 238, 0.18), transparent 60%),
+                radial-gradient(900px 500px at 90% 0%, rgba(245, 158, 11, 0.18), transparent 60%),
+                linear-gradient(180deg, #0b1220 0%, #0f172a 35%, #0b1220 100%);
+            color: var(--chat-text);
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        body.chat-page .page-title {
+            font-family: 'Sora', sans-serif;
+            letter-spacing: 0.3px;
+        }
+
+        body.chat-page .breadcrumb {
+            color: var(--chat-muted);
+        }
+
+        body.chat-page .breadcrumb a {
+            color: var(--chat-accent);
+        }
+
+        .chat-shell {
+            display: grid;
+            grid-template-columns: minmax(260px, 340px) 1fr;
+            gap: 20px;
+            padding: 18px;
+            border-radius: 24px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--chat-border);
+            box-shadow: var(--chat-shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-list-panel,
+        .chat-view-panel {
+            min-height: 600px;
+        }
+
+        .chat-list-panel {
+            background: var(--chat-surface);
+            border-radius: 18px;
+            border: 1px solid var(--chat-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-search {
+            border-bottom: 1px solid var(--chat-border);
+            background: rgba(10, 15, 30, 0.85);
+            padding: 16px;
+        }
+
+        .chat-search .form-control {
+            background: #0b1220;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: var(--chat-text);
+            border-radius: 12px;
+            height: 44px;
+        }
+
+        .chat-search .form-control::placeholder {
+            color: var(--chat-muted);
+        }
+
+        .chat-search .btn {
+            border-radius: 12px;
+            padding: 10px 16px;
+            font-weight: 600;
+        }
+
+        .chat-shell .btn-primary {
+            background: var(--chat-accent);
+            border-color: var(--chat-accent);
+            color: #0b1220;
+        }
+
+        .chat-shell .btn-primary:hover {
+            background: #38bdf8;
+            border-color: #38bdf8;
+            color: #0b1220;
+        }
+
+        #mailList {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        #mailList::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #mailList::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.3);
+            border-radius: 999px;
+        }
+
+        .chat-list-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin: 6px;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .chat-list-item:hover {
+            background: rgba(34, 211, 238, 0.08);
+            border-color: rgba(34, 211, 238, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .chat-list-item.is-active {
+            background: rgba(34, 211, 238, 0.12);
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 12px 24px rgba(14, 165, 233, 0.18);
+        }
+
+        .chat-list-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0b1220;
+            background: linear-gradient(135deg, var(--chat-accent), #38bdf8);
+            flex-shrink: 0;
+        }
+
+        .chat-list-item.is-me .chat-list-avatar {
+            background: linear-gradient(135deg, var(--chat-accent-2), #f97316);
+        }
+
+        .chat-list-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .chat-list-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--chat-muted);
+        }
+
+        .sender-name {
+            color: var(--chat-text);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .message_text {
+            margin-top: 4px;
+            color: var(--chat-muted);
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .chat-no-results {
+            padding: 16px;
+            color: var(--chat-muted);
+        }
+
+        .chat-view-panel {
+            background: var(--chat-surface-2);
+            border-radius: 18px;
+            border: 1px solid var(--chat-border);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .chat-empty-state {
+            flex: 1;
+            border: 1px dashed var(--chat-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--chat-muted);
+            padding: 24px;
+        }
+
+        .mail-view {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .chat-pane-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .chat-pane-title {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--chat-muted);
+        }
+
+        .chat-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            color: var(--chat-muted);
+        }
+
+        #view-sender {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.2rem;
+            color: var(--chat-text);
+        }
+
+        #view-time {
+            font-size: 0.85rem;
+            color: var(--chat-muted);
+        }
+
+        .chat-actions .btn {
+            border-radius: 10px;
+        }
+
+        .chat-shell .btn-outline-secondary {
+            border-color: var(--chat-border);
+            color: var(--chat-text);
+        }
+
+        .chat-shell .btn-outline-secondary:hover {
+            background: rgba(148, 163, 184, 0.16);
+        }
+
+        .message-body {
+            background: var(--chat-surface-3);
+            border-radius: 16px;
+            padding: 18px;
+            border: 1px solid var(--chat-border);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message-bubble {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(14, 165, 233, 0.08));
+            border: 1px solid rgba(34, 211, 238, 0.25);
+            color: var(--chat-text);
+            border-radius: 16px;
+            padding: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            min-height: 120px;
+        }
+
+        .reply-section textarea {
+            background: #0b1220;
+            color: var(--chat-text);
+            border: 1px solid var(--chat-border);
+            border-radius: 12px;
+        }
+
+        .reply-section textarea::placeholder {
+            color: var(--chat-muted);
+        }
+
+        @media (max-width: 992px) {
+            .chat-shell {
+                grid-template-columns: 1fr;
+                padding: 14px;
+            }
+
+            .chat-view-panel {
+                display: none;
+            }
+
+            .chat-shell.chat-open .chat-view-panel {
+                display: flex;
+            }
+
+            .chat-shell.chat-open .chat-list-panel {
+                display: none;
+            }
+        }
+    </style>
 
     <div class="container-scroller">
         <!-- partial:partials/_sidebar.html -->
@@ -35,44 +359,46 @@ check_login()
                     </div>
                     <div class="row">
                         <div class="container">
-                            <div class="email-wrapper wrapper">
-                                <div class="mail-list-container  pt-0 pb-2 border-right bg-dark">
-                                    <div class="sticky-top bg-dark border-bottom px-3 py-3 d-flex gap-2" style="top:0;">
-                                        <input class="form-control flex-grow-1" type="search" placeholder="Search message" id="mail-search">
-                                        <div class="compose mb-3"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
+                            <div class="chat-shell">
+                                <div class="chat-list-panel mail-list-container">
+                                    <div class="chat-search sticky-top d-flex gap-2 align-items-center" style="top:0;">
+                                        <input class="form-control flex-grow-1" type="search" placeholder="Search messages" id="mail-search">
+                                        <div class="compose"><button class="btn btn-primary w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Compose</button></div>
                                     </div>
                                     <div id="mailList"></div>
                                     <!-- NO RESULTS MESSAGE -->
-                                    <div class="mail-list" id="no-results" style="display:none;">
-                                        <div class="col-10 mail-list d-flex flex-column">
-                                            No messages found for your search.Please try again with different keywords.
-                                        </div>
+                                    <div class="chat-no-results" id="no-results" style="display:none;">
+                                        No messages found for your search. Please try again with different keywords.
+                                    </div>
+                                </div>
+                                <div class="chat-view-panel">
+                                    <div class="chat-empty-state" id="chat-empty">
+                                        Select a message to preview the conversation.
                                     </div>
                                     <!--Message view-->
-                                    <div class="mail-view d-none  pt-4 pb-2 border-right bg-dark" id="mail-view">
-                                        <div class="row">
-                                            <div class="col-sm-8 col-lg-8 col-md-8 mb-4 mt-4">
-                                                <div class="btn-toolbar">
-                                                    <div class="btn-group">
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-reply text-primary"></i> Reply</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="delete-message">
-                                                            <i class="mdi mdi-delete text-primary"></i> Delete
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-printer text-primary"></i>Print</button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="back-to-list"><i class="mdi mdi-arrow-left text-primary"></i>Back</button>
-                                                    </div>
+                                    <div class="mail-view d-none" id="mail-view">
+                                        <div class="chat-pane-header">
+                                            <div class="chat-pane-title">
+                                                <span class="chat-label">Conversation</span>
+                                                <div class="chat-meta">
+                                                    <span id="view-sender"></span>
+                                                    <span>&bull;</span>
+                                                    <span id="view-time"></span>
+                                                </div>
+                                            </div>
+                                            <div class="btn-toolbar chat-actions">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-reply text-primary"></i> Reply</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="delete-message">
+                                                        <i class="mdi mdi-delete text-primary"></i> Delete
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="mdi mdi-printer text-primary"></i>Print</button>
+                                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="back-to-list"><i class="mdi mdi-arrow-left text-primary"></i>Back</button>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="message-body">
-                                            <div class="sender-details">
-                                                <div class="details">
-
-                                                    <p class="sender-email">From: <span id="view-sender"></span></p>
-                                                </div>
-                                            </div>
-                                            <div class="message-content" id="view-content">
-                                            </div>
+                                            <div class="message-bubble" id="view-content"></div>
 
                                             <!--Reply section-->
                                             <div class="reply-section d-none">
@@ -88,7 +414,6 @@ check_login()
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <!--Compose Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
@@ -135,7 +460,7 @@ check_login()
                                     function filterMails() {
                                         const input = document.getElementById('mail-search');
                                         const filter = input.value.toLowerCase();
-                                        const mails = document.querySelectorAll('.mail-list');
+                                        const mails = document.querySelectorAll('.chat-list-item');
                                         const noResults = document.getElementById('no-results');
 
 
@@ -179,32 +504,42 @@ check_login()
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
+            const chatShell = document.querySelector('.chat-shell');
             const mailView = document.getElementById('mail-view');
             const viewSender = document.getElementById('view-sender');
+            const viewTime = document.getElementById('view-time');
             const viewContent = document.getElementById('view-content');
             const mailListContainer = document.getElementById('mailList');
             const backBtn = document.getElementById('back-to-list');
+            const chatEmpty = document.getElementById('chat-empty');
 
             // OPEN MESSAGE
             mailListContainer.addEventListener('click', (e) => {
 
-                const mail = e.target.closest('.mail-list');
+                const mail = e.target.closest('.chat-list-item');
                 if (!mail) return;
 
-                viewSender.textContent = mail.dataset.senderName;
-                viewContent.textContent = mail.dataset.message;
+                viewSender.textContent = mail.dataset.senderName || 'Unknown';
+                viewTime.textContent = mail.dataset.chatTime || '';
+                viewContent.textContent = mail.dataset.message || '';
                 viewContent.dataset.chatId = mail.dataset.chatId;
                 viewContent.dataset.chatCode = mail.dataset.chatCode;
 
 
                 mailView.classList.remove('d-none');
-                mailListContainer.classList.add('d-none');
+                chatEmpty.classList.add('d-none');
+                chatShell.classList.add('chat-open');
+
+                document.querySelectorAll('.chat-list-item.is-active')
+                    .forEach(item => item.classList.remove('is-active'));
+                mail.classList.add('is-active');
             });
 
             // BACK TO LIST
             backBtn.addEventListener('click', () => {
                 mailView.classList.add('d-none');
-                mailListContainer.classList.remove('d-none');
+                chatEmpty.classList.remove('d-none');
+                chatShell.classList.remove('chat-open');
             });
 
             // REPLY TOGGLE
@@ -214,21 +549,6 @@ check_login()
                         .classList.toggle('d-none');
                 });
 
-        });
-    </script>
-    <!--Back to mail list script-->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const backToListButton = document.getElementById('back-to-list');
-            const mailView = document.getElementById('mail-view');
-            const mailListContainer = document.querySelector('.mail-list-container');
-
-            backToListButton.addEventListener('click', () => {
-                // Hide the mail view panel
-                mailView.classList.add('d-none');
-                // Show the mail list panel
-                mailListContainer.classList.remove('d-none');
-            });
         });
     </script>
     <!--Print conversation Script-->

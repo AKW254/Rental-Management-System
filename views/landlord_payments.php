@@ -42,6 +42,7 @@ check_login()
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th>Invoice Number</th>
                                                     <th>Payment Method</th>
                                                     <th>Payment Amount</th>
                                                     <th>Payment Transcation Code</th>
