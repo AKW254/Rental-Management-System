@@ -30,7 +30,7 @@ check_login()
                 <?php
                 //Get room details
                 $room_id = $_GET['room_id'];
-                $stmt = $mysqli->prepare("SELECT rs.room_title,rs.room_image,rs.room_rent_amount,rs.room_availability,us.user_name AS landlord,user_pic,property_name FROM rooms AS rs 
+                $stmt = $mysqli->prepare("SELECT rs.room_id, rs.room_title,rs.room_image,rs.room_rent_amount,rs.room_availability,us.user_name AS landlord,user_pic,property_name FROM rooms AS rs 
                 INNER JOIN properties AS ps ON rs.property_id=ps.property_id
                 INNER JOIN users AS us ON ps.property_manager_id=us.user_id
                  WHERE room_id = ?");
@@ -53,7 +53,13 @@ check_login()
                             <h3 class="page-title"><?php echo $room->room_title; ?> Room Details </h3>
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                                    <?php
+                                    if ($_SESSION['role_id'] == 2) {
+                                        echo '<li class="breadcrumb-item"><a href="landlord_dashboard">Dashboard</a></li>';
+                                    } else {
+                                        echo '<li class="breadcrumb-item"><a href="tenant_dashboard">Dashboard</a></li>';
+                                    }
+                                    ?>
                                     <li class="breadcrumb-item active" aria-current="page">View Room details</li>
                                 </ol>
                             </nav>
@@ -64,7 +70,7 @@ check_login()
 
                                     <div class="col-12">
                                         <!--Show Room details -->
-                                        <div class="col-sm-12 col-md-12 col-xl-8 grid-margin stretch-card">
+                                        <div class="col-sm-12 col-md-12 col-xl-12 grid-margin stretch-card">
                                             <div class="card">
                                                 <div class="card-body">
                                                     <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel owl-loaded owl-drag">
@@ -121,47 +127,89 @@ check_login()
                                                                         </tr>
 
                                                                     </table>
-                                                                    <h2>Rental History</h2>
-                                                                    <table class="table table-responsive table-bordered">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>#</th>
-                                                                                <th>From</th>
-                                                                                <th>To</th>
-                                                                                <th>Rented by</th>
-                                                                                <th>Status</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                            <?php
-                                                                            $sql = "SELECT * FROM rental_agreements AS ra 
+                                                                    <?php if ($_SESSION['role_id'] == 3 && $room->room_availability == 'Available') {
+                                                                        // Check for existing agreement for this tenant + room
+                                                                        $check_agreement = "SELECT agreement_no, agreement_status, agreement_start_date, agreement_end_date FROM rental_agreements WHERE tenant_id = ? AND room_id = ?";
+                                                                        $stmt_check_agreement = $mysqli->prepare($check_agreement);
+                                                                        $stmt_check_agreement->bind_param('ii', $_SESSION['user_id'], $room_id);
+                                                                        $stmt_check_agreement->execute();
+                                                                        $res = $stmt_check_agreement->get_result();
+                                                                        if ($res->num_rows > 0) {
+                                                                    ?>
+                                                                            <h2>Rental History</h2>
+                                                                            <table class="table table-responsive table-bordered">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th>#</th>
+                                                                                        <th>On</th>
+                                                                                        <th>Status</th>
+                                                                                        <th>Agreement No</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <?php
+                                                                                    $i = 0;
+                                                                                    while ($rental = $res->fetch_object()) {
+                                                                                        $i++;
+                                                                                        echo "<tr>";
+                                                                                        echo "<td>" . $i . "</td>";
+                                                                                        echo "<td>" . date('d M Y', strtotime($rental->agreement_start_date)) . "</td>";
+                                                                                     
+                                                                                        echo "<td>" . $rental->agreement_status . "</td>";
+                                                                                        echo "<td>" . $rental->agreement_no . "</td>";
+                                                                                        echo "</tr>";
+                                                                                    }
+                                                                                    ?>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        <?php } else { ?>
+                                                                            <div class="col-sm-12 col-md-6 col-xl-12 mt-4">
+                                                                                <a href="../functions/rental_agreements.php?room_id=<?php echo (int)$room->room_id; ?>&action=initiate" class="btn btn-primary">Rent this room</a>
+                                                                            </div>
+                                                                        <?php } ?>
+                                                                    <?php } else { ?>
+                                                                    
+                                                                        <h2>Rental History</h2>
+                                                                        <table class="table table-responsive table-bordered">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>#</th>
+                                                                                    <th>From</th>
+                                                                                    <th>To</th>
+                                                                                    <th>Rented by</th>
+                                                                                    <th>Status</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <?php
+                                                                                $sql = "SELECT * FROM rental_agreements AS ra 
                                                                         INNER JOIN users AS us ON ra.tenant_id=us.user_id
                                                                         WHERE room_id = ?";
-                                                                            $stmt = $mysqli->prepare($sql);
-                                                                            $stmt->bind_param('i', $room_id);
-                                                                            $stmt->execute();
-                                                                            $res = $stmt->get_result();
-                                                                            //Get row count
-                                                                            $row_count = $res->num_rows;
-                                                                            if ($row_count == 0) {
-                                                                                echo "<tr><td colspan='5' class='text-center'>No data found</td></tr>";
-                                                                            } else {
-                                                                                $i = 0;
-                                                                                while ($rental = $res->fetch_object()) {
-                                                                                    $i++;
-                                                                                    echo "<tr>";
-                                                                                    echo "<td>" . $i . "</td>";
-                                                                                    echo "<td>" . date('d M Y', strtotime($rental->agreement_start_date)) . "</td>";
-                                                                                    echo "<td>" . date('d M Y', strtotime($rental->agreement_end_date)) . "</td>";
-                                                                                    echo "<td>" . $rental->user_name . "</td>";
-                                                                                    echo "<td>" . $rental->agreement_status . "</td>";
-                                                                                    echo "</tr>";
+                                                                                $stmt = $mysqli->prepare($sql);
+                                                                                $stmt->bind_param('i', $room_id);
+                                                                                $stmt->execute();
+                                                                                $res = $stmt->get_result();
+                                                                                //Get row count
+                                                                                $row_count = $res->num_rows;
+                                                                                if ($row_count == 0) {
+                                                                                    echo "<tr><td colspan='5' class='text-center'>No data found</td></tr>";
+                                                                                } else {
+                                                                                    $i = 0;
+                                                                                    while ($rental = $res->fetch_object()) {
+                                                                                        $i++;
+                                                                                        echo "<tr>";
+                                                                                        echo "<td>" . $i . "</td>";
+                                                                                        echo "<td>" . date('d M Y', strtotime($rental->agreement_start_date)) . "</td>";
+                                                                                        echo "<td>" . date('d M Y', strtotime($rental->agreement_end_date)) . "</td>";
+                                                                                        echo "<td>" . $rental->user_name . "</td>";
+                                                                                        echo "<td>" . $rental->agreement_status . "</td>";
+                                                                                        echo "</tr>";
+                                                                                    }
                                                                                 }
-                                                                            }
-                                                                            ?>
-                                                                        </tbody>
-                                                                    </table>
-
+                                                                                ?>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    <?php } ?>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -134,7 +134,7 @@
     elseif (($_SESSION['role_id']) == 2) { ?>
      <nav class="sidebar sidebar-offcanvas fixed" id="sidebar">
          <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
-             <a class="navbar-brand" href="/">RMS</a>
+             <a class="navbar-brand" href="landlord_dashboard">RMS</a>
          </div>
          <ul class="nav">
              <li class="nav-item profile">
@@ -249,10 +249,104 @@
 
          </ul>
      </nav>
-
  <?php }
     //Tenant
-    elseif (($_SESSION['role_id']) == 3) {
-        # code...
-    }
-    ?>
+    elseif (($_SESSION['role_id']) == 3) { ?>
+     <nav class="sidebar sidebar-offcanvas fixed "  id="sidebar">
+         <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+             <a class="navbar-brand" href="tenant_dashboard">RMS</a>
+         </div>
+         <ul class="nav">
+             <li class="nav-item profile">
+                 <div class="profile-desc">
+                     <div class="profile-pic">
+                         <div class="count-indicator">
+                             <img class="img-xs rounded-circle " src="../public/images/dummy profile.jpg" alt="">
+                             <span class="count bg-success"></span>
+                         </div>
+                         <?php
+                            $sql = "SELECT us.user_name,rl.role_type FROM users AS us INNER JOIN roles AS rl ON us.role_id=rl.role_id WHERE us.user_id=?";
+                            $stmt = $mysqli->prepare($sql);
+                            $stmt->bind_param('i', $_SESSION['user_id']);
+                            $stmt->execute();
+                            $res = $stmt->get_result();
+                            if ($res) {
+                                while ($user = $res->fetch_object()) {
+                            ?>
+                                 <div class="profile-name">
+                                     <h5 class="mb-0 font-weight-normal dynamictext" data-type="user_name"><?php echo htmlspecialchars($user->user_name, ENT_QUOTES, 'UTF-8'); ?></h5>
+                                     <span><?php echo htmlspecialchars($user->role_type, ENT_QUOTES, 'UTF-8'); ?></span>
+                                 </div>
+                         <?php
+                                }
+                            }
+                            $stmt->close();
+                            ?>
+                     </div>
+                 </div>
+             </li>
+             <li class="nav-item nav-category">
+                 <span class="nav-link">Navigation</span>
+             </li>
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="tenant_dashboard">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-speedometer"></i>
+                     </span>
+                     <span class="menu-title">Dashboard</span>
+                 </a>
+             </li>
+            
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="tenant_maintenances">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-account-group"></i>
+                     </span>
+                     <span class="menu-title">My maintenance Request</span>
+                 </a>
+             </li>
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="tenant_rental_agreements">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-file-document"></i>
+                     </span>
+                     <span class="menu-title">Rental Agreements</span>
+
+                 </a>
+
+             </li>
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="tenant_invoices">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-wallet"></i>
+                     </span>
+                     <span class="menu-title">Invoices</span>
+
+                 </a>
+
+             </li>
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="tenant_payments">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-wallet"></i>
+                     </span>
+                     <span class="menu-title">Payment</span>
+
+                 </a>
+
+             </li>
+
+             <li class="nav-item menu-items">
+                 <a class="nav-link" href="chats">
+                     <span class="menu-icon">
+                         <i class="mdi mdi-chat"></i>
+                     </span>
+                     <span class="menu-title">Chats</span>
+                 </a>
+             </li>
+
+         </ul>
+     </nav>
+
+
+ <?php } ?>

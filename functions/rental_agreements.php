@@ -1,4 +1,7 @@
 <?php
+
+use Symfony\Component\Process\Pipes\WindowsPipes;
+
  session_start();
  include('../config/config.php');
  include('../config/checklogin.php');
@@ -17,13 +20,14 @@ header('Content-Type: application/json; charset=utf-8');
  }
 
 // Create a new rental agreement
- if (isset($_POST['action']) && $_POST['action'] === 'create') {
+ if ((isset($_POST['action']) && $_POST['action'] === 'create') || ($_GET['action'] == 'initiate'))  {
      // Start secure handling
      mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
  
      try {
-         // Sanitize inputs
-         $room_id = trim($_POST['room_id']);
+        // Sanitize inputs
+        $room_id = $_POST['room_id'] ?? $_GET['room_id'] ?? null;
+        $room_id = $room_id ? (int)$room_id : null;
          $tenant_id = $_SESSION['user_id'] ?? null;
          $agreement_no = "RA/" . rand(1000, 9999) . "/" . date("Y");
          $agreement_start_date = date('Y-m-d');
@@ -80,12 +84,20 @@ header('Content-Type: application/json; charset=utf-8');
          //Notify property manager About new rental agreement
          include('../mailers/new_rental_agreement.php');
             $mail->send() && create_notification($mysqli, $_SESSION['user_id'], '1', 'New rental agreement created successfully', 1);
- 
-         echo json_encode([
+        #If is a Get Redirect to Current page
+        $isGetRequest = (isset($_GET['action']) && $_GET['action'] === 'initiate');
+        if ($isGetRequest) {
+            header("Location: ../views/room-details.php?room_id=" . $room_id . "");
+            exit;
+        }
+
+        echo json_encode([
              'success' => true,
              'message' => 'Rental agreement created successfully.',
              'agreement_no' => $agreement_no
          ]);
+
+         exit;
      } catch (mysqli_sql_exception $e) {
          $response= 'Database Error: ' . $e->getMessage();
          ob_clean();
