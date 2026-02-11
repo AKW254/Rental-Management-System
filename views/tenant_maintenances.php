@@ -27,7 +27,7 @@ check_login();
                         <h3 class="page-title"> Maintenances </h3>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="tenant_dashboard">Dashboard</a></li>
                                 <li class="breadcrumb-item active" aria-current="page">Maintenances</li>
                             </ol>
                         </nav>
@@ -61,7 +61,7 @@ check_login();
                                                                     <?php
                                                                     $sql = "SELECT rs.room_title, rl.room_id FROM rooms AS rs INNER JOIN rental_agreements AS rl ON rs.room_id = rl.room_id WHERE rl.tenant_id = ? AND rl.agreement_status = 'Active'";
                                                                     $stmt = $mysqli->prepare($sql);
-                                                                    $stmt->bind_param("s", $_SESSION['user_id']);
+                                                                    $stmt->bind_param("i", $_SESSION['user_id']);
                                                                     $stmt->execute();
                                                                     $result = $stmt->get_result();
                                                                     if ($result->num_rows > 0) {
@@ -96,12 +96,11 @@ check_login();
 
                                 <div class="col-12">
                                     <div class="table-responsive">
-                                        <table id="requestTable" class="table">
+                                        <table id="tenant_requestTable" class="table">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Room No</th>
-                            
                                                     <th>Maintenance Request Description</th>
                                                     <th>Request Date</th>
                                                     <th>Status</th>
@@ -112,7 +111,7 @@ check_login();
                                                 <!-- DataTables will populate via Datatable initilazation -->
                                             </tbody>
                                         </table>
-                                        <?php include '../helpers/modals/request_modal.php'; ?>
+                                        <?php include '../helpers/modals/tenant_request_modal.php'; ?>
                                     </div>
                                 </div>
                             </div>
@@ -144,8 +143,8 @@ check_login();
                             if (modalInstance) {
                                 modalInstance.hide();
                             }
-                            if (window.requestTable?.ajax) {
-                                window.requestTable.ajax.reload(null, false);
+                            if (window.tenant_requestTable?.ajax) {
+                                window.tenant_requestTable.ajax.reload(null, false);
                             }
                             // Show success message
                             showToast('success', result.message);
@@ -183,7 +182,7 @@ check_login();
                                         modal.hide();
 
                                         // Refresh DataTable
-                                        window.requestTable?.ajax?.reload(null, false);
+                                        window.tenant_requestTable?.ajax?.reload(null, false);
                                         showToast('success', result.message);
                                     } else {
                                         showToast('error', result.error);
@@ -221,8 +220,8 @@ check_login();
                                     ).hide();
 
                                     // Reload the DataTable
-                                    if (window.requestTable && window.requestTable.ajax) {
-                                        window.requestTable.ajax.reload(null, false);
+                                    if (window.tenant_requestTable && window.tenant_requestTable.ajax) {
+                                        window.tenant_requestTable.ajax.reload(null, false);
                                     }
                                     showToast('success', result.message);
                                 } else {
@@ -241,7 +240,7 @@ check_login();
             <?php include('../partials/scripts.php') ?>
             <script src="../public/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
             <script src="../public/assets/vendors/datatables.net-bs4/query.dataTables.js"></script>
-            <script src="../public/assets/vendors/datatables.net-bs4/request-table.js"></script>
+            <script src="../public/assets/vendors/datatables.net-bs4/tenant_request-table.js"></script>
 
 
 </body>

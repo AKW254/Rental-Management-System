@@ -18,15 +18,28 @@ create_notification($mysqli, $_SESSION['user_id'], '3', 'Unauthorized access to 
 // Handles the creation of a new maintenance request by validating inputs and inserting data into the database
 if ($_POST['action'] === 'create') {
     $room_id = filter_var($_POST['room_id'], FILTER_VALIDATE_INT);
-    $maintenance_request_description = mysqli_real_escape_string($mysqli, $_POST['maintenance_request_description']);
+    $raw_description = trim($_POST['maintenance_request_description'] ?? '');
+
+    if ($room_id === false || $room_id <= 0) {
+        $response = ['success' => false, 'message' => 'Invalid room selected.'];
+        echo json_encode($response);
+        exit;
+    }
+    if ($raw_description === '') {
+        $response = ['success' => false, 'message' => 'Maintenance description is required.'];
+        echo json_encode($response);
+        exit;
+    }
+    $maintenance_request_description = mysqli_real_escape_string($mysqli, $raw_description);
 
     // Get agreement details
     $sql1 = "SELECT ra.agreement_id,us.user_name AS tenant_name,rm.room_title FROM rental_agreements AS ra
     INNER JOIN users AS us ON ra.tenant_id = us.user_id
     INNER JOIN rooms AS rm ON ra.room_id = rm.room_id
-     WHERE rm.room_id = ?";
+     WHERE rm.room_id = ? AND ra.tenant_id = ? AND ra.agreement_status = 'Active'
+     LIMIT 1";
     $stmt1 = $mysqli->prepare($sql1);
-    $stmt1->bind_param("i", $room_id);
+    $stmt1->bind_param("ii", $room_id, $_SESSION['user_id']);
     if (!$stmt1->execute()) {
         error_log('Execute failed for agreement lookup: ' . $stmt1->error);
         $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
@@ -81,12 +94,24 @@ if ($_POST['action'] === 'create') {
             exit;
         }
         $stmt3->bind_param("isi", $agreement_id, $maintenance_request_description, $landlord_id);
-        // Send email notification to landlord
-        include('../mailers/request_maintenance.php');
-        if ($stmt3->execute() && $mail->send()) {
-            
-            $response = ['success' => true, 'message' => "Maintenance request created successfully"];
-            create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request created successfully', 1);
+        $insert_ok = $stmt3->execute();
+        if ($insert_ok) {
+            // Send email notification to landlord (non-blocking)
+            $mail_sent = true;
+            include('../mailers/request_maintenance.php');
+            if (isset($mail) && is_object($mail) && method_exists($mail, 'send')) {
+                $mail_sent = $mail->send();
+            } else {
+                $mail_sent = false;
+            }
+
+            if ($mail_sent) {
+                $response = ['success' => true, 'message' => "Maintenance request created successfully"];
+                create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request created successfully', 1);
+            } else {
+                $response = ['success' => true, 'message' => "Maintenance request created, but email notification failed."];
+                create_notification($mysqli, $_SESSION['user_id'], '3', 'Maintenance request created (email failed)', 1);
+            }
         } else {
             error_log('Database Error: ' . $mysqli->error);
             $response = ['success' => false, 'message' => 'An unexpected error occurred. Please try again later.'];
